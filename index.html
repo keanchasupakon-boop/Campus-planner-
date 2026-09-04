@@ -2377,7 +2377,12 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
   var undoQueue = {};
   var draggedEntryId = null;
   var uid = function(){ return Math.random().toString(36).slice(2,9); };
-
+// ฟังก์ชันดึงวันที่แบบอิงตาม Timezone ปัจจุบัน (Local Time)
+function getLocalDateStr(dateObj) {
+  var d = dateObj ? new Date(dateObj) : new Date();
+  var tzOffset = d.getTimezoneOffset() * 60000; // แปลง offset เป็นมิลลิวินาที
+  return new Date(d.getTime() - tzOffset).toISOString().split('T')[0];
+}
   // Calendar State
   var viewYear = new Date().getFullYear();
   var viewMonth = new Date().getMonth(); // 0-11
@@ -2592,7 +2597,7 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
   // --- Daily Activity Streak ---
   function updateStudyStreak(actionTaken) {
     if(!data.streak) data.streak = { count: 1, lastDate: new Date().toISOString().split('T')[0] };
-    var todayStr = new Date().toISOString().split('T')[0];
+    var todayStr = getLocalDateStr(new Date());
     
     if (data.streak.lastDate !== todayStr) {
       var last = new Date(data.streak.lastDate + 'T00:00:00');
@@ -3122,7 +3127,7 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
   function renderToday() {
     var now = new Date();
     var todayDayIdx = now.getDay() === 0 ? 6 : now.getDay() - 1;
-    var todayStr = now.toISOString().split('T')[0];
+    var todayStr = getLocalDateStr(now);
     
     document.getElementById('todayDateStr').textContent = now.toLocaleDateString(undefined, {weekday: 'long', month:'short', day:'numeric', year:'numeric'});
     
@@ -3505,7 +3510,7 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
     var overdue=[], today=[], thisWk=[], later=[], completed=[];
     var msInDay = 24*60*60*1000;
     var dayOfWeek = now.getDay()===0?7:now.getDay();
-    var endOfWeek = new Date(now.getTime() + (7-dayOfWeek)*msInDay).toISOString().split('T')[0];
+    var endOfWeek = getLocalDateStr(new Date(now.getTime() + (7-dayOfWeek)*msInDay));
 
     filteredTasks.forEach(function(t){
       if(t.done) { completed.push(t); return; }
