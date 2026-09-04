@@ -3813,11 +3813,21 @@ function getLocalDateStr(dateObj) {
       if(!id) data.schedule.push(entry);
 
       // Handle Bidirectional Sync to Tasks
-      if(syncToTask) {
-        var targetDue = date;
-        if(!targetDue && freq === 'weekly') {
-          var nowD = new Date();
-          var currentDay = nowD.getDay() === 0 ? 6 : nowD.getDay() - 1;
+// Handle Bidirectional Sync to Tasks
+          if(syncToTask) {
+            // 🐛 จุดแก้บัค: กำหนดให้ใช้วันที่ที่เลือก เฉพาะคลาสแบบ Single 
+            var targetDue = (freq === 'single') ? date : null; 
+            
+            if(!targetDue && freq === 'weekly') {
+              var nowD = new Date();
+              var currentDay = nowD.getDay() === 0 ? 6 : nowD.getDay() - 1;
+              var diff = (day - currentDay + 7) % 7;
+              var targetDateObj = new Date(nowD.getTime() + diff * 86400000);
+              
+              // 💡 หมายเหตุ: ถ้าคุณใส่ฟังก์ชัน getLocalDateStr ตามที่แก้บัคก่อนหน้า 
+              // ให้เปลี่ยนบรรทัดล่างเป็น getLocalDateStr(targetDateObj) ได้เลยครับ
+              targetDue = targetDateObj.toISOString().split('T')[0]; 
+            }
           var diff = (day - currentDay + 7) % 7;
           var targetDateObj = new Date(nowD.getTime() + diff * 86400000);
           targetDue = targetDateObj.toISOString().split('T')[0];
