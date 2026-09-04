@@ -11,7 +11,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Prompt:wght@300;400;500;600;700&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap');
 
 :root {
   --bg: #F8FAFC;
@@ -88,13 +88,16 @@
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: 'Inter', 'Prompt', 'Noto Sans Thai', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   background: var(--body-bg);
   background-attachment: fixed;
   color: var(--ink);
   min-height: 100vh;
   padding: 32px 16px 80px;
   transition: background 0.4s ease, color 0.3s;
+}
+button, input, select, textarea {
+  font-family: inherit;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1309,8 +1312,9 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
           <div id="todayClassesList"></div>
         </div>
         <div class="card">
-          <div class="card-header">
+          <div class="card-header" style="display:flex; align-items:center; justify-content:space-between;">
             <h3><i class="ph ph-warning-circle"></i> Urgent Tasks</h3>
+            <button class="btn small ghost" id="todayAddTaskBtn" style="padding:4px 10px; font-size:12px;"><i class="ph ph-plus"></i> Add Task</button>
           </div>
           <ul class="task-list" id="todayTasksList"></ul>
         </div>
@@ -1616,6 +1620,7 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
       <label>Category
         <select id="f-category">
           <option value="class">🎓 Class / Lecture (วิชาเรียน)</option>
+          <option value="task">📋 Assignment / Task (งานที่ต้องทำ)</option>
           <option value="activity">👥 Club / Activity (ชมรม / กิจกรรม)</option>
           <option value="work">💼 Work / Part-time (ทำงาน / ฝึกงาน)</option>
           <option value="personal">🌟 Personal / Appointment (ธุระ / นัดหมาย)</option>
@@ -1674,6 +1679,15 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
       </label>
     </div>
 
+    <!-- Sync to Tasks Toggle -->
+    <div style="margin:12px 0 4px; padding:10px 14px; background:var(--surface); border:1px solid var(--line); border-radius:10px; display:flex; align-items:center; justify-content:space-between;">
+      <label style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; color:var(--ink); cursor:pointer; margin:0;">
+        <input type="checkbox" id="f-sync-task" style="width:16px; height:16px; cursor:pointer;" checked>
+        <span><i class="ph-fill ph-check-square-offset" style="color:var(--primary);"></i> Sync to Tasks (เพิ่มลงใน To-Do List ด้วย)</span>
+      </label>
+      <span style="font-size:11.5px; color:var(--ink-soft);">Auto-creates linked task</span>
+    </div>
+
     <div style="display:flex; align-items:center; gap:8px; margin-top:24px;">
       <button class="btn small ghost" id="deleteClassBtn" style="display:none; color:var(--coral-dark); border-color:var(--coral-dark);"><i class="ph ph-trash"></i> Delete</button>
       <div style="flex:1;"></div>
@@ -1707,6 +1721,22 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
         </select>
       </label>
     </div>
+
+    <!-- Sync to Schedule Toggle & Time Picker -->
+    <div style="margin:12px 0 4px; padding:12px 14px; background:var(--surface); border:1px solid var(--line); border-radius:10px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+        <label style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; color:var(--ink); cursor:pointer; margin:0;">
+          <input type="checkbox" id="t-sync-schedule" style="width:16px; height:16px; cursor:pointer;" checked>
+          <span><i class="ph-fill ph-calendar-plus" style="color:var(--primary);"></i> Sync to Schedule (ลงตารางเวลาด้วย)</span>
+        </label>
+        <span style="font-size:11.5px; color:var(--ink-soft);">Shows on Timetable & Calendar</span>
+      </div>
+      <div class="form-row" id="t-time-wrap" style="margin-bottom:0;">
+        <label>Start Time <input type="time" id="t-start" value="09:00"></label>
+        <label>End Time <input type="time" id="t-end" value="10:00"></label>
+      </div>
+    </div>
+
     <div style="display:flex; align-items:center; gap:8px; margin-top:24px;">
       <button class="btn small ghost" id="deleteTaskBtn" style="display:none; color:var(--coral-dark); border-color:var(--coral-dark);"><i class="ph ph-trash"></i> Delete</button>
       <div style="flex:1;"></div>
@@ -2702,8 +2732,13 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
     });
   }
 
-  function timeToMin(t){ var p = t.split(':'); return parseInt(p[0],10)*60 + parseInt(p[1],10); }
+  function timeToMin(t){
+    if(!t || typeof t !== 'string' || t.indexOf(':') === -1) return 0;
+    var p = t.split(':');
+    return (parseInt(p[0],10)||0)*60 + (parseInt(p[1],10)||0);
+  }
   function fmtTime(t){
+    if(!t || typeof t !== 'string' || t.indexOf(':') === -1) return '';
     var m = timeToMin(t); var h = Math.floor(m/60), mm = m%60;
     var ampm = h>=12 ? 'pm':'am'; var h12 = h%12; if(h12===0) h12=12;
     return h12 + (mm ? ':' + (mm<10?'0':'')+mm : '') + ampm;
@@ -2744,17 +2779,39 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
     if(itemIndex > -1) {
       var item = data[type][itemIndex];
       data[type].splice(itemIndex, 1);
+
+      var linkedItem = null;
+      var linkedType = null;
+      if(type === 'tasks' && item.linkedScheduleId) {
+        var sIdx = data.schedule.findIndex(function(s){ return s.id === item.linkedScheduleId || s.linkedTaskId === id; });
+        if(sIdx > -1) {
+          linkedItem = data.schedule.splice(sIdx, 1)[0];
+          linkedType = 'schedule';
+        }
+      } else if(type === 'schedule' && item.linkedTaskId) {
+        var tIdx = data.tasks.findIndex(function(t){ return t.id === item.linkedTaskId || t.linkedScheduleId === id; });
+        if(tIdx > -1) {
+          linkedItem = data.tasks.splice(tIdx, 1)[0];
+          linkedType = 'tasks';
+        }
+      }
+
       save(); refreshViews();
       
       var timeout = setTimeout(function(){ delete undoQueue[id]; }, 5000);
       undoQueue[id] = {
-        item: item, type: type, timeout: timeout,
+        item: item, type: type, linkedItem: linkedItem, linkedType: linkedType, timeout: timeout,
         restore: function(){
-          clearTimeout(this.timeout); data[this.type].push(this.item);
+          clearTimeout(this.timeout); 
+          data[this.type].push(this.item);
+          if(this.linkedItem && this.linkedType) {
+            data[this.linkedType].push(this.linkedItem);
+          }
           save(); refreshViews(); delete undoQueue[id];
         }
       };
-      showToast('Item deleted.', function(){ if(undoQueue[id]) undoQueue[id].restore(); });
+      var toastMsg = linkedItem ? 'Item and synced schedule/task removed' : 'Item deleted.';
+      showToast(toastMsg, function(){ if(undoQueue[id]) undoQueue[id].restore(); });
     }
   }
 
@@ -2775,6 +2832,7 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
 
   function getCategoryIcon(cat) {
     switch(cat) {
+      case 'task': return 'ph-check-square-offset';
       case 'activity': return 'ph-users-three';
       case 'work': return 'ph-briefcase';
       case 'personal': return 'ph-star';
@@ -2843,6 +2901,8 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
     var freqSelect = document.getElementById('f-freq');
     var dayWrap = document.getElementById('f-day-wrap');
     var dateWrap = document.getElementById('f-date-wrap');
+    var catSelect = document.getElementById('f-category');
+    var syncTaskChk = document.getElementById('f-sync-task');
 
     function updateFreqUI() {
       if(freqSelect.value === 'single') {
@@ -2855,10 +2915,18 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
     }
     freqSelect.onchange = updateFreqUI;
 
+    catSelect.onchange = function() {
+      if(catSelect.value === 'task') {
+        freqSelect.value = 'single';
+        updateFreqUI();
+        if(syncTaskChk) syncTaskChk.checked = true;
+      }
+    };
+
     if(isEdit) {
       var entry = data.schedule.find(function(x){ return x.id === id; });
       document.getElementById('f-id').value = id;
-      document.getElementById('f-category').value = entry.category || 'class';
+      catSelect.value = entry.category || 'class';
       freqSelect.value = entry.freq || 'weekly';
       document.getElementById('f-day').value = entry.day !== undefined ? entry.day : 0;
       document.getElementById('f-date').value = entry.date || '';
@@ -2868,9 +2936,11 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
       document.getElementById('f-subject').value = entry.subject || '';
       document.getElementById('f-loc').value = entry.loc || '';
       document.getElementById('f-color').value = entry.customColor || 'auto';
+      var linkedT = entry.linkedTaskId ? data.tasks.find(function(t){ return t.id === entry.linkedTaskId; }) : null;
+      if(syncTaskChk) syncTaskChk.checked = entry.syncToTask !== undefined ? entry.syncToTask : (!!linkedT || entry.category === 'task');
     } else {
       document.getElementById('f-id').value = '';
-      document.getElementById('f-category').value = 'class';
+      catSelect.value = 'class';
       freqSelect.value = defaultDate ? 'single' : 'weekly';
       document.getElementById('f-day').value = activeMobileDay;
       document.getElementById('f-date').value = defaultDate || new Date().toISOString().split('T')[0];
@@ -2880,6 +2950,7 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
       document.getElementById('f-subject').value = '';
       document.getElementById('f-loc').value = '';
       document.getElementById('f-color').value = 'auto';
+      if(syncTaskChk) syncTaskChk.checked = true;
     }
 
     updateFreqUI();
@@ -2891,21 +2962,46 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
     document.getElementById('taskModalTitle').innerHTML = isEdit ? '<i class="ph ph-pencil-simple"></i> Edit Task' : '<i class="ph ph-check-square-offset"></i> Add Task';
     document.getElementById('deleteTaskBtn').style.display = isEdit ? 'inline-flex' : 'none';
     
-    if(isEdit) {
-      var entry = data.tasks.find(function(x){ return x.id === id; });
+    var syncScheduleChk = document.getElementById('t-sync-schedule');
+    var timeWrap = document.getElementById('t-time-wrap');
+
+    function updateTaskSyncUI() {
+      if(timeWrap && syncScheduleChk) {
+        timeWrap.style.display = syncScheduleChk.checked ? 'flex' : 'none';
+      }
+    }
+    if(syncScheduleChk) syncScheduleChk.onchange = updateTaskSyncUI;
+
+    var entry = isEdit ? data.tasks.find(function(x){ return x.id === id; }) : null;
+    if(entry) {
       document.getElementById('t-id').value = id;
-      document.getElementById('t-text').value = entry.text;
+      document.getElementById('t-text').value = entry.text || '';
       document.getElementById('t-subject').value = entry.subject || '';
       document.getElementById('t-due').value = entry.due || '';
       document.getElementById('t-priority').value = entry.priority || 'med';
+      
+      var linkedSch = entry.linkedScheduleId ? data.schedule.find(function(s){ return s.id === entry.linkedScheduleId; }) : null;
+      document.getElementById('t-start').value = entry.time || (linkedSch ? linkedSch.start : '09:00');
+      document.getElementById('t-end').value = entry.endTime || (linkedSch ? linkedSch.end : '10:00');
+      if(syncScheduleChk) {
+        syncScheduleChk.checked = entry.syncToSchedule !== undefined ? entry.syncToSchedule : (!!linkedSch);
+      }
     } else {
       document.getElementById('t-id').value = '';
       document.getElementById('t-text').value = '';
       document.getElementById('t-subject').value = '';
       document.getElementById('t-due').value = defaultDate || new Date().toISOString().split('T')[0];
       document.getElementById('t-priority').value = 'med';
+      document.getElementById('t-start').value = '09:00';
+      document.getElementById('t-end').value = '10:00';
+      if(syncScheduleChk) syncScheduleChk.checked = true;
     }
+    updateTaskSyncUI();
     openModal('taskModal');
+    setTimeout(function(){
+      var inp = document.getElementById('t-text');
+      if(inp) inp.focus();
+    }, 80);
   };
 
   window.openMilestoneModal = function(id, defaultDate) {
@@ -2957,10 +3053,13 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
     } else {
       dayEvents.forEach(function(c){
         var isSingle = c.freq === 'single';
+        var isTaskDone = c.isDone;
+        var iconHtml = isTaskDone ? '<i class="ph-fill ph-check-circle" style="color:var(--sage-dark);"></i> ' : '<i class="ph '+getCategoryIcon(c.category)+'"></i> ';
+        var textStyle = isTaskDone ? 'text-decoration:line-through;opacity:0.7;' : '';
         html += '<div class="task-item" onclick="openClassModal(\''+c.id+'\')">'+
                 '<div style="width:10px;height:10px;border-radius:50%;background:var(--'+c.color+'-dark);margin-top:5px;flex-shrink:0;"></div>'+
-                '<div class="task-body"><div class="task-text"><i class="ph '+getCategoryIcon(c.category)+'"></i> '+(c.subject?'['+c.subject+'] ':'')+c.title+(isSingle?' <span class="pill pri-low" style="font-size:10px;">One-time</span>':'')+'</div>'+
-                '<div class="task-meta"><i class="ph ph-clock"></i> '+fmtTime(c.start)+' - '+fmtTime(c.end)+' &middot; '+(c.loc||'TBA')+'</div></div></div>';
+                '<div class="task-body"><div class="task-text">' + iconHtml + (c.subject?'['+c.subject+'] ':'') + '<span style="' + textStyle + '">' + c.title + '</span>' + (isSingle?' <span class="pill pri-low" style="font-size:10px;">One-time</span>':'') + (isTaskDone ? ' <span class="pill pri-low" style="font-size:10px;color:var(--sage-dark);">Done</span>' : '') + '</div>'+
+                '<div class="task-meta"><i class="ph ph-clock"></i> '+fmtTime(c.start)+' - '+fmtTime(c.end)+' &middot; '+(c.loc||'General')+'</div></div></div>';
       });
     }
     html += '</div>';
@@ -2972,10 +3071,11 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
       html += '<div style="font-size:12.5px;color:var(--ink-soft);padding:4px 0;">No tasks due on this date.</div>';
     } else {
       tasks.forEach(function(t){
+        var timeBadge = t.time ? '<span><i class="ph ph-clock"></i> ' + fmtTime(t.time) + '</span>' : '';
         html += '<div class="task-item '+(t.done?'done':'')+'" onclick="openTaskModal(\''+t.id+'\')">'+
                 '<div class="check '+(t.done?'checked':'')+'"></div>'+
                 '<div class="task-body"><div class="task-text">'+t.text+'</div>'+
-                '<div class="task-meta"><span class="pill pri-'+t.priority+'">'+t.priority+'</span>'+(t.subject?'<span>'+t.subject+'</span>':'')+'</div></div></div>';
+                '<div class="task-meta"><span class="pill pri-'+t.priority+'">'+t.priority+'</span>'+(t.subject?'<span>'+t.subject+'</span>':'')+timeBadge+'</div></div></div>';
       });
     }
     html += '</div>';
@@ -3085,12 +3185,15 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
     if(todaySchedule.length === 0) clList.innerHTML = '<div class="empty-note">No classes or events scheduled today. Free time!</div>';
     else {
       todaySchedule.forEach(function(c){
-        var d = document.createElement('div'); d.className = 'task-item';
+        var d = document.createElement('div'); d.className = 'task-item' + (c.isDone ? ' done' : '');
         var isSingle = c.freq === 'single';
+        var isTask = c.category === 'task' || !!c.linkedTaskId;
         var subjectBadge = c.subject ? '<span style="opacity:0.75;font-weight:600;margin-right:4px;">['+c.subject+']</span>' : '';
+        var checkIcon = c.isDone ? '<i class="ph-fill ph-check-circle" style="color:var(--sage-dark);"></i> ' : '<i class="ph ' + getCategoryIcon(c.category) + '"></i> ';
+        var textStyle = c.isDone ? 'text-decoration:line-through;opacity:0.7;' : '';
         d.innerHTML = '<div style="width:10px;height:10px;border-radius:50%;margin-top:5px;flex-shrink:0;background:var(--'+c.color+'-dark);"></div>' +
-                      '<div class="task-body"><div class="task-text"><i class="ph ' + getCategoryIcon(c.category) + '"></i> ' + subjectBadge + c.title + (isSingle ? ' <span class="pill pri-low" style="font-size:10px;">One-time</span>' : '') + '</div>' + 
-                      '<div class="task-meta"><i class="ph ph-clock"></i> '+fmtTime(c.start)+' - '+fmtTime(c.end)+' &middot; <i class="ph ph-map-pin"></i> '+(c.loc||'General')+'</div></div>';
+                      '<div class="task-body"><div class="task-text">' + checkIcon + subjectBadge + '<span style="' + textStyle + '">' + c.title + '</span>' + (isSingle ? ' <span class="pill pri-low" style="font-size:10px;">One-time</span>' : '') + (c.isDone ? ' <span class="pill pri-low" style="font-size:10px;color:var(--sage-dark);border-color:var(--sage);">Done</span>' : '') + '</div>' + 
+                      '<div class="task-meta"><i class="ph ph-clock"></i> '+fmtTime(c.start)+' - '+fmtTime(c.end)+' &middot; <i class="ph ph-map-pin"></i> '+(c.loc||(isTask?'Task Focus':'General'))+'</div></div>';
         d.onclick = function(){ openClassModal(c.id); };
         clList.appendChild(d);
       });
@@ -3105,13 +3208,19 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
       urgTasks.forEach(function(t){
         var li = document.createElement('li'); li.className = 'task-item';
         var isOverdue = t.due < todayStr;
+        var timeStr = t.time ? ' &middot; <i class="ph ph-clock"></i> ' + fmtTime(t.time) : '';
         li.innerHTML = '<div class="check" role="checkbox"></div>'+
                        '<div class="task-body"><div class="task-text">'+t.text+'</div>'+
                        '<div class="task-meta"><span class="pill '+(isOverdue?'pri-high':'pri-med')+'">'+(isOverdue?'Overdue':'Today')+'</span>'+
-                       (t.subject?'<span class="subj-dot" style="background:var(--'+getColorForString(t.subject)+'-dark)"></span>'+t.subject:'')+'</div></div>';
+                       (t.subject?'<span class="subj-dot" style="background:var(--'+getColorForString(t.subject)+'-dark)"></span>'+t.subject:'')+
+                       timeStr + '</div></div>';
         li.querySelector('.check').onclick = function(e){
           e.stopPropagation();
           t.done = true;
+          if(t.linkedScheduleId) {
+            var linkedSch = data.schedule.find(function(s){ return s.id === t.linkedScheduleId || s.linkedTaskId === t.id; });
+            if(linkedSch) linkedSch.isDone = true;
+          }
           playPopSound();
           updateStudyStreak(true);
           save();
@@ -3194,10 +3303,23 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
         e.preventDefault(); this.classList.remove('drag-over');
         if(!draggedEntryId) return;
         var entry = data.schedule.find(function(x){ return x.id === draggedEntryId; });
-        if(entry && entry.day !== parseInt(this.dataset.day)) {
-           if(checkConflict(parseInt(this.dataset.day), entry.start, entry.end, entry.id)) {
+        var targetDay = parseInt(this.dataset.day, 10);
+        if(entry && entry.day !== targetDay) {
+           if(checkConflict(targetDay, entry.start, entry.end, entry.id)) {
               showToast("Conflict: Time overlaps with another class.");
-           } else { entry.day = parseInt(this.dataset.day); save(); refreshViews(); }
+           } else {
+             entry.day = targetDay;
+             if(entry.freq === 'single') {
+               var targetColDate = new Date(monday);
+               targetColDate.setDate(monday.getDate() + targetDay);
+               entry.date = targetColDate.toISOString().split('T')[0];
+               if(entry.linkedTaskId) {
+                 var lTask = data.tasks.find(function(t){ return t.id === entry.linkedTaskId; });
+                 if(lTask) lTask.due = entry.date;
+               }
+             }
+             save(); refreshViews(); 
+           }
         }
         draggedEntryId = null;
       });
@@ -3211,14 +3333,18 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
         var startMin = timeToMin(e.start), endMin = timeToMin(e.end);
         var top = ((startMin - DAY_START_MIN)/TOTAL_MIN) * RAIL_PX;
         var height = ((endMin - startMin)/TOTAL_MIN) * RAIL_PX;
+        var isTaskDone = e.isDone;
         var box = document.createElement('div');
-        box.className = 'entry c-' + e.color;
+        box.className = 'entry c-' + e.color + (isTaskDone ? ' done' : '');
         box.style.top = Math.max(0,top) + 'px';
         box.style.height = Math.max(26,height) + 'px';
+        if(isTaskDone) box.style.opacity = '0.7';
         box.draggable = true;
         box.innerHTML = '<span class="t"></span><span class="m"></span>';
         var subjectBadge = e.subject ? '<span style="font-weight:700;margin-right:3px;">[' + e.subject + ']</span>' : '';
-        box.querySelector('.t').innerHTML = '<i class="ph ' + getCategoryIcon(e.category) + '"></i> ' + subjectBadge + e.title;
+        var iconHtml = isTaskDone ? '<i class="ph-fill ph-check-circle" style="color:#16A34A;"></i> ' : '<i class="ph ' + getCategoryIcon(e.category) + '"></i> ';
+        var textStyle = isTaskDone ? 'text-decoration:line-through;' : '';
+        box.querySelector('.t').innerHTML = iconHtml + subjectBadge + '<span style="' + textStyle + '">' + e.title + '</span>';
         box.querySelector('.m').innerHTML = '<i class="ph ph-clock"></i> '+fmtTime(e.start) + (e.loc ? ' &middot; ' + e.loc : '');
         
         box.addEventListener('dragstart', function(evt){ draggedEntryId = e.id; evt.dataTransfer.setData('text/plain', e.id); });
@@ -3293,8 +3419,12 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
         badgesHtml += '<div style="font-size:10px;color:var(--ink-soft);">+'+(dayTasks.length-3)+' more</div>';
       }
 
-      // Single-date events on this date
-      var daySingleEvents = data.schedule.filter(function(e){ return e.freq === 'single' && e.date === dateStr; });
+      // Single-date events on this date (prevent duplicate if already shown as task)
+      var daySingleEvents = data.schedule.filter(function(e){
+        if(e.freq !== 'single' || e.date !== dateStr) return false;
+        if(e.linkedTaskId && dayTasks.some(function(t){ return t.id === e.linkedTaskId; })) return false;
+        return true;
+      });
       daySingleEvents.forEach(function(e){
         badgesHtml += '<div class="month-badge" style="background:var(--'+e.color+');color:var(--'+e.color+'-dark);font-weight:600;" title="'+e.title+'"><i class="ph '+getCategoryIcon(e.category)+'"></i> '+e.title+'</div>';
       });
@@ -3390,12 +3520,15 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
       if(list.length === 0) return '';
       var html = '<div class="timeline-section"><div class="timeline-header '+colorClass+'"><i class="'+icon+'"></i> '+title+' ('+list.length+')</div><ul class="task-list">';
       list.sort(function(a,b){ return (a.due||'9999').localeCompare(b.due||'9999'); }).forEach(function(t){
+        var timeBadge = t.time ? '<span><i class="ph ph-clock"></i> '+fmtTime(t.time)+(t.endTime?' - '+fmtTime(t.endTime):'')+'</span>' : '';
+        var schBadge = (t.syncToSchedule || t.linkedScheduleId) ? '<span class="pill pri-low" style="font-size:10px;"><i class="ph ph-calendar"></i> In Schedule</span>' : '';
         html += '<li class="task-item '+(t.done?'done':'')+'" data-id="'+t.id+'">'+
                 '<div class="check '+(t.done?'checked':'')+'" role="checkbox"></div>'+
                 '<div class="task-body"><div class="task-text">'+t.text+'</div><div class="task-meta">'+
                 '<span class="pill pri-'+(t.priority||'med')+'">'+(t.priority==='high'?'High':t.priority==='low'?'Low':'Med')+'</span>'+
                 (t.subject?'<span class="subj-dot" style="background:var(--'+getColorForString(t.subject)+'-dark)"></span>'+t.subject:'')+
-                (t.due?'<span><i class="ph ph-calendar"></i> '+t.due+'</span>':'')+'</div></div></li>';
+                (t.due?'<span><i class="ph ph-calendar"></i> '+t.due+'</span>':'')+
+                timeBadge + schBadge + '</div></div></li>';
       });
       html += '</ul></div>';
       return html;
@@ -3440,6 +3573,10 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
           var id = li.dataset.id;
           var task = data.tasks.find(function(x){ return x.id === id; });
           task.done = !task.done;
+          if(task.linkedScheduleId) {
+            var linkedSch = data.schedule.find(function(s){ return s.id === task.linkedScheduleId || s.linkedTaskId === id; });
+            if(linkedSch) linkedSch.isDone = task.done;
+          }
           if(task.done) {
             playPopSound();
             updateStudyStreak(true);
@@ -3486,15 +3623,22 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
     renderTasks();
     renderNotes();
     var dp = document.getElementById('dayPicker');
-    if(document.querySelector('.nav-bar button.active').dataset.panel === 'schedule' && window.innerWidth <= 640) dp.style.display = 'flex';
+    var activeNav = document.querySelector('.nav-bar button.active');
+    if(dp) {
+      if(activeNav && activeNav.dataset.panel === 'schedule' && window.innerWidth <= 640) dp.style.display = 'flex';
+      else dp.style.display = 'none';
+    }
   }
 
   // --- Wire All DOM Events ---
   function wireEvents(){
     window.addEventListener('resize', function(){
       var dp = document.getElementById('dayPicker');
-      if(document.querySelector('.nav-bar button.active').dataset.panel === 'schedule' && window.innerWidth <= 640) dp.style.display = 'flex';
-      else dp.style.display = 'none';
+      var activeNav = document.querySelector('.nav-bar button.active');
+      if(dp) {
+        if(activeNav && activeNav.dataset.panel === 'schedule' && window.innerWidth <= 640) dp.style.display = 'flex';
+        else dp.style.display = 'none';
+      }
     });
 
     document.getElementById('themeToggle').addEventListener('click', function(){
@@ -3571,7 +3715,29 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
     // Add Buttons
     document.getElementById('addClassBtn').addEventListener('click', function(){ openClassModal(); });
     document.getElementById('addTaskBtn').addEventListener('click', function(){ openTaskModal(); });
+    var todayAdd = document.getElementById('todayAddTaskBtn');
+    if(todayAdd) todayAdd.addEventListener('click', function(){ openTaskModal(); });
     document.getElementById('addMilestoneBtn').addEventListener('click', function(){ openMilestoneModal(); });
+
+    // Enter key submits for Task and Class input fields
+    var tInput = document.getElementById('t-text');
+    if(tInput) {
+      tInput.addEventListener('keydown', function(e){
+        if(e.key === 'Enter') {
+          e.preventDefault();
+          document.getElementById('saveTaskBtn').click();
+        }
+      });
+    }
+    var fInput = document.getElementById('f-title');
+    if(fInput) {
+      fInput.addEventListener('keydown', function(e){
+        if(e.key === 'Enter') {
+          e.preventDefault();
+          document.getElementById('saveClassBtn').click();
+        }
+      });
+    }
     
     // Modal Cancel Buttons
     document.getElementById('cancelClassModal').addEventListener('click', closeAllModals);
@@ -3605,6 +3771,7 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
       var subject = document.getElementById('f-subject').value.trim().toUpperCase();
       var loc = document.getElementById('f-loc').value.trim();
       var customColor = document.getElementById('f-color').value;
+      var syncToTask = document.getElementById('f-sync-task').checked;
       
       var day = parseInt(document.getElementById('f-day').value, 10);
       var date = document.getElementById('f-date').value;
@@ -3636,8 +3803,43 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
       entry.loc = loc;
       entry.customColor = customColor;
       entry.color = color;
+      entry.syncToTask = syncToTask;
       
       if(!id) data.schedule.push(entry);
+
+      // Handle Bidirectional Sync to Tasks
+      if(syncToTask) {
+        var targetDue = date;
+        if(!targetDue && freq === 'weekly') {
+          var nowD = new Date();
+          var currentDay = nowD.getDay() === 0 ? 6 : nowD.getDay() - 1;
+          var diff = (day - currentDay + 7) % 7;
+          var targetDateObj = new Date(nowD.getTime() + diff * 86400000);
+          targetDue = targetDateObj.toISOString().split('T')[0];
+        }
+
+        var linkedT = entry.linkedTaskId ? data.tasks.find(function(t){ return t.id === entry.linkedTaskId; }) : null;
+        if(!linkedT) {
+          linkedT = { id: uid(), done: false };
+          data.tasks.push(linkedT);
+          entry.linkedTaskId = linkedT.id;
+        }
+
+        linkedT.text = title;
+        linkedT.subject = subject;
+        linkedT.due = targetDue || new Date().toISOString().split('T')[0];
+        linkedT.time = start;
+        linkedT.endTime = end;
+        linkedT.priority = category === 'task' ? 'high' : 'med';
+        linkedT.linkedScheduleId = entry.id;
+        linkedT.syncToSchedule = true;
+        entry.isDone = !!linkedT.done;
+      } else if(!syncToTask && entry.linkedTaskId) {
+        var tIdx = data.tasks.findIndex(function(t){ return t.id === entry.linkedTaskId; });
+        if(tIdx > -1) data.tasks.splice(tIdx, 1);
+        entry.linkedTaskId = null;
+      }
+
       save(); refreshViews(); closeAllModals(); showToast(id ? 'Schedule updated' : 'Schedule entry added');
     });
 
@@ -3649,16 +3851,76 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
     document.getElementById('saveTaskBtn').addEventListener('click', function(){
       var id = document.getElementById('t-id').value;
       var text = document.getElementById('t-text').value.trim();
-      if(!text){ alert('Please enter a task description.'); return; }
+      if(!text){
+        alert('กรุณากรอกรายละเอียดของงาน (Please enter a task description)');
+        var inp = document.getElementById('t-text');
+        if(inp) inp.focus();
+        return;
+      }
       
-      var entry = id ? data.tasks.find(function(x){ return x.id === id; }) : { id: uid(), done:false };
+      var due = document.getElementById('t-due').value;
+      var priority = document.getElementById('t-priority').value || 'med';
+      var subject = document.getElementById('t-subject').value.trim().toUpperCase();
+      var syncChk = document.getElementById('t-sync-schedule');
+      var syncToSchedule = syncChk ? syncChk.checked : false;
+      var startTime = (document.getElementById('t-start') && document.getElementById('t-start').value) || '09:00';
+      var endTime = (document.getElementById('t-end') && document.getElementById('t-end').value) || '10:00';
+
+      if(syncToSchedule && due && timeToMin(endTime) <= timeToMin(startTime)) {
+        alert('เวลาสิ้นสุดต้องมากกว่าเวลาเริ่มต้น (End time must be after start time)');
+        return;
+      }
+      
+      var entry = id ? data.tasks.find(function(x){ return x.id === id; }) : null;
+      if (!entry) {
+        entry = { id: uid(), done: false };
+        data.tasks.push(entry);
+      }
       entry.text = text;
-      entry.subject = document.getElementById('t-subject').value.trim().toUpperCase();
-      entry.due = document.getElementById('t-due').value;
-      entry.priority = document.getElementById('t-priority').value;
-      
-      if(!id) data.tasks.push(entry);
-      save(); refreshViews(); closeAllModals(); showToast(id ? 'Task updated' : 'Task added');
+      entry.subject = subject;
+      entry.due = due;
+      entry.priority = priority;
+      entry.time = startTime;
+      entry.endTime = endTime;
+      entry.syncToSchedule = syncToSchedule;
+
+      // Handle Bidirectional Sync to Schedule
+      if(syncToSchedule && due) {
+        var dObj = new Date(due + 'T00:00:00');
+        var dayIdx = dObj.getDay() === 0 ? 6 : dObj.getDay() - 1;
+        var schColor = priority === 'high' ? 'coral' : (priority === 'low' ? 'sage' : 'sky');
+
+        var linkedSch = entry.linkedScheduleId ? data.schedule.find(function(s){ return s.id === entry.linkedScheduleId; }) : null;
+        if(!linkedSch) {
+          linkedSch = { id: uid() };
+          data.schedule.push(linkedSch);
+          entry.linkedScheduleId = linkedSch.id;
+        }
+
+        linkedSch.title = text;
+        linkedSch.category = 'task';
+        linkedSch.freq = 'single';
+        linkedSch.date = due;
+        linkedSch.day = dayIdx;
+        linkedSch.start = startTime;
+        linkedSch.end = endTime;
+        linkedSch.subject = subject;
+        linkedSch.color = schColor;
+        linkedSch.customColor = schColor;
+        linkedSch.linkedTaskId = entry.id;
+        linkedSch.isDone = !!entry.done;
+        linkedSch.syncToTask = true;
+      } else if(!syncToSchedule && entry.linkedScheduleId) {
+        var schIdx = data.schedule.findIndex(function(s){ return s.id === entry.linkedScheduleId; });
+        if(schIdx > -1) data.schedule.splice(schIdx, 1);
+        entry.linkedScheduleId = null;
+      }
+
+      save();
+      refreshViews();
+      closeAllModals();
+      playPopSound();
+      showToast(id ? 'อัปเดตงานเรียบร้อย ✨' : 'เพิ่มงานใหม่สำเร็จ! 🎉');
     });
 
     document.getElementById('deleteTaskBtn').addEventListener('click', function(){
