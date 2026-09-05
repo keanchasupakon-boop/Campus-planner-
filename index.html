@@ -963,8 +963,63 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 .toast-btn { background: none; border: none; color: var(--primary); font-weight: 600; cursor: pointer; padding: 0; font-size: 13.5px; }
 .toast-btn:hover { text-decoration: underline; }
 
-.empty-note { text-align: center; padding: 28px 16px; color: var(--ink-soft); font-size: 13.5px; border: 1px dashed var(--line); border-radius: var(--radius-sm); margin-bottom: 14px;}
-footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-top: 32px; }
+/* ---------- App Bottom Footer & Creator Copyright ---------- */
+.app-footer {
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: 12.5px;
+  margin: 28px auto 20px auto;
+  padding: 10px 16px 24px;
+  background: transparent;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  user-select: none;
+}
+.footer-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13.5px;
+}
+.footer-version-tag {
+  font-size: 10.5px;
+  font-weight: 700;
+  background: rgba(0, 0, 0, 0.04);
+  color: var(--primary);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 1px 7px;
+}
+[data-theme="dark"] .footer-version-tag {
+  background: rgba(255, 255, 255, 0.06);
+}
+.footer-copyright {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: 0.2px;
+}
+.footer-author {
+  color: var(--primary);
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--primary) 0%, #6366F1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+.footer-meta {
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  opacity: 0.85;
+}
 
 /* ---------- Quick Preview Popover (Google Calendar Style) ---------- */
 .event-popover {
@@ -3404,13 +3459,41 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
         <p style="font-size:13px; color:var(--ink-soft); margin-top:-5px; margin-bottom:16px;">Receive a browser alert 10 minutes before your classes begin.</p>
         <button class="btn ghost" id="reqNotifyBtn"><i class="ph ph-bell"></i> Enable Class Reminders</button>
       </div>
+
+      <div class="settings-section">
+        <h3><i class="ph ph-info"></i> About &amp; Copyright</h3>
+        <div style="background:var(--surface-2); padding:14px; border-radius:12px; border:1px solid var(--border); font-size:13px; line-height:1.6;">
+          <div style="font-weight:700; color:var(--ink); display:flex; align-items:center; gap:6px;">
+            <i class="ph-fill ph-student" style="color:var(--primary);"></i> Campus Planner v2.5
+          </div>
+          <div style="margin-top:4px; color:var(--ink-soft);">
+            ออกแบบและสร้างสรรค์โดย <strong style="color:var(--primary); font-weight:700;">@SUKI SKY SUPAKON KEANCHA</strong>
+          </div>
+          <div style="margin-top:4px; font-size:12px; color:var(--ink-soft);">
+            &copy; 2026 All Rights Reserved &middot; Made with <i class="ph-fill ph-heart" style="color:#EF4444; font-size:11px;"></i> for Student Life
+          </div>
+        </div>
+      </div>
       
       <button class="btn ghost" id="resetAll" style="color:var(--coral-dark); border-color:var(--coral-dark); width:100%;"><i class="ph ph-warning"></i> Reset All Planner Data</button>
     </section>
-
   </main>
-  
-  <footer>Saved automatically on your device</footer>
+
+  <footer class="app-footer">
+    <div class="footer-brand">
+      <i class="ph-fill ph-student" style="color:var(--primary); font-size:16px;"></i>
+      <span style="font-weight:700; color:var(--ink);">Campus Planner</span>
+      <span class="footer-version-tag">v2.5</span>
+    </div>
+    <div class="footer-copyright">
+      &copy; 2026 สร้างโดย <span class="footer-author">@SUKI SKY SUPAKON KEANCHA</span> &middot; All Rights Reserved
+    </div>
+    <div class="footer-meta">
+      <span>Crafted with <i class="ph-fill ph-heart" style="color:#EF4444; font-size:11px;"></i> for Student Life</span>
+      <span>&bull;</span>
+      <span>Saved automatically on your device</span>
+    </div>
+  </footer>
 </div>
 
 <!-- Mobile Navigation Drawer -->
@@ -3466,6 +3549,9 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
     <div class="drawer-info-row">
       <div class="streak-badge" style="font-size:11.5px; padding:5px 10px;"><i class="ph-fill ph-fire"></i> <span id="drawerStreakCount">1</span> Day Streak</div>
       <button class="icon-btn" id="drawerSoundBtn" title="Sound Effects" style="width:34px; height:34px;"><i class="ph ph-speaker-high"></i></button>
+    </div>
+    <div style="text-align:center; margin-top:10px; font-size:11px; color:var(--ink-soft); border-top:1px solid var(--border); padding-top:8px;">
+      &copy; 2026 สร้างโดย <strong style="color:var(--primary); font-weight:700;">@SUKI SKY SUPAKON KEANCHA</strong>
     </div>
   </div>
 </aside>
