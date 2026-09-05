@@ -2,7 +2,7 @@
 <html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Campus Planner</title>
 <!-- Phosphor Icons for elegant, modern icons -->
 <script src="https://unpkg.com/@phosphor-icons/web"></script>
@@ -1452,40 +1452,591 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
   background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
 }
 
-/* ---------- Responsive Mobile Styles ---------- */
+/* ---------- Mobile Navigation Drawer (Slide Menu) ---------- */
+#mobileMenuBtn {
+  display: none;
+}
+.drawer-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.48);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 2400;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.drawer-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.mobile-drawer {
+  display: none;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 290px;
+  max-width: 84vw;
+  background: var(--container-bg);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border-right: 1px solid var(--container-border);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.28);
+  z-index: 2500;
+  transform: translateX(-105%);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  flex-direction: column;
+  padding: 16px 14px calc(16px + env(safe-area-inset-bottom, 8px));
+  box-sizing: border-box;
+}
+.mobile-drawer.open {
+  transform: translateX(0);
+}
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 12px;
+}
+.drawer-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink);
+}
+.drawer-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  overflow-y: auto;
+}
+.drawer-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  transition: all 0.15s ease;
+  width: 100%;
+}
+.drawer-nav-item i {
+  font-size: 22px;
+  color: var(--ink-soft);
+  transition: color 0.15s ease;
+  flex-shrink: 0;
+}
+.drawer-nav-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.drawer-nav-title {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.drawer-nav-desc {
+  font-size: 11px;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.drawer-nav-item:hover {
+  background: var(--surface-hover);
+}
+.drawer-nav-item.active {
+  background: rgba(59, 130, 246, 0.12);
+  border-color: rgba(59, 130, 246, 0.25);
+}
+.drawer-nav-item.active i {
+  color: var(--primary);
+}
+.drawer-nav-item.active .drawer-nav-title {
+  color: var(--primary);
+  font-weight: 700;
+}
+.drawer-footer {
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  margin-top: 8px;
+}
+.drawer-info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ---------- Responsive Mobile Styles (Native iOS Feel & Clutter-Free Layout) ---------- */
 @media (max-width: 640px) {
-  body { padding: 16px 12px 60px; }
-  .main-container { padding: 18px 14px; }
-  .modal-backdrop {
-    padding: 0;
-    align-items: flex-end;
+  body {
+    padding: 12px 12px calc(24px + env(safe-area-inset-bottom, 8px)) !important;
+    -webkit-tap-highlight-color: transparent;
   }
-  .modal-card {
-    border-radius: 24px 24px 0 0;
-    max-height: 85vh;
-    padding: 24px 20px;
-    animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  .app-wrap {
+    padding-bottom: 0 !important;
   }
-  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-  
-  .event-popover {
-    left: 12px !important;
-    right: 12px !important;
-    bottom: 16px !important;
-    top: auto !important;
-    width: auto !important;
-    max-width: none !important;
+  .main-container {
+    padding: 16px 14px;
     border-radius: 20px;
-    box-shadow: 0 -4px 24px rgba(0,0,0,0.2);
-    animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .schedule-grid { grid-template-columns: 38px minmax(0, 1fr); }
+  /* Masthead Header - Sleek Single Row */
+  .masthead {
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+    margin-bottom: 14px !important;
+  }
+  .masthead-brand-group {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    flex: 1;
+    min-width: 0;
+  }
+  .masthead-text {
+    flex: 1;
+    min-width: 0;
+  }
+  .masthead-text h1 {
+    font-size: 17px !important;
+    margin: 0 !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    letter-spacing: -0.01em;
+  }
+  .masthead-text .sub {
+    display: none !important; /* Hide "Academic Planner" subtitle on mobile */
+  }
+  .masthead-controls {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 6px !important;
+    flex-shrink: 0 !important;
+    overflow: visible !important;
+    width: auto !important;
+    padding-bottom: 0 !important;
+  }
+  .masthead-controls::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Badges & Buttons Clean Up on Mobile */
+  #syncStatusBadge {
+    display: none !important; /* Clean up: local status is hidden on phone */
+  }
+  #soundToggleBtn {
+    display: none !important; /* Sound toggle is easily managed in Settings or Drawer */
+  }
+  .streak-label {
+    display: none !important; /* Hide "Day Streak" text, keep compact "🔥 1" */
+  }
+  #streakBadge {
+    font-size: 11.5px !important;
+    padding: 4px 8px !important;
+    border-radius: 999px !important;
+    flex-shrink: 0 !important;
+  }
+  #dailyBriefingBtn {
+    font-size: 11.5px !important;
+    padding: 5px 9px !important;
+    border-radius: 999px !important;
+    flex-shrink: 0 !important;
+  }
+  .user-auth-btn {
+    font-size: 11.5px !important;
+    padding: 4px 8px !important;
+    border-radius: 999px !important;
+    flex-shrink: 0 !important;
+  }
+  .user-avatar-circle {
+    width: 22px !important;
+    height: 22px !important;
+    font-size: 11px !important;
+  }
+  .icon-btn {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 15px !important;
+    border-radius: 50% !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Hamburger Menu Button & Drawer */
+  #mobileMenuBtn {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 19px !important;
+    border-radius: 10px !important;
+    flex-shrink: 0 !important;
+  }
+  .drawer-backdrop {
+    display: block !important;
+  }
+  .mobile-drawer {
+    display: flex !important;
+  }
+
+  /* Navigation Bar - 100% hidden on mobile (Zero clutter, no bottom bar!) */
+  .nav-bar {
+    display: none !important;
+  }
+
+  /* Instant Snappy Page Transition (ตัดสลับไปหน้าใหม่ทันที) */
+  .panel.active {
+    display: block !important;
+    animation: pageCutIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+  @keyframes pageCutIn {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Panel Head */
+  .panel-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .panel-head h2 {
+    font-size: 17px !important;
+  }
+  .panel-head .actions-group {
+    width: 100%;
+    display: flex;
+    gap: 6px;
+  }
+  .actions-group .btn {
+    flex: 1;
+    min-width: 0;
+    padding: 8px 10px;
+    font-size: 12px;
+    justify-content: center;
+  }
+
+  /* Today View Layout - Prioritize Today's Classes & Urgent Tasks */
+  #panel-today {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  #panel-today .panel-head {
+    order: 1 !important;
+    margin-bottom: 8px !important;
+  }
+  #panel-today .panel-head h2 {
+    font-size: 17px !important;
+  }
+  #panel-today #quotePill {
+    order: 2 !important;
+    margin-bottom: 14px !important;
+    padding: 8px 12px !important;
+    font-size: 12px !important;
+  }
+  #panel-today #milestonesContainer {
+    order: 3 !important;
+  }
+  #panel-today .today-grid {
+    order: 4 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+    margin-bottom: 14px !important;
+  }
+  #panel-today .big-picture-grid {
+    order: 5 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    margin-bottom: 6px !important;
+  }
+  
+  /* Workload Graph - Compact Mini Bar on Mobile */
+  .big-picture-grid .card {
+    padding: 12px 14px !important;
+    border-radius: 16px !important;
+  }
+  .big-picture-grid .card-header {
+    margin-bottom: 8px !important;
+  }
+  .big-picture-grid .card-header h3 {
+    font-size: 13.5px !important;
+  }
+  .big-picture-grid .card-sub {
+    font-size: 11px !important;
+  }
+  .workload-graph {
+    height: 60px !important;
+    gap: 8px !important;
+    padding: 0 4px 2px !important;
+  }
+  .wl-bar-track {
+    max-width: 28px !important;
+    height: 36px !important;
+    border-radius: 6px !important;
+    padding: 2px !important;
+  }
+  .wl-count {
+    font-size: 11px !important;
+  }
+  .wl-label {
+    font-size: 9.5px !important;
+  }
+
+  /* Productivity Mini-Dashboard - Compact 2-Column Row */
+  .productivity-dash-wrap {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+    flex-direction: unset !important;
+  }
+  .productivity-dash-wrap .metric-card {
+    padding: 10px 8px !important;
+    gap: 8px !important;
+    border-radius: 14px !important;
+  }
+  .ring-wrap {
+    width: 44px !important;
+    height: 44px !important;
+    flex-shrink: 0 !important;
+  }
+  .ring-wrap svg {
+    width: 44px !important;
+    height: 44px !important;
+  }
+  .ring-wrap circle {
+    cx: 22 !important;
+    cy: 22 !important;
+    r: 18 !important;
+  }
+  .ring-text span {
+    font-size: 11px !important;
+  }
+  .pomo-time {
+    font-size: 19px !important;
+  }
+  .pomo-controls {
+    display: flex !important;
+    gap: 4px !important;
+    justify-content: center !important;
+  }
+  .pomo-controls .btn {
+    padding: 4px 6px !important;
+    font-size: 11px !important;
+  }
+
+  /* Schedule Week Layout */
+  .week-nav {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .week-nav-title {
+    font-size: 13.5px;
+    text-align: center;
+  }
+  .week-extra-controls {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 6px;
+  }
+  .week-extra-controls .btn, .week-extra-controls .chip {
+    flex: 1;
+    justify-content: center;
+    padding: 6px 8px !important;
+    font-size: 11px !important;
+  }
+  .day-picker {
+    display: flex !important;
+    justify-content: space-between !important;
+    gap: 4px !important;
+    margin-bottom: 10px !important;
+    padding-bottom: 2px !important;
+    overflow-x: visible !important;
+  }
+  .day-picker button {
+    flex: 1 !important;
+    min-width: 0 !important;
+    padding: 7px 2px !important;
+    font-size: 11.5px !important;
+    text-align: center !important;
+    border-radius: 12px !important;
+  }
+  .schedule-grid {
+    grid-template-columns: 36px minmax(0, 1fr) !important;
+    gap: 0 6px !important;
+  }
+  .time-slot {
+    font-size: 9.5px !important;
+  }
   .day-col { display: none; }
   .day-col.active-day { display: block; }
   .day-head { display: none; }
   .day-head.active-day { display: block; }
-  .day-picker { display: flex; }
+  .sch-filter-bar {
+    padding: 2px 2px 8px !important;
+    margin-bottom: 6px !important;
+  }
+  .sch-filter-chip {
+    padding: 4px 10px !important;
+    font-size: 11px !important;
+  }
+
+  /* Modals as True Bottom Sheets */
+  .modal-backdrop {
+    padding: 0 !important;
+    align-items: flex-end !important;
+  }
+  .modal-card {
+    border-radius: 26px 26px 0 0 !important;
+    max-height: 90vh !important;
+    padding: 20px 16px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    animation: slideUp 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .modal-title {
+    font-size: 16px !important;
+    margin-bottom: 14px !important;
+  }
+  .form-row {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+  .form-row label {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+  input, select, textarea {
+    font-size: 16px !important; /* Prevents iOS browser auto-zoom on input focus */
+    padding: 10px 14px !important;
+    border-radius: 12px !important;
+  }
+
+  /* Toast Notification */
+  .toast-container {
+    bottom: calc(20px + env(safe-area-inset-bottom, 8px)) !important;
+  }
+
+  /* Daily Briefing Bottom Sheet on Mobile */
+  .briefing-modal-card {
+    border-radius: 28px 28px 0 0 !important;
+    max-height: 88vh !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .briefing-hero-header {
+    padding: 16px 18px 14px !important;
+  }
+  .briefing-top-nav {
+    margin-bottom: 10px !important;
+  }
+  .briefing-date-pill {
+    font-size: 11px !important;
+    padding: 3px 9px !important;
+  }
+  .briefing-avatar-badge {
+    width: 40px !important;
+    height: 40px !important;
+    font-size: 22px !important;
+    border-radius: 14px !important;
+  }
+  .briefing-greeting {
+    font-size: 16.5px !important;
+    line-height: 1.25 !important;
+  }
+  .briefing-subtitle {
+    font-size: 11.5px !important;
+  }
+  .briefing-body {
+    padding: 14px 16px 20px !important;
+    gap: 14px !important;
+    max-height: calc(88vh - 125px) !important;
+  }
+  /* 3-card metric on mobile: ALWAYS 1 row, 3 equal columns, proportional & neat! */
+  .briefing-stats-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 6px !important;
+  }
+  .briefing-stat-card {
+    padding: 8px 6px !important;
+    border-radius: 14px !important;
+    text-align: center;
+    align-items: center;
+  }
+  .stat-card-top {
+    width: 100%;
+    justify-content: center !important;
+    gap: 4px;
+  }
+  .stat-card-label {
+    font-size: 10px !important;
+    white-space: nowrap;
+  }
+  .stat-card-icon {
+    font-size: 12px !important;
+  }
+  .stat-card-value {
+    font-size: 18px !important;
+    font-weight: 800 !important;
+  }
+  .briefing-footer-section {
+    padding-top: 10px !important;
+    gap: 10px !important;
+  }
+  .briefing-action-buttons {
+    flex-direction: column-reverse !important;
+    gap: 8px !important;
+  }
+  .briefing-btn-primary, .briefing-btn-secondary {
+    width: 100% !important;
+    padding: 11px 16px !important;
+    font-size: 13.5px !important;
+  }
+
+  /* Quick Preview Popover Bottom Sheet */
+  .event-popover {
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    top: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 24px 24px 0 0 !important;
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.2) !important;
+    animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
 }
 
 /* ---------- Theme Mood Palettes ---------- */
@@ -1863,18 +2414,23 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
 <div class="app-wrap">
 
   <header class="masthead">
-    <div class="masthead-text">
-      <h1><i class="ph-fill ph-student"></i> Campus Planner</h1>
-      <div class="sub" id="headerSub">Academic Planner</div>
+    <div class="masthead-brand-group">
+      <button class="icon-btn mobile-menu-btn" id="mobileMenuBtn" aria-label="Open Navigation Menu" title="Menu">
+        <i class="ph-bold ph-list"></i>
+      </button>
+      <div class="masthead-text">
+        <h1><i class="ph-fill ph-student"></i> Campus Planner</h1>
+        <div class="sub" id="headerSub">Academic Planner</div>
+      </div>
     </div>
-    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+    <div class="masthead-controls" style="display:flex; align-items:center; gap:8px; justify-content:flex-end;">
       <button class="chip" id="dailyBriefingBtn" title="Daily Briefing / สรุปวันนี้" style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; font-weight:600; cursor:pointer; background:var(--surface); border:1px solid var(--line); border-radius:999px; font-size:12.5px; color:var(--ink); transition:all 0.15s ease;">
         <i class="ph-fill ph-sun-horizon" style="color:var(--accent);"></i> <span>สรุปวันนี้</span>
       </button>
       <div class="sync-badge" id="syncStatusBadge" title="Data Storage & Cloud Sync Status">
         <span class="sync-dot local" id="syncDot"></span> <span id="syncStatusText">Local</span>
       </div>
-      <div class="streak-badge" id="streakBadge" title="Daily Activity Streak"><i class="ph-fill ph-fire"></i> <span id="streakCount">1</span> Day Streak</div>
+      <div class="streak-badge" id="streakBadge" title="Daily Activity Streak"><i class="ph-fill ph-fire"></i> <span id="streakCount">1</span><span class="streak-label"> Day Streak</span></div>
       <button class="user-auth-btn" id="userAuthBtn" title="Account / Profile">
         <div class="user-avatar-circle" id="userAvatarCircle"><i class="ph ph-user"></i></div>
         <span id="userAuthBtnText">Sign In</span>
@@ -1926,7 +2482,7 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
         </div>
         
         <!-- Productivity Mini-Dashboard -->
-        <div style="display:flex; flex-direction:column; gap:14px;">
+        <div style="display:flex; flex-direction:column; gap:14px;" class="productivity-dash-wrap">
           <div class="metric-card">
             <div class="ring-wrap">
               <svg><circle class="ring-bg" cx="31" cy="31" r="28"></circle><circle class="ring-prog" id="taskRing" cx="31" cy="31" r="28"></circle></svg>
@@ -2161,6 +2717,63 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
   
   <footer>Saved automatically on your device</footer>
 </div>
+
+<!-- Mobile Navigation Drawer -->
+<div class="drawer-backdrop" id="drawerBackdrop"></div>
+<aside class="mobile-drawer" id="mobileNavDrawer" aria-label="Mobile Navigation Menu">
+  <div class="drawer-header">
+    <div class="drawer-brand">
+      <i class="ph-fill ph-student" style="color:var(--primary); font-size:22px;"></i>
+      <span style="font-weight:700; font-size:16px;">Campus Planner</span>
+    </div>
+    <button class="icon-btn" id="closeDrawerBtn" aria-label="Close Menu" title="Close"><i class="ph ph-x"></i></button>
+  </div>
+
+  <div class="drawer-nav" id="drawerNavButtons">
+    <button data-panel="today" class="drawer-nav-item active">
+      <i class="ph ph-sun"></i>
+      <div class="drawer-nav-text">
+        <span class="drawer-nav-title">Today</span>
+        <span class="drawer-nav-desc">ภาพรวมและภารกิจวันนี้</span>
+      </div>
+    </button>
+    <button data-panel="schedule" class="drawer-nav-item">
+      <i class="ph ph-calendar"></i>
+      <div class="drawer-nav-text">
+        <span class="drawer-nav-title">Schedule</span>
+        <span class="drawer-nav-desc">ตารางเรียน & ปฏิทินวิชา</span>
+      </div>
+    </button>
+    <button data-panel="tasks" class="drawer-nav-item">
+      <i class="ph ph-check-square"></i>
+      <div class="drawer-nav-text">
+        <span class="drawer-nav-title">Tasks</span>
+        <span class="drawer-nav-desc">งานค้าง & การบ้านที่ต้องส่ง</span>
+      </div>
+    </button>
+    <button data-panel="notes" class="drawer-nav-item">
+      <i class="ph ph-push-pin"></i>
+      <div class="drawer-nav-text">
+        <span class="drawer-nav-title">Notes</span>
+        <span class="drawer-nav-desc">สมุดจดบันทึก & ช็อตโน้ต</span>
+      </div>
+    </button>
+    <button data-panel="settings" class="drawer-nav-item">
+      <i class="ph ph-gear"></i>
+      <div class="drawer-nav-text">
+        <span class="drawer-nav-title">Settings</span>
+        <span class="drawer-nav-desc">ตั้งค่าระบบ & จัดการวิชา</span>
+      </div>
+    </button>
+  </div>
+
+  <div class="drawer-footer">
+    <div class="drawer-info-row">
+      <div class="streak-badge" style="font-size:11.5px; padding:5px 10px;"><i class="ph-fill ph-fire"></i> <span id="drawerStreakCount">1</span> Day Streak</div>
+      <button class="icon-btn" id="drawerSoundBtn" title="Sound Effects" style="width:34px; height:34px;"><i class="ph ph-speaker-high"></i></button>
+    </div>
+  </div>
+</aside>
 
 <!-- ================= MODALS ================= -->
 <div class="modal-backdrop" id="modalBackdrop">
@@ -3738,6 +4351,51 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
     }
   }
 
+  // --- Navigation & Drawer Helpers ---
+  function closeMobileDrawer() {
+    var drawer = document.getElementById('mobileNavDrawer');
+    var backdrop = document.getElementById('drawerBackdrop');
+    if(drawer) drawer.classList.remove('open');
+    if(backdrop) backdrop.classList.remove('open');
+  }
+
+  function openMobileDrawer() {
+    var drawer = document.getElementById('mobileNavDrawer');
+    var backdrop = document.getElementById('drawerBackdrop');
+    if(drawer) drawer.classList.add('open');
+    if(backdrop) backdrop.classList.add('open');
+    var s = document.getElementById('streakCount');
+    var ds = document.getElementById('drawerStreakCount');
+    if(s && ds) ds.textContent = s.textContent;
+  }
+
+  function switchTab(panelName) {
+    if(!panelName) return;
+    // Update desktop nav buttons
+    document.querySelectorAll('#tabButtons button').forEach(function(x){
+      x.classList.toggle('active', x.dataset.panel === panelName);
+    });
+    // Update mobile drawer nav items
+    document.querySelectorAll('#drawerNavButtons .drawer-nav-item').forEach(function(x){
+      x.classList.toggle('active', x.dataset.panel === panelName);
+    });
+    // Switch active panel
+    document.querySelectorAll('.panel').forEach(function(p){
+      p.classList.remove('active');
+    });
+    var target = document.getElementById('panel-' + panelName);
+    if(target) target.classList.add('active');
+
+    // Instant page cut: snap scroll straight to top of page!
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+
+    closeAllModals();
+    closeMobileDrawer();
+    updateMobileDayPickerVisibility();
+  }
+
   // --- Modal Helpers ---
   var modalBackdrop = document.getElementById('modalBackdrop');
   function closeAllModals() {
@@ -3752,6 +4410,7 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
     document.querySelectorAll('.modal-card').forEach(function(m){ m.style.display = 'none'; });
     document.body.style.overflow = '';
     hideEventPopover();
+    closeMobileDrawer();
   }
 
   function openModal(modalId) {
@@ -5049,17 +5708,35 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
       save(); updateHeader();
     });
 
-    // Tab switcher
+    // Tab Switcher & Mobile Drawer Events
     document.querySelectorAll('#tabButtons button').forEach(function(b){
       b.addEventListener('click', function(){
-        document.querySelectorAll('#tabButtons button').forEach(function(x){ x.classList.remove('active'); });
-        b.classList.add('active');
-        document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
-        document.getElementById('panel-' + b.dataset.panel).classList.add('active');
-        closeAllModals();
-        updateMobileDayPickerVisibility();
+        switchTab(b.dataset.panel);
       });
     });
+
+    document.querySelectorAll('#drawerNavButtons .drawer-nav-item').forEach(function(b){
+      b.addEventListener('click', function(){
+        switchTab(b.dataset.panel);
+      });
+    });
+
+    var mMenuBtn = document.getElementById('mobileMenuBtn');
+    if(mMenuBtn) mMenuBtn.addEventListener('click', openMobileDrawer);
+
+    var cDrawerBtn = document.getElementById('closeDrawerBtn');
+    if(cDrawerBtn) cDrawerBtn.addEventListener('click', closeMobileDrawer);
+
+    var dBackdrop = document.getElementById('drawerBackdrop');
+    if(dBackdrop) dBackdrop.addEventListener('click', closeMobileDrawer);
+
+    var dSoundBtn = document.getElementById('drawerSoundBtn');
+    if(dSoundBtn) {
+      dSoundBtn.addEventListener('click', function(){
+        var origSoundBtn = document.getElementById('soundToggleBtn');
+        if(origSoundBtn) origSoundBtn.click();
+      });
+    }
 
     // Schedule View Switcher (Week vs Month)
     document.querySelectorAll('#scheduleViewSwitcher button').forEach(function(btn){
