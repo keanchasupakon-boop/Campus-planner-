@@ -649,9 +649,16 @@ button, input, select, textarea {
 }
 .time-col { position: relative; border-right: 1px solid var(--line); margin-right: 6px; }
 .time-label { position: absolute; right: 10px; font-size: 10.5px; font-weight: 500; color: var(--ink-soft); transform: translateY(-6px); }
-.day-col { position: relative; min-height: 810px; border-radius: 8px; transition: background 0.2s; min-width: 0; }
+.day-col { 
+  position: relative; 
+  border-radius: 8px; 
+  transition: background 0.2s; 
+  min-width: 0;
+  background-image: linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+  background-size: 100% var(--hour-h, 42px);
+}
 .day-col.drag-over { background: var(--bg); }
-.day-col .rail { position: relative; height: 810px; }
+.day-col .rail { position: relative; width: 100%; }
 
 .entry {
   position: absolute; left: 0; right: 0; border-radius: 6px; padding: 5px 7px; font-size: 11px;
@@ -1614,12 +1621,11 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
     min-width: 0;
   }
   .masthead-text h1 {
-    font-size: 17px !important;
+    font-size: 18px !important;
+    font-weight: 700 !important;
     margin: 0 !important;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    letter-spacing: -0.01em;
+    white-space: nowrap !important;
+    letter-spacing: -0.02em !important;
   }
   .masthead-text .sub {
     display: none !important; /* Hide "Academic Planner" subtitle on mobile */
@@ -1638,38 +1644,41 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
     display: none;
   }
 
-  /* Badges & Buttons Clean Up on Mobile */
+  /* Badges & Buttons Clean Up on Mobile - Minimal & Clean */
   #syncStatusBadge {
     display: none !important; /* Clean up: local status is hidden on phone */
   }
   #soundToggleBtn {
     display: none !important; /* Sound toggle is easily managed in Settings or Drawer */
   }
-  .streak-label {
-    display: none !important; /* Hide "Day Streak" text, keep compact "🔥 1" */
-  }
   #streakBadge {
-    font-size: 11.5px !important;
-    padding: 4px 8px !important;
-    border-radius: 999px !important;
-    flex-shrink: 0 !important;
+    display: none !important; /* Streak is prominently displayed in the hamburger drawer */
   }
   #dailyBriefingBtn {
-    font-size: 11.5px !important;
-    padding: 5px 9px !important;
+    font-size: 13px !important;
+    padding: 6px 9px !important;
     border-radius: 999px !important;
     flex-shrink: 0 !important;
+    background: var(--surface) !important;
+    border: 1px solid var(--line) !important;
+  }
+  #dailyBriefingBtn span {
+    display: none !important; /* Hide Thai text "สรุปวันนี้" to give space to Title */
   }
   .user-auth-btn {
-    font-size: 11.5px !important;
-    padding: 4px 8px !important;
-    border-radius: 999px !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
     flex-shrink: 0 !important;
   }
+  #userAuthBtnText {
+    display: none !important; /* Hide username text like "SKY" to save header space */
+  }
   .user-avatar-circle {
-    width: 22px !important;
-    height: 22px !important;
-    font-size: 11px !important;
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 13px !important;
   }
   .icon-btn {
     width: 32px !important;
@@ -1702,7 +1711,10 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
     display: none !important;
   }
 
-  /* Instant Snappy Page Transition (ตัดสลับไปหน้าใหม่ทันที) */
+  /* Panel Visibility - Only the active panel is shown (หน้าใครหน้ามัน 100%) */
+  .panel {
+    display: none !important;
+  }
   .panel.active {
     display: block !important;
     animation: pageCutIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
@@ -1718,57 +1730,145 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
     }
   }
 
-  /* Panel Head */
+  /* Panel Head across ALL Panels on Mobile */
   .panel-head {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-    margin-bottom: 14px;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 4px !important;
+    margin-bottom: 12px !important;
   }
   .panel-head h2 {
-    font-size: 17px !important;
+    font-size: 22px !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.02em !important;
+    color: var(--ink) !important;
+    line-height: 1.2 !important;
+    margin: 0 0 2px 0 !important;
+  }
+  .panel-head .sub {
+    font-size: 12.5px !important;
+    color: var(--ink-soft) !important;
+    font-weight: 500 !important;
+    margin: 0 0 6px 0 !important;
   }
   .panel-head .actions-group {
-    width: 100%;
-    display: flex;
-    gap: 6px;
+    width: 100% !important;
+    display: flex !important;
+    gap: 8px !important;
+    margin-top: 4px !important;
   }
   .actions-group .btn {
-    flex: 1;
-    min-width: 0;
-    padding: 8px 10px;
-    font-size: 12px;
-    justify-content: center;
+    flex: 1 !important;
+    min-width: 0 !important;
+    padding: 9px 12px !important;
+    font-size: 12.5px !important;
+    font-weight: 600 !important;
+    border-radius: 12px !important;
+    justify-content: center !important;
   }
 
-  /* Today View Layout - Prioritize Today's Classes & Urgent Tasks */
-  #panel-today {
+  /* Today View Layout - Only when active! */
+  #panel-today.active {
     display: flex !important;
     flex-direction: column !important;
+    animation: pageCutIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
   }
   #panel-today .panel-head {
     order: 1 !important;
     margin-bottom: 8px !important;
   }
   #panel-today .panel-head h2 {
-    font-size: 17px !important;
+    font-size: 22px !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.02em !important;
+    color: var(--ink) !important;
+    margin-bottom: 2px !important;
+  }
+  #panel-today .panel-head .sub {
+    font-size: 13px !important;
+    color: var(--ink-soft) !important;
+    font-weight: 500 !important;
   }
   #panel-today #quotePill {
     order: 2 !important;
-    margin-bottom: 14px !important;
-    padding: 8px 12px !important;
+    margin-bottom: 12px !important;
+    padding: 9px 12px !important;
     font-size: 12px !important;
+    background: var(--surface-2) !important;
+    border: 1px solid var(--line) !important;
+    border-radius: 12px !important;
+    color: var(--ink-soft) !important;
   }
   #panel-today #milestonesContainer {
     order: 3 !important;
+    margin-bottom: 12px !important;
+    gap: 8px !important;
   }
+  #panel-today .milestone-card {
+    flex: 1 1 100% !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 12px 14px !important;
+    border-radius: 14px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    box-shadow: var(--shadow-sm) !important;
+    background: var(--surface) !important;
+  }
+  #panel-today .milestone-card h4 {
+    margin: 0 !important;
+    font-size: 13.5px !important;
+  }
+  #panel-today .milestone-card .date {
+    margin: 2px 0 0 0 !important;
+    font-size: 11px !important;
+  }
+  #panel-today .milestone-card .countdown {
+    font-size: 18px !important;
+    text-align: right !important;
+    line-height: 1.1 !important;
+  }
+  #panel-today .milestone-card .countdown span {
+    display: block !important;
+    font-size: 10px !important;
+  }
+
+  /* Schedule & Tasks Section */
   #panel-today .today-grid {
     order: 4 !important;
     display: flex !important;
     flex-direction: column !important;
-    gap: 14px !important;
-    margin-bottom: 14px !important;
+    gap: 12px !important;
+    margin-bottom: 12px !important;
   }
+  #panel-today .today-grid .card {
+    padding: 14px !important;
+    border-radius: 16px !important;
+    background: var(--surface) !important;
+    border: 1px solid var(--line) !important;
+    box-shadow: var(--shadow-sm) !important;
+  }
+  #panel-today .today-grid .card-header {
+    margin-bottom: 10px !important;
+  }
+  #panel-today .today-grid .card-header h3 {
+    font-size: 14px !important;
+    font-weight: 700 !important;
+  }
+  #panel-today .empty-note {
+    text-align: center !important;
+    padding: 12px 14px !important;
+    color: var(--ink-soft) !important;
+    font-size: 12px !important;
+    border: 1px dashed var(--line) !important;
+    border-radius: 12px !important;
+    background: var(--surface-2) !important;
+    margin-bottom: 0 !important;
+    line-height: 1.4 !important;
+  }
+
+  /* Big Picture & Productivity Dashboard Section */
   #panel-today .big-picture-grid {
     order: 5 !important;
     display: flex !important;
@@ -1776,37 +1876,51 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
     gap: 12px !important;
     margin-bottom: 6px !important;
   }
-  
-  /* Workload Graph - Compact Mini Bar on Mobile */
   .big-picture-grid .card {
-    padding: 12px 14px !important;
+    padding: 14px !important;
     border-radius: 16px !important;
+    background: var(--surface) !important;
+    border: 1px solid var(--line) !important;
+    box-shadow: var(--shadow-sm) !important;
   }
   .big-picture-grid .card-header {
-    margin-bottom: 8px !important;
+    margin-bottom: 10px !important;
   }
   .big-picture-grid .card-header h3 {
-    font-size: 13.5px !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
   }
   .big-picture-grid .card-sub {
     font-size: 11px !important;
+    color: var(--ink-soft) !important;
+    margin-top: 2px !important;
   }
+  
+  /* Workload Graph - Balanced Bar Chart on Mobile */
   .workload-graph {
-    height: 60px !important;
-    gap: 8px !important;
-    padding: 0 4px 2px !important;
+    height: 76px !important;
+    gap: 10px !important;
+    padding: 0 4px 4px !important;
+    border-bottom: 1px solid var(--line) !important;
+  }
+  .wl-bar-col {
+    gap: 4px !important;
   }
   .wl-bar-track {
-    max-width: 28px !important;
-    height: 36px !important;
-    border-radius: 6px !important;
-    padding: 2px !important;
+    max-width: 36px !important;
+    height: 48px !important;
+    border-radius: 8px !important;
+    padding: 2.5px !important;
+    background: var(--surface-2) !important;
   }
   .wl-count {
-    font-size: 11px !important;
+    font-size: 11.5px !important;
+    font-weight: 700 !important;
   }
   .wl-label {
-    font-size: 9.5px !important;
+    font-size: 10px !important;
+    font-weight: 500 !important;
+    margin-top: 2px !important;
   }
 
   /* Productivity Mini-Dashboard - Compact 2-Column Row */
@@ -1817,29 +1931,34 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
     flex-direction: unset !important;
   }
   .productivity-dash-wrap .metric-card {
-    padding: 10px 8px !important;
-    gap: 8px !important;
-    border-radius: 14px !important;
+    padding: 12px 10px !important;
+    gap: 10px !important;
+    border-radius: 16px !important;
+    background: var(--surface) !important;
+    border: 1px solid var(--line) !important;
+    box-shadow: var(--shadow-sm) !important;
   }
   .ring-wrap {
-    width: 44px !important;
-    height: 44px !important;
+    width: 48px !important;
+    height: 48px !important;
     flex-shrink: 0 !important;
   }
   .ring-wrap svg {
-    width: 44px !important;
-    height: 44px !important;
+    width: 48px !important;
+    height: 48px !important;
   }
   .ring-wrap circle {
-    cx: 22 !important;
-    cy: 22 !important;
-    r: 18 !important;
+    cx: 24 !important;
+    cy: 24 !important;
+    r: 20 !important;
   }
   .ring-text span {
-    font-size: 11px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
   }
   .pomo-time {
-    font-size: 19px !important;
+    font-size: 20px !important;
+    font-weight: 800 !important;
   }
   .pomo-controls {
     display: flex !important;
@@ -1847,67 +1966,336 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
     justify-content: center !important;
   }
   .pomo-controls .btn {
-    padding: 4px 6px !important;
+    padding: 4px 7px !important;
     font-size: 11px !important;
+    border-radius: 8px !important;
   }
 
-  /* Schedule Week Layout */
+  /* ---------- SCHEDULE PANEL (WEEK & MONTH) ON MOBILE ---------- */
+  #panel-schedule .view-switcher {
+    flex: 1 !important;
+    display: flex !important;
+    background: var(--surface-2) !important;
+    border: 1px solid var(--line) !important;
+    border-radius: 12px !important;
+    padding: 3px !important;
+  }
+  #panel-schedule .view-switcher button {
+    flex: 1 !important;
+    padding: 7px 4px !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    border-radius: 9px !important;
+    justify-content: center !important;
+  }
+  #panel-schedule #addClassBtn {
+    flex: 1.25 !important;
+    padding: 9px 12px !important;
+    font-size: 12.5px !important;
+    font-weight: 600 !important;
+    border-radius: 12px !important;
+  }
+
+  /* Schedule Week Layout - Sleek Unified Nav Card */
   .week-nav {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 8px;
-    margin-bottom: 10px;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    background: var(--surface) !important;
+    border: 1px solid var(--line) !important;
+    border-radius: 16px !important;
+    padding: 10px 12px !important;
+    margin-bottom: 10px !important;
+    box-shadow: var(--shadow-sm) !important;
+  }
+  .week-nav > div:first-child {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+  }
+  .week-nav > div:first-child .btn {
+    padding: 6px 12px !important;
+    font-size: 12px !important;
+    border-radius: 10px !important;
   }
   .week-nav-title {
-    font-size: 13.5px;
-    text-align: center;
+    font-size: 13.5px !important;
+    font-weight: 700 !important;
+    color: var(--ink) !important;
+    text-align: center !important;
+    margin: 0 !important;
   }
   .week-extra-controls {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    gap: 6px;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 6px !important;
+    width: 100% !important;
   }
-  .week-extra-controls .btn, .week-extra-controls .chip {
-    flex: 1;
-    justify-content: center;
-    padding: 6px 8px !important;
-    font-size: 11px !important;
+  .week-extra-controls .btn, .week-extra-controls .week-ab-pill {
+    width: 100% !important;
+    padding: 7px 8px !important;
+    font-size: 11.5px !important;
+    font-weight: 600 !important;
+    border-radius: 10px !important;
+    justify-content: center !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
   }
+
+  /* Category Filter Chips Bar - Smooth horizontal swipe, no scrollbar */
+  .sch-filter-bar {
+    display: flex !important;
+    overflow-x: auto !important;
+    gap: 6px !important;
+    padding: 2px 2px 6px !important;
+    margin-bottom: 8px !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  .sch-filter-bar::-webkit-scrollbar {
+    display: none !important;
+  }
+  .sch-filter-chip {
+    flex-shrink: 0 !important;
+    padding: 5px 11px !important;
+    font-size: 11.5px !important;
+    border-radius: 999px !important;
+    font-weight: 500 !important;
+    background: var(--surface) !important;
+    border: 1px solid var(--line) !important;
+  }
+  .sch-filter-chip.active {
+    background: var(--primary) !important;
+    color: #fff !important;
+    border-color: var(--primary) !important;
+    font-weight: 700 !important;
+  }
+
+  /* Day Picker - Clean 7-day segmented pill row */
   .day-picker {
     display: flex !important;
     justify-content: space-between !important;
     gap: 4px !important;
     margin-bottom: 10px !important;
-    padding-bottom: 2px !important;
+    padding: 4px !important;
+    border-radius: 14px !important;
+    background: var(--surface) !important;
+    border: 1px solid var(--line) !important;
+    box-shadow: var(--shadow-sm) !important;
     overflow-x: visible !important;
   }
   .day-picker button {
     flex: 1 !important;
     min-width: 0 !important;
-    padding: 7px 2px !important;
-    font-size: 11.5px !important;
+    padding: 8px 2px !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
     text-align: center !important;
-    border-radius: 12px !important;
+    border-radius: 10px !important;
+    border: none !important;
+    background: transparent !important;
+    color: var(--ink-soft) !important;
+    transition: all 0.15s ease !important;
   }
+  .day-picker button.active {
+    background: var(--ink) !important;
+    color: var(--bg) !important;
+    font-weight: 800 !important;
+  }
+  .day-picker button.today:not(.active) {
+    background: var(--surface-2) !important;
+    color: var(--primary) !important;
+    font-weight: 700 !important;
+  }
+
+  /* Schedule Time Grid & Day Column */
   .schedule-grid {
     grid-template-columns: 36px minmax(0, 1fr) !important;
-    gap: 0 6px !important;
+    gap: 0 8px !important;
+    background: var(--surface) !important;
+    border: 1px solid var(--line) !important;
+    border-radius: 16px !important;
+    padding: 10px 8px !important;
+    box-shadow: var(--shadow-sm) !important;
   }
   .time-slot {
     font-size: 9.5px !important;
+    color: var(--ink-soft) !important;
   }
-  .day-col { display: none; }
-  .day-col.active-day { display: block; }
-  .day-head { display: none; }
-  .day-head.active-day { display: block; }
-  .sch-filter-bar {
-    padding: 2px 2px 8px !important;
+  .day-col {
+    display: none;
+    min-height: unset !important;
+  }
+  .day-col.active-day {
+    display: block !important;
+  }
+  .day-col .rail {
+    height: 100% !important;
+  }
+  .day-head {
+    display: none;
+  }
+  .day-head.active-day {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    color: var(--primary) !important;
+    padding: 4px 0 8px !important;
+    margin-bottom: 4px !important;
+    border-bottom: 1px solid var(--line) !important;
+  }
+
+  /* Month Calendar View on Mobile */
+  .month-view-container {
+    background: var(--surface) !important;
+    border: 1px solid var(--line) !important;
+    border-radius: 16px !important;
+    padding: 12px 10px !important;
+    box-shadow: var(--shadow-sm) !important;
+  }
+  .calendar-nav-bar {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    align-items: center !important;
+    margin-bottom: 12px !important;
+  }
+  .calendar-month-title {
+    font-size: 16px !important;
+    font-weight: 800 !important;
+  }
+
+  /* ---------- TASKS & DEADLINES ON MOBILE ---------- */
+  .task-controls {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+    margin-bottom: 14px !important;
+    background: var(--surface) !important;
+    padding: 10px !important;
+    border-radius: 16px !important;
+    border: 1px solid var(--line) !important;
+    box-shadow: var(--shadow-sm) !important;
+  }
+  .search-input-wrap {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    flex: none !important;
+  }
+  .search-input-wrap input {
+    width: 100% !important;
+    padding: 9px 12px 9px 34px !important;
+    font-size: 13px !important;
+    border-radius: 10px !important;
+    background: var(--surface-2) !important;
+    border: 1px solid var(--line) !important;
+  }
+  .task-controls select {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 8px 10px !important;
+    font-size: 12px !important;
+    border-radius: 10px !important;
+    background: var(--surface-2) !important;
+    border: 1px solid var(--line) !important;
+    font-weight: 500 !important;
+  }
+  .timeline-section {
+    margin-bottom: 16px !important;
+  }
+  .timeline-header {
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    color: var(--ink-soft) !important;
+    letter-spacing: 0.04em !important;
+    text-transform: uppercase !important;
+    margin-bottom: 6px !important;
+    padding: 0 4px !important;
+    border-bottom: none !important;
+  }
+  .task-list {
+    background: var(--surface) !important;
+    border: 1px solid var(--line) !important;
+    border-radius: 16px !important;
+    padding: 4px 8px !important;
+    box-shadow: var(--shadow-sm) !important;
+    margin-bottom: 8px !important;
+  }
+  .task-item {
+    padding: 11px 8px !important;
+    border-bottom: 1px solid var(--line) !important;
+    border-radius: 10px !important;
+    gap: 10px !important;
+  }
+  .task-item:last-child {
+    border-bottom: none !important;
+  }
+  .task-item .task-text {
+    font-size: 13.5px !important;
+    font-weight: 600 !important;
+    line-height: 1.35 !important;
+  }
+  .task-meta {
+    gap: 5px !important;
+    margin-top: 3px !important;
+    flex-wrap: wrap !important;
+  }
+  .task-meta span {
+    font-size: 11px !important;
+  }
+
+  /* ---------- STICKY NOTES ON MOBILE ---------- */
+  #panel-notes .masonry {
+    columns: 1 !important;
+    column-gap: 0 !important;
+  }
+  .note-card {
+    padding: 16px !important;
+    border-radius: 16px !important;
+    margin-bottom: 12px !important;
+    box-shadow: var(--shadow-sm) !important;
+    border: 1px solid rgba(0, 0, 0, 0.06) !important;
+  }
+  .note-card textarea {
+    font-size: 14.5px !important;
+    min-height: 85px !important;
+    line-height: 1.5 !important;
+  }
+  .note-card .note-del {
+    opacity: 0.85 !important;
+    top: 10px !important;
+    right: 10px !important;
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 13px !important;
+    border-radius: 50% !important;
+  }
+
+  /* ---------- SETTINGS & BACKUP ON MOBILE ---------- */
+  .settings-section {
+    padding: 16px !important;
+    border-radius: 16px !important;
+    background: var(--surface) !important;
+    border: 1px solid var(--line) !important;
+    box-shadow: var(--shadow-sm) !important;
+    margin-bottom: 14px !important;
+  }
+  .settings-section h3 {
+    font-size: 15px !important;
+    font-weight: 700 !important;
     margin-bottom: 6px !important;
   }
-  .sch-filter-chip {
-    padding: 4px 10px !important;
-    font-size: 11px !important;
+  .settings-section p {
+    font-size: 12px !important;
+    line-height: 1.4 !important;
+    color: var(--ink-soft) !important;
+    margin-bottom: 12px !important;
   }
 
   /* Modals as True Bottom Sheets */
@@ -2408,6 +2796,210 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
   border-color: var(--ink);
   box-shadow: 0 0 0 2px var(--surface);
 }
+.user-avatar-circle.c-sakura { background: #FCE7F3; color: #DB2777; }
+.user-avatar-circle.c-midnight { background: #E2E8F0; color: #0F172A; }
+.user-avatar-circle.c-teal { background: #CCFBF1; color: #0D9488; }
+
+/* Digital Student ID Card */
+.digital-student-card {
+  position: relative;
+  background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+  border: 1px solid var(--line-strong);
+  border-radius: 18px;
+  padding: 16px;
+  margin: 12px 0 16px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+.digital-student-card::before {
+  content: '';
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+  opacity: 0.12;
+  pointer-events: none;
+}
+.student-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px dashed var(--line);
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+}
+.student-card-brand {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.student-card-brand i {
+  color: var(--primary);
+  font-size: 16px;
+}
+.student-card-chip {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  padding: 3px 8px;
+  background: var(--line);
+  color: var(--ink-soft);
+  border-radius: 999px;
+  text-transform: uppercase;
+}
+.student-card-body {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.student-card-avatar {
+  width: 58px !important;
+  height: 58px !important;
+  font-size: 24px !important;
+  border-radius: 16px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  flex-shrink: 0;
+  border: 2px solid var(--surface);
+}
+.student-card-info {
+  flex: 1;
+  min-width: 0;
+}
+.student-card-name {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  line-height: 1.2;
+}
+.student-card-id {
+  font-size: 11.5px;
+  font-family: monospace;
+  font-weight: 600;
+  color: var(--ink-soft);
+  margin-top: 2px;
+}
+.student-card-dept {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--primary);
+  margin-top: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.student-card-email {
+  font-size: 11px;
+  color: var(--ink-soft);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+}
+.student-card-footer {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.student-card-motto {
+  font-size: 11.5px;
+  font-style: italic;
+  color: var(--ink-soft);
+  flex: 1;
+  min-width: 140px;
+}
+.student-card-badges {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.student-card-badges .pill {
+  font-size: 10.5px;
+  padding: 3px 7px;
+  font-weight: 600;
+}
+
+/* Emoji Avatar Picker */
+.avatar-emoji-picker {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 6px;
+  margin-top: 6px;
+}
+@media (max-width: 480px) {
+  .avatar-emoji-picker {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+.avatar-emoji-btn {
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  font-weight: 700;
+  color: var(--ink);
+}
+.avatar-emoji-btn:hover {
+  background: var(--surface-hover);
+  border-color: var(--primary);
+  transform: scale(1.08);
+}
+.avatar-emoji-btn.selected {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--primary);
+  transform: scale(1.08);
+  color: var(--primary);
+}
+
+/* Profile Sub Tabs */
+.profile-sub-tabs {
+  display: flex;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 3px;
+  margin-bottom: 16px;
+  gap: 4px;
+}
+.profile-sub-tabs button {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 8px 10px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  border-radius: 9px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.profile-sub-tabs button.active {
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow-sm);
+}
 </style>
 </head>
 <body>
@@ -2840,39 +3432,144 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
     </div>
   </div>
 
-  <!-- User Profile Modal -->
-  <div class="modal-card" id="profileModal" style="display:none; max-width:440px;">
-    <div class="modal-title"><i class="ph ph-user"></i> Student Profile</div>
-
-    <div style="display:flex; align-items:center; gap:16px; margin:16px 0 20px; padding:16px; background:var(--bg); border:1px solid var(--line); border-radius:14px;">
-      <div class="user-avatar-circle" id="profileAvatarPreview" style="width:52px; height:52px; font-size:20px;"></div>
-      <div style="flex:1; min-width:0;">
-        <div style="font-weight:700; font-size:16px;" id="profileDisplayName"></div>
-        <div style="font-size:12.5px; color:var(--ink-soft); overflow:hidden; text-overflow:ellipsis;" id="profileEmail"></div>
-        <div style="font-size:12px; color:var(--primary); margin-top:2px;" id="profileUniversity"></div>
+  <!-- User Profile Modal (Rich Student Digital ID Card & Academic Profile) -->
+  <div class="modal-card" id="profileModal" style="display:none; max-width:500px;">
+    <div class="modal-title" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <i class="ph-fill ph-identification-card" style="color:var(--primary); font-size:22px;"></i>
+        <span>Student Profile & Digital ID</span>
       </div>
+      <span class="badge" style="font-size:10.5px; background:var(--surface-2); color:var(--ink-soft); font-weight:700; border:1px solid var(--line);">Academic Pass</span>
     </div>
 
-    <div class="form-row" style="flex-direction:column; gap:12px;">
-      <label>Display Name
-        <input type="text" id="profileEditName">
-      </label>
-      <label>University / Campus
-        <input type="text" id="profileEditUniversity">
-      </label>
-      <div>
-        <span style="font-size:12px; font-weight:600; color:var(--ink);">Avatar Color Theme</span>
-        <div class="avatar-color-choices" id="avatarColorChoices">
-          <div class="avatar-color-pill selected" data-color="sky" style="background:#0284C7;"></div>
-          <div class="avatar-color-pill" data-color="sage" style="background:#16A34A;"></div>
-          <div class="avatar-color-pill" data-color="coral" style="background:#DC2626;"></div>
-          <div class="avatar-color-pill" data-color="gold" style="background:#D97706;"></div>
-          <div class="avatar-color-pill" data-color="lilac" style="background:#9333EA;"></div>
+    <!-- Live Digital Student ID Card Preview -->
+    <div class="digital-student-card" id="studentIdCard">
+      <div class="student-card-header">
+        <div class="student-card-brand">
+          <i class="ph-fill ph-student"></i>
+          <span id="cardUniPreview">Chiang Mai University (CMU)</span>
+        </div>
+        <span class="student-card-chip">STUDENT ID</span>
+      </div>
+      
+      <div class="student-card-body">
+        <div class="student-card-avatar-wrap">
+          <div class="user-avatar-circle student-card-avatar c-sky" id="cardAvatarPreview">SK</div>
+        </div>
+        <div class="student-card-info">
+          <div class="student-card-name" id="cardNamePreview">SKY</div>
+          <div class="student-card-id" id="cardIdPreview">ID: 650510101</div>
+          <div class="student-card-dept" id="cardDeptPreview">Faculty of Education · Computer Ed</div>
+          <div class="student-card-email" id="cardEmailPreview">supakornkancha101@gmail.com</div>
+        </div>
+      </div>
+      
+      <div class="student-card-footer">
+        <div class="student-card-motto" id="cardMottoPreview">"Work hard, dream big ✨"</div>
+        <div class="student-card-badges">
+          <span class="pill" id="cardYearBadge">Year 3</span>
+          <span class="pill pri-high" id="cardGpaBadge">🎯 GPA 3.80</span>
+          <span class="pill pri-low" id="cardStreakBadge">🔥 1 Day</span>
         </div>
       </div>
     </div>
 
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:24px; border-top:1px solid var(--line); padding-top:16px;">
+    <!-- Profile Sub Tabs -->
+    <div class="profile-sub-tabs" id="profileSubTabs">
+      <button type="button" class="active" data-ptab="identity"><i class="ph ph-user"></i> Identity & Avatar</button>
+      <button type="button" data-ptab="academic"><i class="ph ph-graduation-cap"></i> Academic Info</button>
+    </div>
+
+    <!-- Tab 1: Identity & Avatar -->
+    <div id="ptab-identity" class="profile-tab-pane">
+      <div class="form-row" style="flex-direction:column; gap:12px;">
+        <label>Display Name / ชื่อแสดง
+          <input type="text" id="profileEditName" placeholder="e.g. SKY">
+        </label>
+        
+        <label>Personal Motto / Bio หรือคำคมประจำตัว
+          <input type="text" id="profileEditBio" placeholder="e.g. Work hard, dream big ✨">
+        </label>
+
+        <div>
+          <span style="font-size:12px; font-weight:600; color:var(--ink); display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;">
+            <span>Avatar Emoji or Initials</span>
+            <span style="font-size:11px; color:var(--ink-soft); font-weight:normal;">Choose icon or letters</span>
+          </span>
+          <div class="avatar-emoji-picker" id="avatarEmojiPicker">
+            <button type="button" class="avatar-emoji-btn selected" data-emoji="" id="avatarEmojiInitialsBtn" title="Initials">SK</button>
+            <button type="button" class="avatar-emoji-btn" data-emoji="🎓">🎓</button>
+            <button type="button" class="avatar-emoji-btn" data-emoji="💻">💻</button>
+            <button type="button" class="avatar-emoji-btn" data-emoji="🍎">🍎</button>
+            <button type="button" class="avatar-emoji-btn" data-emoji="📚">📚</button>
+            <button type="button" class="avatar-emoji-btn" data-emoji="🎨">🎨</button>
+            <button type="button" class="avatar-emoji-btn" data-emoji="☕">☕</button>
+            <button type="button" class="avatar-emoji-btn" data-emoji="🚀">🚀</button>
+            <button type="button" class="avatar-emoji-btn" data-emoji="🦁">🦁</button>
+            <button type="button" class="avatar-emoji-btn" data-emoji="🐱">🐱</button>
+            <button type="button" class="avatar-emoji-btn" data-emoji="🐼">🐼</button>
+            <button type="button" class="avatar-emoji-btn" data-emoji="🦊">🦊</button>
+            <button type="button" class="avatar-emoji-btn" data-emoji="🌟">🌟</button>
+            <button type="button" class="avatar-emoji-btn" data-emoji="⚡">⚡</button>
+            <button type="button" class="avatar-emoji-btn" data-emoji="🎯">🎯</button>
+            <button type="button" class="avatar-emoji-btn" data-emoji="🔬">🔬</button>
+            <button type="button" class="avatar-emoji-btn" data-emoji="🏆">🏆</button>
+          </div>
+        </div>
+
+        <div>
+          <span style="font-size:12px; font-weight:600; color:var(--ink); margin-bottom:4px; display:block;">Avatar & Card Mood Color</span>
+          <div class="avatar-color-choices" id="avatarColorChoices">
+            <div class="avatar-color-pill selected" data-color="sky" style="background:#0284C7;" title="Ocean Sky"></div>
+            <div class="avatar-color-pill" data-color="sage" style="background:#16A34A;" title="Forest Sage"></div>
+            <div class="avatar-color-pill" data-color="coral" style="background:#DC2626;" title="Crimson Coral"></div>
+            <div class="avatar-color-pill" data-color="gold" style="background:#D97706;" title="Golden Amber"></div>
+            <div class="avatar-color-pill" data-color="lilac" style="background:#9333EA;" title="Royal Lilac"></div>
+            <div class="avatar-color-pill" data-color="sakura" style="background:#EC4899;" title="Sakura Pink"></div>
+            <div class="avatar-color-pill" data-color="midnight" style="background:#1E293B;" title="Midnight Dark"></div>
+            <div class="avatar-color-pill" data-color="teal" style="background:#0D9488;" title="Matcha Mint"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 2: Academic Info -->
+    <div id="ptab-academic" class="profile-tab-pane" style="display:none;">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+        <label style="grid-column:1 / -1;">University / Campus / สถาบัน
+          <input type="text" id="profileEditUniversity" placeholder="e.g. Chiang Mai University (CMU)">
+        </label>
+        
+        <label>Student ID / รหัสนักศึกษา
+          <input type="text" id="profileEditStudentId" placeholder="e.g. 650510101">
+        </label>
+
+        <label>Academic Year / ชั้นปี
+          <select id="profileEditYear">
+            <option value="Year 1">ปี 1 (Freshman)</option>
+            <option value="Year 2">ปี 2 (Sophomore)</option>
+            <option value="Year 3">ปี 3 (Junior)</option>
+            <option value="Year 4">ปี 4 (Senior)</option>
+            <option value="Year 5+">ปี 5+ (Super Senior)</option>
+            <option value="Graduate">ปริญญาโท/เอก (Graduate)</option>
+          </select>
+        </label>
+
+        <label>Faculty / คณะ
+          <input type="text" id="profileEditFaculty" placeholder="e.g. คณะศึกษาศาสตร์">
+        </label>
+
+        <label>Major / สาขาวิชา
+          <input type="text" id="profileEditMajor" placeholder="e.g. คอมพิวเตอร์ศึกษา">
+        </label>
+
+        <label style="grid-column:1 / -1;">Target GPA / เกรดเฉลี่ยเป้าหมาย
+          <input type="number" step="0.01" min="0" max="4.00" id="profileEditGpa" placeholder="e.g. 3.80">
+        </label>
+      </div>
+    </div>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:20px; border-top:1px solid var(--line); padding-top:14px;">
       <button class="btn small ghost" id="signOutBtn" style="color:var(--coral-dark); border-color:var(--coral-dark);"><i class="ph ph-sign-out"></i> Sign Out</button>
       <div style="display:flex; gap:8px;">
         <button class="btn small ghost" id="closeProfileModal">Close</button>
@@ -3302,6 +3999,13 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
                     var p = doc.data().profile;
                     if (p.displayName) currentUser.displayName = p.displayName;
                     if (p.university) currentUser.university = p.university;
+                    if (p.faculty) currentUser.faculty = p.faculty;
+                    if (p.major) currentUser.major = p.major;
+                    if (p.studentId) currentUser.studentId = p.studentId;
+                    if (p.academicYear) currentUser.academicYear = p.academicYear;
+                    if (p.targetGpa) currentUser.targetGpa = p.targetGpa;
+                    if (p.bio) currentUser.bio = p.bio;
+                    if (p.avatarEmoji !== undefined) currentUser.avatarEmoji = p.avatarEmoji;
                     if (p.avatarColor) currentUser.avatarColor = p.avatarColor;
                   }
                   handleAuthResolved();
@@ -3365,6 +4069,13 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
           email: account.email,
           displayName: account.displayName || email.split('@')[0],
           university: account.university || '',
+          faculty: account.faculty || '',
+          major: account.major || '',
+          studentId: account.studentId || '',
+          academicYear: account.academicYear || 'Year 1',
+          targetGpa: account.targetGpa || '',
+          bio: account.bio || '',
+          avatarEmoji: account.avatarEmoji || '',
           avatarColor: account.avatarColor || 'sky',
           createdAt: account.createdAt
         };
@@ -3391,6 +4102,13 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
           password: password,
           displayName: displayName.trim() || email.split('@')[0],
           university: university.trim() || '',
+          faculty: '',
+          major: '',
+          studentId: '',
+          academicYear: 'Year 1',
+          targetGpa: '',
+          bio: '',
+          avatarEmoji: '',
           avatarColor: 'sky',
           createdAt: new Date().toISOString()
         };
@@ -3403,6 +4121,13 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
           email: newAccount.email,
           displayName: newAccount.displayName,
           university: newAccount.university,
+          faculty: newAccount.faculty,
+          major: newAccount.major,
+          studentId: newAccount.studentId,
+          academicYear: newAccount.academicYear,
+          targetGpa: newAccount.targetGpa,
+          bio: newAccount.bio,
+          avatarEmoji: newAccount.avatarEmoji,
           avatarColor: newAccount.avatarColor,
           createdAt: newAccount.createdAt
         };
@@ -3427,6 +4152,13 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
             email: cred.user.email,
             displayName: cred.user.displayName || email.split('@')[0],
             university: '',
+            faculty: '',
+            major: '',
+            studentId: '',
+            academicYear: 'Year 1',
+            targetGpa: '',
+            bio: '',
+            avatarEmoji: '',
             avatarColor: 'sky'
           };
           return currentUser;
@@ -3453,6 +4185,13 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
           var prof = {
             displayName: displayName.trim() || email.split('@')[0],
             university: university.trim() || '',
+            faculty: '',
+            major: '',
+            studentId: '',
+            academicYear: 'Year 1',
+            targetGpa: '',
+            bio: '',
+            avatarEmoji: '',
             avatarColor: 'sky',
             createdAt: new Date().toISOString()
           };
@@ -3461,6 +4200,13 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
             email: u.email,
             displayName: prof.displayName,
             university: prof.university,
+            faculty: prof.faculty,
+            major: prof.major,
+            studentId: prof.studentId,
+            academicYear: prof.academicYear,
+            targetGpa: prof.targetGpa,
+            bio: prof.bio,
+            avatarEmoji: prof.avatarEmoji,
             avatarColor: 'sky'
           };
           if (fbDb) {
@@ -3496,6 +4242,13 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
             email: cred.user.email,
             displayName: cred.user.displayName || cred.user.email.split('@')[0],
             university: '',
+            faculty: '',
+            major: '',
+            studentId: '',
+            academicYear: 'Year 1',
+            targetGpa: '',
+            bio: '',
+            avatarEmoji: '',
             avatarColor: 'sky',
             photoURL: cred.user.photoURL || null
           };
@@ -3508,15 +4261,31 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
       if (!currentUser) return Promise.reject('Not logged in');
       if (updates.displayName !== undefined) currentUser.displayName = updates.displayName;
       if (updates.university !== undefined) currentUser.university = updates.university;
+      if (updates.faculty !== undefined) currentUser.faculty = updates.faculty;
+      if (updates.major !== undefined) currentUser.major = updates.major;
+      if (updates.studentId !== undefined) currentUser.studentId = updates.studentId;
+      if (updates.academicYear !== undefined) currentUser.academicYear = updates.academicYear;
+      if (updates.targetGpa !== undefined) currentUser.targetGpa = updates.targetGpa;
+      if (updates.bio !== undefined) currentUser.bio = updates.bio;
+      if (updates.avatarEmoji !== undefined) currentUser.avatarEmoji = updates.avatarEmoji;
       if (updates.avatarColor !== undefined) currentUser.avatarColor = updates.avatarColor;
+
+      var profPayload = {
+        displayName: currentUser.displayName,
+        university: currentUser.university || '',
+        faculty: currentUser.faculty || '',
+        major: currentUser.major || '',
+        studentId: currentUser.studentId || '',
+        academicYear: currentUser.academicYear || 'Year 1',
+        targetGpa: currentUser.targetGpa || '',
+        bio: currentUser.bio || '',
+        avatarEmoji: currentUser.avatarEmoji || '',
+        avatarColor: currentUser.avatarColor || 'sky'
+      };
 
       if (fbDb && currentUser.uid) {
         fbDb.collection('users').doc(currentUser.uid).set({
-          profile: {
-            displayName: currentUser.displayName,
-            university: currentUser.university,
-            avatarColor: currentUser.avatarColor
-          }
+          profile: profPayload
         }, { merge: true }).catch(function(){});
       }
       if (fbAuth && fbAuth.currentUser && updates.displayName) {
@@ -3529,6 +4298,13 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
         var acc = db[currentUser.email.toLowerCase()];
         acc.displayName = currentUser.displayName;
         acc.university = currentUser.university;
+        acc.faculty = currentUser.faculty;
+        acc.major = currentUser.major;
+        acc.studentId = currentUser.studentId;
+        acc.academicYear = currentUser.academicYear;
+        acc.targetGpa = currentUser.targetGpa;
+        acc.bio = currentUser.bio;
+        acc.avatarEmoji = currentUser.avatarEmoji;
         acc.avatarColor = currentUser.avatarColor;
         self.saveAccountsDB(db);
       }
@@ -3694,17 +4470,24 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
       var name = currentUser.displayName || currentUser.email.split('@')[0];
       var initials = name.slice(0, 2).toUpperCase();
       var col = currentUser.avatarColor || 'sky';
+      var avatarContent = currentUser.avatarEmoji || initials;
 
       if(authBtnText) authBtnText.textContent = name;
       if(avatarCircle) {
         avatarCircle.className = 'user-avatar-circle c-' + col;
-        avatarCircle.textContent = initials;
+        avatarCircle.textContent = avatarContent;
       }
-      if(setDisplay) setDisplay.textContent = name;
-      if(setSub) setSub.textContent = currentUser.email + (currentUser.university ? ' · ' + currentUser.university : '');
+      if(setDisplay) {
+        var idStr = currentUser.studentId ? ' (' + currentUser.studentId + ')' : '';
+        setDisplay.textContent = name + idStr;
+      }
+      if(setSub) {
+        var acParts = [currentUser.faculty, currentUser.major, currentUser.university].filter(Boolean).join(' · ');
+        setSub.textContent = currentUser.email + (acParts ? ' • ' + acParts : '');
+      }
       if(setAvatar) {
         setAvatar.className = 'user-avatar-circle c-' + col;
-        setAvatar.textContent = initials;
+        setAvatar.textContent = avatarContent;
       }
       if(setActionBtn) {
         setActionBtn.innerHTML = '<i class="ph ph-user-gear"></i> Manage Profile';
@@ -3736,7 +4519,7 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
   var DAY_START_MIN = 7*60;
   var DAY_END_MIN = 22*60;
   var TOTAL_MIN = DAY_END_MIN - DAY_START_MIN;
-  var RAIL_PX = 810;
+  var RAIL_PX = 360;
   var COLORS = ['sky','sage','coral','gold','lilac','rose','teal'];
 
   var data = { schedule: [], tasks: [], notes: [], milestones: [], settings: {} };
@@ -4394,6 +5177,7 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
     closeAllModals();
     closeMobileDrawer();
     updateMobileDayPickerVisibility();
+    if(panelName === 'schedule') renderScheduleWeek();
   }
 
   // --- Modal Helpers ---
@@ -4592,33 +5376,105 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
     openModal('authModal');
   };
 
+  window.updateCardLivePreview = function() {
+    var name = (document.getElementById('profileEditName').value || '').trim() || (currentUser ? currentUser.displayName : 'Student');
+    var bio = (document.getElementById('profileEditBio').value || '').trim() || 'Work hard, dream big ✨';
+    var uni = (document.getElementById('profileEditUniversity').value || '').trim() || (currentUser ? currentUser.university : '') || 'Campus Planner';
+    var studentId = (document.getElementById('profileEditStudentId').value || '').trim() || (currentUser ? currentUser.studentId : '');
+    var faculty = (document.getElementById('profileEditFaculty').value || '').trim();
+    var major = (document.getElementById('profileEditMajor').value || '').trim();
+    var year = document.getElementById('profileEditYear').value || 'Year 1';
+    var gpa = (document.getElementById('profileEditGpa').value || '').trim();
+
+    var selEmojiBtn = document.querySelector('#avatarEmojiPicker .avatar-emoji-btn.selected');
+    var emoji = selEmojiBtn ? selEmojiBtn.dataset.emoji : '';
+
+    var selColorPill = document.querySelector('#avatarColorChoices .avatar-color-pill.selected');
+    var col = selColorPill ? selColorPill.dataset.color : 'sky';
+
+    var initials = name.slice(0, 2).toUpperCase() || 'SK';
+    var initBtn = document.getElementById('avatarEmojiInitialsBtn');
+    if (initBtn) initBtn.textContent = initials;
+
+    var avatarContent = emoji || initials;
+
+    var cardAvatar = document.getElementById('cardAvatarPreview');
+    if (cardAvatar) {
+      cardAvatar.className = 'user-avatar-circle student-card-avatar c-' + col;
+      cardAvatar.textContent = avatarContent;
+    }
+
+    var cName = document.getElementById('cardNamePreview');
+    if (cName) cName.textContent = name;
+
+    var cId = document.getElementById('cardIdPreview');
+    if (cId) cId.textContent = studentId ? 'ID: ' + studentId : 'ID: --------';
+
+    var cUni = document.getElementById('cardUniPreview');
+    if (cUni) cUni.textContent = uni;
+
+    var cDept = document.getElementById('cardDeptPreview');
+    if (cDept) {
+      var deptStr = [faculty, major].filter(Boolean).join(' · ');
+      cDept.textContent = deptStr || 'Academic Program';
+    }
+
+    var cEmail = document.getElementById('cardEmailPreview');
+    if (cEmail) cEmail.textContent = currentUser ? currentUser.email : 'Local Student Profile';
+
+    var cMotto = document.getElementById('cardMottoPreview');
+    if (cMotto) cMotto.textContent = '"' + bio + '"';
+
+    var cYear = document.getElementById('cardYearBadge');
+    if (cYear) cYear.textContent = year;
+
+    var cGpa = document.getElementById('cardGpaBadge');
+    if (cGpa) {
+      var numGpa = parseFloat(gpa);
+      cGpa.textContent = !isNaN(numGpa) ? '🎯 GPA ' + numGpa.toFixed(2) : '🎯 GPA --';
+    }
+
+    var cStreak = document.getElementById('cardStreakBadge');
+    if (cStreak) {
+      var sc = (data && data.streak) ? data.streak.count : 1;
+      cStreak.textContent = '🔥 ' + sc + ' ' + (sc === 1 ? 'Day' : 'Days');
+    }
+  };
+
   window.openProfileModal = function() {
     if(!currentUser) {
       openAuthModal();
       return;
     }
     var name = currentUser.displayName || currentUser.email.split('@')[0];
-    var initials = name.slice(0, 2).toUpperCase();
     var col = currentUser.avatarColor || 'sky';
-
-    var prev = document.getElementById('profileAvatarPreview');
-    if(prev) {
-      prev.className = 'user-avatar-circle c-' + col;
-      prev.textContent = initials;
-    }
-
-    document.getElementById('profileDisplayName').textContent = name;
-    document.getElementById('profileEmail').textContent = currentUser.email;
-    document.getElementById('profileUniversity').textContent = currentUser.university || 'No university specified';
+    var emoji = currentUser.avatarEmoji || '';
 
     document.getElementById('profileEditName').value = currentUser.displayName || '';
+    document.getElementById('profileEditBio').value = currentUser.bio || '';
     document.getElementById('profileEditUniversity').value = currentUser.university || '';
+    document.getElementById('profileEditStudentId').value = currentUser.studentId || '';
+    document.getElementById('profileEditFaculty').value = currentUser.faculty || '';
+    document.getElementById('profileEditMajor').value = currentUser.major || '';
+    document.getElementById('profileEditYear').value = currentUser.academicYear || 'Year 1';
+    document.getElementById('profileEditGpa').value = currentUser.targetGpa || '';
 
     // Color choices
     document.querySelectorAll('#avatarColorChoices .avatar-color-pill').forEach(function(pill){
       pill.classList.toggle('selected', pill.dataset.color === col);
     });
 
+    // Emoji choices
+    document.querySelectorAll('#avatarEmojiPicker .avatar-emoji-btn').forEach(function(btn){
+      btn.classList.toggle('selected', btn.dataset.emoji === emoji);
+    });
+
+    // Switch to first sub-tab by default
+    document.querySelectorAll('#profileSubTabs button').forEach(function(b){ b.classList.toggle('active', b.dataset.ptab === 'identity'); });
+    var pId = document.getElementById('ptab-identity'); if (pId) pId.style.display = 'block';
+    var pAc = document.getElementById('ptab-academic'); if (pAc) pAc.style.display = 'none';
+
+    updateCardLivePreview();
     openModal('profileModal');
   };
 
@@ -5268,7 +6124,7 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
         allWeekEntries = allWeekEntries.concat(getEntriesForDay(d, getLocalDateStr(dDate)));
       }
       if(allWeekEntries.length === 0) {
-        dayStartHour = 8; dayEndHour = 17;
+        dayStartHour = 8; dayEndHour = 16;
       } else {
         var minMin = 24 * 60, maxMin = 0;
         allWeekEntries.forEach(function(e){
@@ -5285,7 +6141,35 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
     var activeStartMin = dayStartHour * 60;
     var activeEndMin = dayEndHour * 60;
     var activeTotalMin = activeEndMin - activeStartMin;
-    var RAIL_PX = 820;
+    var totalHours = Math.max(1, dayEndHour - dayStartHour);
+    var isMobile = window.innerWidth <= 768;
+
+    // Viewport-adaptive compact height calculation (no vertical page scroll when workload is low/normal)
+    var vh = window.innerHeight || 800;
+    var overhead = isMobile ? 260 : 225;
+    var maxAvailH = Math.max(280, vh - overhead);
+
+    var hourHeight = 44;
+    if (!isMobile) {
+      if (totalHours <= 7) hourHeight = 46;
+      else if (totalHours <= 10) hourHeight = 42;
+      else if (totalHours <= 13) hourHeight = 36;
+      else hourHeight = 32;
+    } else {
+      if (totalHours <= 8) hourHeight = 42;
+      else if (totalHours <= 11) hourHeight = 36;
+      else hourHeight = 30;
+    }
+
+    var targetPx = Math.round(totalHours * hourHeight);
+    if (targetPx > maxAvailH && (maxAvailH / totalHours) >= 32) {
+      targetPx = Math.round(maxAvailH);
+    }
+    var RAIL_PX = Math.max(260, Math.min(targetPx, 560));
+    var singleHourH = RAIL_PX / totalHours;
+
+    grid.style.setProperty('--rail-h', RAIL_PX + 'px');
+    grid.style.setProperty('--hour-h', singleHourH + 'px');
 
     grid.appendChild(document.createElement('div')); // corner
 
@@ -5301,6 +6185,7 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
     });
 
     var timeCol = document.createElement('div'); timeCol.className = 'time-col';
+    timeCol.style.height = RAIL_PX + 'px';
     for(var hr = dayStartHour; hr <= dayEndHour; hr++){
       var lab = document.createElement('div'); lab.className = 'time-label';
       var top = ((hr * 60 - activeStartMin) / activeTotalMin) * RAIL_PX;
@@ -5316,6 +6201,7 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
 
       var col = document.createElement('div');
       col.className = 'day-col' + (d===activeMobileDay ? ' active-day':''); col.dataset.day = d;
+      col.style.height = RAIL_PX + 'px';
       
       // Drag & drop handlers
       col.addEventListener('dragover', function(e){ e.preventDefault(); this.classList.add('drag-over'); });
@@ -5348,6 +6234,7 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
       });
 
       var rail = document.createElement('div'); rail.className = 'rail';
+      rail.style.height = RAIL_PX + 'px';
       var dayEntries = getEntriesForDay(d, colDateStrForDay);
 
       // Smart Overlap Layout (Side-by-Side)
@@ -5396,7 +6283,7 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
         gapBox.style.top = top + 'px';
         gapBox.style.height = height + 'px';
         gapBox.title = 'ช่วงเวลาว่าง ' + durText + ' (' + timeRange + ') - คลิกเพื่อจัดตาราง/เพิ่มกิจกรรม';
-        gapBox.innerHTML = '<span class="gap-text"><i class="ph ph-coffee"></i> ว่าง ' + durText + (height >= 42 ? ' <span class="gap-time">(' + timeRange + ')</span>' : '') + '</span>';
+        gapBox.innerHTML = '<span class="gap-text"><i class="ph ph-coffee"></i> ว่าง ' + durText + (height >= 34 ? ' <span class="gap-time">(' + timeRange + ')</span>' : '') + '</span>';
         gapBox.addEventListener('click', (function(slotStart, slotEnd, dayIdx, dateStr){
           return function(){
             openClassModal(null, dateStr, slotStart, slotEnd, dayIdx);
@@ -5828,6 +6715,13 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
     });
     window.addEventListener('resize', function(){
       hideEventPopover();
+      var schPanel = document.getElementById('panel-schedule');
+      if(schPanel && schPanel.classList.contains('active')) {
+        clearTimeout(window._schResizeTimer);
+        window._schResizeTimer = setTimeout(function(){
+          renderScheduleWeek();
+        }, 150);
+      }
     });
 
     // Add Buttons
@@ -6415,13 +7309,44 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
       });
     }
 
+    // Sub tabs switching in Profile Modal
+    document.querySelectorAll('#profileSubTabs button').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        document.querySelectorAll('#profileSubTabs button').forEach(function(b){ b.classList.remove('active'); });
+        this.classList.add('active');
+        var tab = this.dataset.ptab;
+        var pId = document.getElementById('ptab-identity');
+        var pAc = document.getElementById('ptab-academic');
+        if (pId && pAc) {
+          pId.style.display = tab === 'identity' ? 'block' : 'none';
+          pAc.style.display = tab === 'academic' ? 'block' : 'none';
+        }
+      });
+    });
+
+    // Real-time live card preview on input
+    ['profileEditName', 'profileEditBio', 'profileEditUniversity', 'profileEditStudentId', 'profileEditFaculty', 'profileEditMajor', 'profileEditGpa'].forEach(function(id){
+      var el = document.getElementById(id);
+      if(el) el.addEventListener('input', updateCardLivePreview);
+    });
+    var elYear = document.getElementById('profileEditYear');
+    if(elYear) elYear.addEventListener('change', updateCardLivePreview);
+
+    // Avatar Emoji Picker
+    document.querySelectorAll('#avatarEmojiPicker .avatar-emoji-btn').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        document.querySelectorAll('#avatarEmojiPicker .avatar-emoji-btn').forEach(function(b){ b.classList.remove('selected'); });
+        this.classList.add('selected');
+        updateCardLivePreview();
+      });
+    });
+
     // Avatar Color Selection
     document.querySelectorAll('#avatarColorChoices .avatar-color-pill').forEach(function(pill){
       pill.addEventListener('click', function(){
         document.querySelectorAll('#avatarColorChoices .avatar-color-pill').forEach(function(p){ p.classList.remove('selected'); });
         this.classList.add('selected');
-        var prev = document.getElementById('profileAvatarPreview');
-        if(prev) prev.className = 'user-avatar-circle c-' + this.dataset.color;
+        updateCardLivePreview();
       });
     });
 
@@ -6429,15 +7354,46 @@ footer { text-align: center; color: var(--ink-soft); font-size: 12.5px; margin-t
     if(saveProf) {
       saveProf.addEventListener('click', function(){
         var name = document.getElementById('profileEditName').value.trim();
+        var bio = document.getElementById('profileEditBio').value.trim();
         var uni = document.getElementById('profileEditUniversity').value.trim();
+        var studentId = document.getElementById('profileEditStudentId').value.trim();
+        var faculty = document.getElementById('profileEditFaculty').value.trim();
+        var major = document.getElementById('profileEditMajor').value.trim();
+        var year = document.getElementById('profileEditYear').value;
+        var gpa = document.getElementById('profileEditGpa').value.trim();
+
         var selPill = document.querySelector('#avatarColorChoices .avatar-color-pill.selected');
         var col = selPill ? selPill.dataset.color : 'sky';
 
-        AuthService.updateProfile({ displayName: name, university: uni, avatarColor: col }).then(function(){
+        var selEmoji = document.querySelector('#avatarEmojiPicker .avatar-emoji-btn.selected');
+        var emoji = selEmoji ? selEmoji.dataset.emoji : '';
+
+        saveProf.disabled = true;
+        saveProf.innerHTML = '<i class="ph ph-spinner"></i> Saving...';
+
+        AuthService.updateProfile({
+          displayName: name,
+          bio: bio,
+          university: uni,
+          studentId: studentId,
+          faculty: faculty,
+          major: major,
+          academicYear: year,
+          targetGpa: gpa,
+          avatarEmoji: emoji,
+          avatarColor: col
+        }).then(function(){
+          saveProf.disabled = false;
+          saveProf.innerHTML = '<i class="ph ph-check"></i> Save Changes';
           updateAuthUI();
           closeAllModals();
-          playPopSound();
-          showToast('Profile updated successfully! ✨');
+          playSuccessChime();
+          fireConfetti();
+          showToast('บันทึกบัตรนักศึกษา & ข้อมูลโปรไฟล์สำเร็จ! 🎓✨');
+        }).catch(function(err){
+          saveProf.disabled = false;
+          saveProf.innerHTML = '<i class="ph ph-check"></i> Save Changes';
+          alert('Could not update profile: ' + err);
         });
       });
     }
