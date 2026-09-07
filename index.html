@@ -45,6 +45,9 @@
   --lilac: #F3E8FF; --lilac-dark: #9333EA;
   --rose: #FFE4E6; --rose-dark: #E11D48;
   --teal: #CCFBF1; --teal-dark: #0D9488;
+  --indigo: #E0E7FF; --indigo-dark: #4F46E5;
+  --amber: #FEF3C7; --amber-dark: #D97706;
+  --emerald: #D1FAE5; --emerald-dark: #059669;
   
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
@@ -84,6 +87,9 @@
   --lilac: rgba(147, 51, 234, 0.2); --lilac-dark: #D8B4FE;
   --rose: rgba(225, 29, 72, 0.2); --rose-dark: #FDA4AF;
   --teal: rgba(13, 148, 136, 0.2); --teal-dark: #5EEAD4;
+  --indigo: rgba(79, 70, 229, 0.22); --indigo-dark: #A5B4FC;
+  --amber: rgba(217, 119, 6, 0.2); --amber-dark: #FCD34D;
+  --emerald: rgba(5, 150, 105, 0.2); --emerald-dark: #6EE7B7;
   
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
   --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
@@ -673,23 +679,27 @@ button, input, select, textarea {
 .day-col .rail { position: relative; width: 100%; }
 
 .entry {
-  position: absolute; left: 0; right: 0; border-radius: 6px; padding: 5px 7px; font-size: 11px;
-  line-height: 1.35; overflow: hidden; cursor: grab; border: 1px solid transparent; user-select: none;
+  position: absolute; left: 0; right: 0; border-radius: 8px; padding: 5px 8px; font-size: 11px;
+  line-height: 1.35; overflow: hidden; cursor: grab; border: 1px solid rgba(0,0,0,0.06); user-select: none;
   transition: transform 0.1s, box-shadow 0.2s;
   min-width: 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
 }
-.entry:hover { box-shadow: var(--shadow-sm); z-index: 10; }
+.entry:hover { box-shadow: var(--shadow); z-index: 10; }
 .entry:active { cursor: grabbing; transform: scale(0.97); }
 .entry .t { font-weight: 600; display: block; font-size: 12px; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .entry .m { display: block; color: inherit; opacity: 0.9; font-size: 10.5px; display: flex; align-items: center; gap: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-.entry.c-sky { background: var(--sky); color: var(--sky-dark); border-color: rgba(0,0,0,0.03); }
-.entry.c-sage { background: var(--sage); color: var(--sage-dark); border-color: rgba(0,0,0,0.03); }
-.entry.c-coral { background: var(--coral); color: var(--coral-dark); border-color: rgba(0,0,0,0.03); }
-.entry.c-gold { background: var(--gold); color: var(--gold-dark); border-color: rgba(0,0,0,0.03); }
-.entry.c-lilac { background: var(--lilac); color: var(--lilac-dark); border-color: rgba(0,0,0,0.03); }
-.entry.c-rose { background: var(--rose); color: var(--rose-dark); border-color: rgba(0,0,0,0.03); }
-.entry.c-teal { background: var(--teal); color: var(--teal-dark); border-color: rgba(0,0,0,0.03); }
+.entry.c-sky { background: var(--sky); color: var(--sky-dark); border-left: 4px solid var(--sky-dark); }
+.entry.c-sage { background: var(--sage); color: var(--sage-dark); border-left: 4px solid var(--sage-dark); }
+.entry.c-coral { background: var(--coral); color: var(--coral-dark); border-left: 4px solid var(--coral-dark); }
+.entry.c-gold { background: var(--gold); color: var(--gold-dark); border-left: 4px solid var(--gold-dark); }
+.entry.c-lilac { background: var(--lilac); color: var(--lilac-dark); border-left: 4px solid var(--lilac-dark); }
+.entry.c-rose { background: var(--rose); color: var(--rose-dark); border-left: 4px solid var(--rose-dark); }
+.entry.c-teal { background: var(--teal); color: var(--teal-dark); border-left: 4px solid var(--teal-dark); }
+.entry.c-indigo { background: var(--indigo); color: var(--indigo-dark); border-left: 4px solid var(--indigo-dark); }
+.entry.c-amber { background: var(--amber); color: var(--amber-dark); border-left: 4px solid var(--amber-dark); }
+.entry.c-emerald { background: var(--emerald); color: var(--emerald-dark); border-left: 4px solid var(--emerald-dark); }
 
 /* Free-Time / Gap Indicator */
 .gap-indicator {
@@ -795,6 +805,109 @@ button, input, select, textarea {
 }
 .week-ab-pill:hover {
   background: var(--surface);
+  border-color: var(--primary);
+}
+
+/* ---------- Task Filter Chips Bar & Notification Styles ---------- */
+.task-filter-bar {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 4px 2px 10px;
+  margin-bottom: 12px;
+  scrollbar-width: thin;
+}
+.task-filter-bar::-webkit-scrollbar { height: 4px; }
+.task-filter-bar::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 4px; }
+.task-filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink-soft);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+.task-filter-chip:hover {
+  background: var(--bg);
+  border-color: var(--line-strong);
+  color: var(--ink);
+}
+.task-filter-chip.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #FFFFFF;
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+}
+.date-range-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-size: 10.5px;
+  font-weight: 600;
+  background: var(--primary-light);
+  color: var(--primary);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+.tag-exam-midterm {
+  background: #FEE2E2 !important;
+  color: #DC2626 !important;
+  font-weight: 700 !important;
+  border: 1px solid rgba(220, 38, 38, 0.25) !important;
+}
+.tag-exam-final {
+  background: #F3E8FF !important;
+  color: #9333EA !important;
+  font-weight: 700 !important;
+  border: 1px solid rgba(147, 51, 234, 0.25) !important;
+}
+.tag-quiz {
+  background: #FEF3C7 !important;
+  color: #D97706 !important;
+  font-weight: 700 !important;
+  border: 1px solid rgba(217, 119, 6, 0.25) !important;
+}
+.notif-badge-count {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #EF4444;
+  color: #FFFFFF;
+  font-size: 10px;
+  font-weight: 800;
+  border-radius: 999px;
+  min-width: 17px;
+  height: 17px;
+  line-height: 17px;
+  text-align: center;
+  padding: 0 4px;
+  border: 2px solid var(--surface);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  animation: pulseDot 1.4s infinite alternate;
+}
+.reminder-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 14px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  transition: all 0.2s;
+}
+.reminder-item:hover {
+  background: var(--surface-hover);
   border-color: var(--primary);
 }
 
@@ -3181,6 +3294,10 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
         <span class="sync-dot local" id="syncDot"></span> <span id="syncStatusText">Local</span>
       </div>
       <div class="streak-badge" id="streakBadge" title="Daily Activity Streak"><i class="ph-fill ph-fire"></i> <span id="streakCount">1</span><span class="streak-label"> Day Streak</span></div>
+      <button class="icon-btn" id="notifBellBtn" aria-label="Notifications & Reminders" title="เตือนความจำ &amp; การแจ้งเตือน" style="position:relative;">
+        <i class="ph ph-bell"></i>
+        <span class="notif-badge-count" id="notifBadgeCount" style="display:none;">0</span>
+      </button>
       <button class="user-auth-btn" id="userAuthBtn" title="Account / Profile">
         <div class="user-avatar-circle" id="userAvatarCircle"><i class="ph ph-user"></i></div>
         <span id="userAuthBtnText">Sign In</span>
@@ -3354,16 +3471,35 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
         </div>
       </div>
 
+      <!-- Quick Filter Chips Bar -->
+      <div class="task-filter-bar" id="taskFilterBar">
+        <button class="task-filter-chip active" data-filter="all"><i class="ph ph-squares-four"></i> ทั้งหมด</button>
+        <button class="task-filter-chip" data-filter="pending"><i class="ph ph-clock"></i> ยังไม่เสร็จ</button>
+        <button class="task-filter-chip" data-filter="exams"><i class="ph-fill ph-file-text" style="color:#DC2626;"></i> 🎯 งานสอบ (Exams/Quizzes)</button>
+        <button class="task-filter-chip" data-filter="urgent"><i class="ph ph-warning-circle" style="color:#DC2626;"></i> ด่วน / ค้างส่ง</button>
+        <button class="task-filter-chip" data-filter="completed"><i class="ph ph-check-circle" style="color:#16A34A;"></i> เสร็จแล้ว</button>
+      </div>
+
       <!-- Filters & Search -->
       <div class="task-controls">
         <div class="search-input-wrap">
           <i class="ph ph-magnifying-glass"></i>
-          <input type="text" id="taskSearch" placeholder="Search tasks or subjects...">
+          <input type="text" id="taskSearch" placeholder="Search tasks, exams, or subjects...">
         </div>
-        <select id="filterSubject" style="min-width: 140px;">
+        <select id="filterType" style="min-width: 140px;">
+          <option value="">All Types (ทุกประเภท)</option>
+          <option value="exam_midterm">📝 สอบกลางภาค (Midterm)</option>
+          <option value="exam_final">🎓 สอบปลายภาค (Final)</option>
+          <option value="quiz">⚡ สอบย่อย / ควิซ (Quiz)</option>
+          <option value="assignment">📋 การบ้าน / รายงาน</option>
+          <option value="project">💡 โครงงาน / โปรเจกต์</option>
+          <option value="practicum">🍎 ฝึกสอน / แผนการสอน</option>
+          <option value="other">📌 ทั่วไป / อื่นๆ</option>
+        </select>
+        <select id="filterSubject" style="min-width: 130px;">
           <option value="">All Subjects</option>
         </select>
-        <select id="filterPriority" style="min-width: 120px;">
+        <select id="filterPriority" style="min-width: 110px;">
           <option value="">All Priorities</option>
           <option value="high">High</option>
           <option value="med">Medium</option>
@@ -3820,6 +3956,9 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
       <label>Category
         <select id="f-category">
           <option value="class">🎓 วิชาเรียน / บรรยาย (Lecture / Coursework)</option>
+          <option value="exam_midterm">📝 สอบกลางภาค (Midterm Exam)</option>
+          <option value="exam_final">🎓 สอบปลายภาค (Final Exam)</option>
+          <option value="quiz">⚡ สอบย่อย / ควิซ (Quiz / Mini-Test)</option>
           <option value="practicum">🍎 ฝึกสอน (Teaching Practicum)</option>
           <option value="observation">🏫 สังเกตการสอน (School Observation)</option>
           <option value="lesson_plan">📝 ทำแผนการสอน / สื่อ (Lesson Plan & Materials)</option>
@@ -3837,6 +3976,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
           <option value="week_a">Week A (เฉพาะสัปดาห์คี่)</option>
           <option value="week_b">Week B (เฉพาะสัปดาห์คู่)</option>
           <option value="single">Single Date (เฉพาะวันเดียว)</option>
+          <option value="date_range">Multi-day / ช่วงวันที่ (หลายวันต่อเนื่อง)</option>
         </select>
       </label>
     </div>
@@ -3844,17 +3984,20 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     <div class="form-row">
       <label id="f-day-wrap">Day of Week
         <select id="f-day">
-          <option value="0">Monday</option>
-          <option value="1">Tuesday</option>
-          <option value="2">Wednesday</option>
-          <option value="3">Thursday</option>
-          <option value="4">Friday</option>
-          <option value="5">Saturday</option>
-          <option value="6">Sunday</option>
+          <option value="0">Sunday (วันอาทิตย์)</option>
+          <option value="1">Monday (วันจันทร์)</option>
+          <option value="2">Tuesday (วันอังคาร)</option>
+          <option value="3">Wednesday (วันพุธ)</option>
+          <option value="4">Thursday (วันพฤหัสบดี)</option>
+          <option value="5">Friday (วันศุกร์)</option>
+          <option value="6">Saturday (วันเสาร์)</option>
         </select>
       </label>
-      <label id="f-date-wrap" style="display:none;">Specific Date
+      <label id="f-date-wrap" style="display:none;">Specific / Start Date
         <input type="date" id="f-date">
+      </label>
+      <label id="f-end-date-wrap" style="display:none;">End Date (วันสิ้นสุด)
+        <input type="date" id="f-end-date">
       </label>
       <label>Starts <input type="time" id="f-start" value="09:00"></label>
       <label>Ends <input type="time" id="f-end" value="10:00"></label>
@@ -3878,11 +4021,14 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
           <option value="auto">Auto (ตามหมวดหมู่ / รหัสวิชา)</option>
           <option value="sky">Blue (Sky)</option>
           <option value="sage">Green (Sage)</option>
-          <option value="coral">Red (Coral)</option>
-          <option value="gold">Yellow (Gold)</option>
-          <option value="lilac">Purple (Lilac)</option>
+          <option value="coral">Red (Coral - ข้อสอบ)</option>
+          <option value="gold">Yellow (Gold - ควิซ)</option>
+          <option value="lilac">Purple (Lilac - ปลายภาค)</option>
           <option value="rose">Rose (ฝึกสอน)</option>
           <option value="teal">Teal (สังเกตการสอน)</option>
+          <option value="indigo">Indigo</option>
+          <option value="amber">Amber</option>
+          <option value="emerald">Emerald</option>
         </select>
       </label>
     </div>
@@ -3894,6 +4040,37 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
         <span><i class="ph-fill ph-check-square-offset" style="color:var(--primary);"></i> Sync to Tasks (เพิ่มลงใน To-Do List ด้วย)</span>
       </label>
       <span style="font-size:11.5px; color:var(--ink-soft);">Auto-creates linked task</span>
+    </div>
+
+    <!-- Reminder Settings -->
+    <div style="margin:10px 0 4px; padding:10px 14px; background:var(--surface); border:1px solid var(--line); border-radius:10px;">
+      <div style="display:flex; align-items:center; justify-content:space-between;">
+        <label style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; color:var(--ink); cursor:pointer; margin:0;">
+          <input type="checkbox" id="f-has-reminder" style="width:16px; height:16px; cursor:pointer;">
+          <span><i class="ph-fill ph-bell-ringing" style="color:var(--gold-dark);"></i> ตั้งเตือนความจำ (Reminder)</span>
+        </label>
+        <span style="font-size:11.5px; color:var(--ink-soft);">แจ้งเตือนบนอุปกรณ์</span>
+      </div>
+      <div id="f-reminder-wrap" style="display:none; margin-top:10px;">
+        <div class="form-row" style="margin-bottom:0;">
+          <label>เตือนล่วงหน้า
+            <select id="f-remind-timing">
+              <option value="at_time">ตรงเวลาที่เริ่ม (At time of event)</option>
+              <option value="10_min" selected>10 นาทีก่อนเริ่ม (10 min before)</option>
+              <option value="30_min">30 นาทีก่อนเริ่ม (30 min before)</option>
+              <option value="60_min">1 ชั่วโมงก่อนเริ่ม (1 hr before)</option>
+              <option value="1_day">1 วันล่วงหน้า (1 day before)</option>
+              <option value="custom">กำหนดวันและเวลาเอง (Custom)</option>
+            </select>
+          </label>
+          <label id="f-remind-custom-wrap" style="display:none;">วัน &amp; เวลาที่ต้องการเตือน
+            <div style="display:flex; gap:6px;">
+              <input type="date" id="f-remind-date" style="flex:1;">
+              <input type="time" id="f-remind-time" value="08:30" style="width:100px;">
+            </div>
+          </label>
+        </div>
+      </div>
     </div>
 
     <div style="display:flex; align-items:center; gap:8px; margin-top:24px;">
@@ -3908,18 +4085,43 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
   <div class="modal-card" id="taskModal" style="display:none;">
     <input type="hidden" id="t-id">
     <div class="modal-title" id="taskModalTitle"><i class="ph ph-check-square-offset"></i> Add Task</div>
+    
     <div class="form-row">
       <label style="flex:2;">Task Description
-        <input type="text" id="t-text" placeholder="e.g. Read chapter 4, Buy groceries">
+        <input type="text" id="t-text" placeholder="e.g. Read chapter 4, Midterm Math exam">
       </label>
+      <label>Category / Type
+        <select id="t-category">
+          <option value="assignment">📋 การบ้าน / งานส่ง (Assignment)</option>
+          <option value="exam_midterm">📝 สอบกลางภาค (Midterm Exam)</option>
+          <option value="exam_final">🎓 สอบปลายภาค (Final Exam)</option>
+          <option value="quiz">⚡ สอบย่อย / ควิซ (Quiz / Test)</option>
+          <option value="project">💡 โครงงาน / โปรเจกต์ (Project)</option>
+          <option value="practicum">🍎 ฝึกสอน / แผนการสอน (Teaching)</option>
+          <option value="other">📌 ทั่วไป / อื่นๆ (Other)</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="form-row">
       <label>Subject / Tag (Optional)
         <input type="text" id="t-subject" placeholder="e.g. PSY101, Personal, Club" list="subjectList">
         <datalist id="subjectList"></datalist>
       </label>
-    </div>
-    <div class="form-row">
-      <label>Due Date
-        <input type="date" id="t-due">
+      <label>Color Theme
+        <select id="t-color">
+          <option value="auto">Auto (ตามหมวดหมู่ / รหัสวิชา)</option>
+          <option value="sky">Blue (Sky)</option>
+          <option value="sage">Green (Sage)</option>
+          <option value="coral">Red (Coral - ข้อสอบ)</option>
+          <option value="gold">Yellow (Gold - ควิซ)</option>
+          <option value="lilac">Purple (Lilac - ปลายภาค)</option>
+          <option value="rose">Rose (ฝึกสอน)</option>
+          <option value="teal">Teal (สังเกตการสอน)</option>
+          <option value="indigo">Indigo</option>
+          <option value="amber">Amber</option>
+          <option value="emerald">Emerald</option>
+        </select>
       </label>
       <label>Priority
         <select id="t-priority">
@@ -3927,6 +4129,15 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
           <option value="med" selected>Medium</option>
           <option value="high">High</option>
         </select>
+      </label>
+    </div>
+
+    <div class="form-row">
+      <label>Start Date (วันที่เริ่ม - ไม่บังคับ)
+        <input type="date" id="t-start-date">
+      </label>
+      <label>Due Date / End Date (กำหนดส่ง / วันสิ้นสุด)
+        <input type="date" id="t-due">
       </label>
     </div>
 
@@ -3945,11 +4156,74 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
       </div>
     </div>
 
+    <!-- Reminder Settings -->
+    <div style="margin:10px 0 4px; padding:10px 14px; background:var(--surface); border:1px solid var(--line); border-radius:10px;">
+      <div style="display:flex; align-items:center; justify-content:space-between;">
+        <label style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; color:var(--ink); cursor:pointer; margin:0;">
+          <input type="checkbox" id="t-has-reminder" style="width:16px; height:16px; cursor:pointer;">
+          <span><i class="ph-fill ph-bell-ringing" style="color:var(--gold-dark);"></i> ตั้งเตือนความจำ (Reminder)</span>
+        </label>
+        <span style="font-size:11.5px; color:var(--ink-soft);">แจ้งเตือนบนอุปกรณ์</span>
+      </div>
+      <div id="t-reminder-wrap" style="display:none; margin-top:10px;">
+        <div class="form-row" style="margin-bottom:0;">
+          <label>เตือนล่วงหน้า
+            <select id="t-remind-timing">
+              <option value="at_time">ตรงเวลาส่ง (At deadline)</option>
+              <option value="10_min">10 นาทีก่อนส่ง (10 min before)</option>
+              <option value="30_min">30 นาทีก่อนส่ง (30 min before)</option>
+              <option value="60_min">1 ชั่วโมงก่อนส่ง (1 hr before)</option>
+              <option value="1_day" selected>1 วันล่วงหน้า (1 day before)</option>
+              <option value="custom">กำหนดวันและเวลาเอง (Custom)</option>
+            </select>
+          </label>
+          <label id="t-remind-custom-wrap" style="display:none;">วัน &amp; เวลาที่ต้องการเตือน
+            <div style="display:flex; gap:6px;">
+              <input type="date" id="t-remind-date" style="flex:1;">
+              <input type="time" id="t-remind-time" value="09:00" style="width:100px;">
+            </div>
+          </label>
+        </div>
+      </div>
+    </div>
+
     <div style="display:flex; align-items:center; gap:8px; margin-top:24px;">
       <button class="btn small ghost" id="deleteTaskBtn" style="display:none; color:var(--coral-dark); border-color:var(--coral-dark);"><i class="ph ph-trash"></i> Delete</button>
       <div style="flex:1;"></div>
       <button class="btn small ghost" id="cancelTaskModal">Cancel</button>
       <button class="btn small primary" id="saveTaskBtn"><i class="ph ph-floppy-disk"></i> Save Task</button>
+    </div>
+  </div>
+
+  <!-- Notification & Reminders Center Modal -->
+  <div class="modal-card" id="reminderCenterModal" style="display:none; max-width:480px;">
+    <div class="modal-title" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <i class="ph-fill ph-bell-ringing" style="color:var(--primary); font-size:22px;"></i>
+        <span>Reminders &amp; Notifications</span>
+      </div>
+      <span class="badge" id="reminderCountBadge" style="font-size:11px; background:var(--surface-2); color:var(--ink-soft); font-weight:700; border:1px solid var(--line);">0 active</span>
+    </div>
+
+    <!-- Permission Status Card -->
+    <div id="notifPermissionBanner" style="background:var(--surface-2); border:1px solid var(--line); border-radius:14px; padding:12px 14px; margin-bottom:14px; display:flex; align-items:center; justify-content:space-between; gap:10px;">
+      <div style="display:flex; align-items:center; gap:8px; font-size:12.5px;">
+        <i class="ph-fill ph-shield-check" id="notifStatusIcon" style="color:var(--sage-dark); font-size:18px;"></i>
+        <span id="notifStatusText">การแจ้งเตือนบนอุปกรณ์: พร้อมใช้งาน</span>
+      </div>
+      <button class="btn small primary" id="enableNotifInCenterBtn" style="display:none; padding:4px 10px; font-size:11.5px;">เปิดแจ้งเตือน</button>
+    </div>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+      <div style="font-weight:700; font-size:13.5px; color:var(--ink);">รายการที่ตั้งเตือนไว้</div>
+      <button class="btn small ghost" id="testNotifBtn" style="padding:4px 9px; font-size:11px;" title="ทดสอบเสียงและการเด้งเตือน"><i class="ph ph-lightning"></i> ทดสอบส่งแจ้งเตือน</button>
+    </div>
+
+    <!-- Reminder List Container -->
+    <div id="reminderCenterList" style="display:flex; flex-direction:column; gap:8px; max-height:360px; overflow-y:auto; padding-right:2px;"></div>
+
+    <div style="display:flex; justify-content:flex-end; margin-top:20px; border-top:1px solid var(--line); padding-top:12px;">
+      <button class="btn small ghost" id="closeReminderCenterBtn">ปิด (Close)</button>
     </div>
   </div>
 
@@ -5010,13 +5284,22 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     }
   }
 
-  var DAY_NAMES = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-  var DAY_SHORT = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  // Register PWA Service Worker for native device notifications
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('./sw.js').catch(function(err){
+        console.warn('Service Worker registration notice:', err);
+      });
+    });
+  }
+
+  var DAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var DAY_SHORT = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   var DAY_START_MIN = 7*60;
   var DAY_END_MIN = 22*60;
   var TOTAL_MIN = DAY_END_MIN - DAY_START_MIN;
   var RAIL_PX = 360;
-  var COLORS = ['sky','sage','coral','gold','lilac','rose','teal'];
+  var COLORS = ['sky','sage','coral','gold','lilac','rose','teal','indigo','amber','emerald'];
 
   var data = { schedule: [], tasks: [], notes: [], milestones: [], settings: {} };
   var undoQueue = {};
@@ -5027,11 +5310,36 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
   var viewYear = new Date().getFullYear();
   var viewMonth = new Date().getMonth(); // 0-11
   var weekOffset = 0; // 0 = current week, 1 = next week, etc.
-  var activeMobileDay = new Date().getDay() === 0 ? 6 : new Date().getDay() - 1;
+  var activeMobileDay = new Date().getDay(); // 0 = Sunday
   var selectedDayDateStr = null;
   var activeCategoryFilter = 'all';
+  var activeTaskFilter = 'all';
   var smartCropEnabled = true;
   var manualWeekTypeOverride = null; // null for auto, or 'week_a' / 'week_b'
+
+  function isDateInRange(targetDateStr, startDateStr, endDateStr) {
+    if (!startDateStr || !targetDateStr) return false;
+    var end = endDateStr || startDateStr;
+    return targetDateStr >= startDateStr && targetDateStr <= end;
+  }
+
+  function formatDateRange(startStr, endStr) {
+    if (!startStr) return endStr || '';
+    if (!endStr || startStr === endStr) {
+      try {
+        var d = new Date(startStr + 'T00:00:00');
+        return d.toLocaleDateString('th-TH', { day: 'numeric', month: 'short' });
+      } catch(e){ return startStr; }
+    }
+    try {
+      var d1 = new Date(startStr + 'T00:00:00');
+      var d2 = new Date(endStr + 'T00:00:00');
+      var daysCount = Math.round((d2 - d1) / 86400000) + 1;
+      var d1Str = d1.toLocaleDateString('th-TH', { day: 'numeric', month: 'short' });
+      var d2Str = d2.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' });
+      return d1Str + ' – ' + d2Str + (daysCount > 1 ? ' (' + daysCount + ' วัน)' : '');
+    } catch(e){ return startStr + ' – ' + endStr; }
+  }
 
   function getWeekType(dateObj) {
     var d = new Date(Date.UTC(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate()));
@@ -5049,6 +5357,10 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
   }
 
   function getColorForString(str, cat) {
+    if(cat === 'exam_midterm') return 'coral';
+    if(cat === 'exam_final') return 'lilac';
+    if(cat === 'quiz') return 'gold';
+    if(cat === 'project') return 'amber';
     if(cat === 'practicum') return 'rose';
     if(cat === 'observation') return 'teal';
     if(cat === 'lesson_plan') return 'gold';
@@ -5447,10 +5759,24 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     if(newData.settings.soundEnabled === undefined) newData.settings.soundEnabled = true;
     if(!newData.settings.themeMood) newData.settings.themeMood = 'aurora';
     
+    // Auto-migrate from Monday=0 to Sunday=0 without breaking any user data!
+    if (!newData.settings.weekStartSunday) {
+      newData.schedule.forEach(function(s){
+        if (typeof s.day === 'number' && (!s.freq || s.freq !== 'single' && s.freq !== 'date_range')) {
+          s.day = (s.day + 1) % 7;
+        }
+      });
+      newData.settings.weekStartSunday = true;
+    }
+
     newData.schedule.forEach(function(s){
       if(!s.category) s.category = 'class';
       if(!s.freq) s.freq = 'weekly';
-      if(!s.color) s.color = getColorForString(s.subject || s.title);
+      if(!s.color) s.color = getColorForString(s.subject || s.title, s.category);
+    });
+    newData.tasks.forEach(function(t){
+      if(!t.category) t.category = 'assignment';
+      if(!t.color) t.color = getColorForString(t.subject || t.text, t.category);
     });
     return newData;
   }
@@ -5461,20 +5787,20 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     var in14Days = getLocalDateStr(new Date(Date.now() + 86400000*14));
     return {
       schedule: [
-        {id:uid(), category:'class', freq:'weekly', day:0, start:'09:00', end:'10:30', title:'Intro to Psychology', subject: 'PSY101', loc:'Hall 204', color:'sky'},
-        {id:uid(), category:'class', freq:'weekly', day:1, start:'11:00', end:'12:30', title:'Calculus II', subject: 'MATH201', loc:'Room 118', color:'sage'},
-        {id:uid(), category:'activity', freq:'weekly', day:3, start:'16:30', end:'18:00', title:'Photography Club Meeting', subject: 'Club', loc:'Student Union 2F', color:'lilac'}
+        {id:uid(), category:'class', freq:'weekly', day:1, start:'09:00', end:'10:30', title:'Intro to Psychology', subject: 'PSY101', loc:'Hall 204', color:'sky'},
+        {id:uid(), category:'class', freq:'weekly', day:2, start:'11:00', end:'12:30', title:'Calculus II', subject: 'MATH201', loc:'Room 118', color:'sage'},
+        {id:uid(), category:'activity', freq:'weekly', day:4, start:'16:30', end:'18:00', title:'Photography Club Meeting', subject: 'Club', loc:'Student Union 2F', color:'lilac'}
       ],
       tasks: [
-        {id:uid(), text:'Read chapter 4', subject:'PSY101', due: todayStr, priority:'high', done:false},
-        {id:uid(), text:'Calculus Problem Set 3', subject:'MATH201', due: in3Days, priority:'med', done:false}
+        {id:uid(), text:'Read chapter 4', subject:'PSY101', due: todayStr, priority:'high', done:false, category:'assignment', color:'sky'},
+        {id:uid(), text:'Calculus Problem Set 3', subject:'MATH201', due: in3Days, priority:'med', done:false, category:'assignment', color:'sage'}
       ],
       notes: [{id:uid(), text:'Group project meeting Thurs 5pm!', color:'gold'}],
       milestones: [
         {id:uid(), title:'Midterm Examinations', date: in14Days}
       ],
       streak: { count: 1, lastDate: todayStr },
-      settings: { darkMode: false, soundEnabled: true, themeMood: 'aurora' }
+      settings: { darkMode: false, soundEnabled: true, themeMood: 'aurora', weekStartSunday: true }
     };
   }
 
@@ -5561,7 +5887,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
         var recFreq = (freq === 'single') ? cFreq : freq;
         if(!singleDateStr) continue;
         var sObj = new Date(singleDateStr + 'T00:00:00');
-        var sDay = sObj.getDay() === 0 ? 6 : sObj.getDay() - 1;
+        var sDay = sObj.getDay(); // 0 = Sunday
         if(sDay !== recDay) continue;
         if(recFreq === 'week_a' || recFreq === 'week_b') {
           if(getWeekType(sObj) !== recFreq) continue;
@@ -5703,6 +6029,11 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 
   function getCategoryIcon(cat) {
     switch(cat) {
+      case 'exam_midterm': return 'ph-file-text';
+      case 'exam_final': return 'ph-graduation-cap';
+      case 'quiz': return 'ph-lightning';
+      case 'assignment': return 'ph-check-square-offset';
+      case 'project': return 'ph-lightbulb';
       case 'practicum': return 'ph-chalkboard-teacher';
       case 'observation': return 'ph-buildings';
       case 'lesson_plan': return 'ph-notebook';
@@ -5719,6 +6050,11 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 
   var CATEGORY_INFO = {
     class: { text: 'วิชาเรียน / บรรยาย', icon: 'ph-graduation-cap' },
+    exam_midterm: { text: 'สอบกลางภาค (Midterm Exam)', icon: 'ph-file-text' },
+    exam_final: { text: 'สอบปลายภาค (Final Exam)', icon: 'ph-graduation-cap' },
+    quiz: { text: 'สอบย่อย / ควิซ (Quiz)', icon: 'ph-lightning' },
+    assignment: { text: 'การบ้าน / งานส่ง', icon: 'ph-check-square-offset' },
+    project: { text: 'โครงงาน / โปรเจกต์', icon: 'ph-lightbulb' },
     practicum: { text: 'ฝึกสอน', icon: 'ph-chalkboard-teacher' },
     observation: { text: 'สังเกตการสอน', icon: 'ph-buildings' },
     lesson_plan: { text: 'ทำแผนการสอน / สื่อ', icon: 'ph-notebook' },
@@ -5989,22 +6325,45 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     var freqSelect = document.getElementById('f-freq');
     var dayWrap = document.getElementById('f-day-wrap');
     var dateWrap = document.getElementById('f-date-wrap');
+    var endDateWrap = document.getElementById('f-end-date-wrap');
     var catSelect = document.getElementById('f-category');
     var syncTaskChk = document.getElementById('f-sync-task');
+
+    var fHasRemind = document.getElementById('f-has-reminder');
+    var fRemindWrap = document.getElementById('f-reminder-wrap');
+    var fRemindTiming = document.getElementById('f-remind-timing');
+    var fRemindCustWrap = document.getElementById('f-remind-custom-wrap');
+
+    if(fHasRemind && fRemindWrap) {
+      fHasRemind.onchange = function() {
+        fRemindWrap.style.display = fHasRemind.checked ? 'block' : 'none';
+      };
+    }
+    if(fRemindTiming && fRemindCustWrap) {
+      fRemindTiming.onchange = function() {
+        fRemindCustWrap.style.display = fRemindTiming.value === 'custom' ? 'block' : 'none';
+      };
+    }
 
     function updateFreqUI() {
       if(freqSelect.value === 'single') {
         dayWrap.style.display = 'none';
         dateWrap.style.display = 'flex';
+        if(endDateWrap) endDateWrap.style.display = 'none';
+      } else if(freqSelect.value === 'date_range') {
+        dayWrap.style.display = 'none';
+        dateWrap.style.display = 'flex';
+        if(endDateWrap) endDateWrap.style.display = 'flex';
       } else {
         dayWrap.style.display = 'flex';
         dateWrap.style.display = 'none';
+        if(endDateWrap) endDateWrap.style.display = 'none';
       }
     }
     freqSelect.onchange = updateFreqUI;
 
     catSelect.onchange = function() {
-      if(catSelect.value === 'task' || catSelect.value === 'lesson_plan') {
+      if(catSelect.value === 'task' || catSelect.value === 'lesson_plan' || catSelect.value.startsWith('exam_') || catSelect.value === 'quiz') {
         if(syncTaskChk) syncTaskChk.checked = true;
       }
     };
@@ -6016,6 +6375,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
       freqSelect.value = entry.freq || 'weekly';
       document.getElementById('f-day').value = entry.day !== undefined ? entry.day : 0;
       document.getElementById('f-date').value = entry.date || '';
+      if(document.getElementById('f-end-date')) document.getElementById('f-end-date').value = entry.endDate || '';
       document.getElementById('f-start').value = entry.start;
       document.getElementById('f-end').value = entry.end;
       document.getElementById('f-title').value = entry.title;
@@ -6024,12 +6384,22 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
       document.getElementById('f-color').value = entry.customColor || 'auto';
       var linkedT = entry.linkedTaskId ? data.tasks.find(function(t){ return t.id === entry.linkedTaskId; }) : null;
       if(syncTaskChk) syncTaskChk.checked = entry.syncToTask !== undefined ? entry.syncToTask : (!!linkedT || entry.category === 'task');
+
+      if(fHasRemind) {
+        fHasRemind.checked = !!entry.hasReminder;
+        if(fRemindWrap) fRemindWrap.style.display = entry.hasReminder ? 'block' : 'none';
+        if(fRemindTiming) fRemindTiming.value = entry.reminderTiming || '10_min';
+        if(fRemindCustWrap) fRemindCustWrap.style.display = entry.reminderTiming === 'custom' ? 'block' : 'none';
+        if(document.getElementById('f-remind-date')) document.getElementById('f-remind-date').value = entry.remindDate || entry.date || '';
+        if(document.getElementById('f-remind-time')) document.getElementById('f-remind-time').value = entry.remindTime || '08:30';
+      }
     } else {
       document.getElementById('f-id').value = '';
       catSelect.value = 'class';
       freqSelect.value = defaultDate ? 'single' : 'weekly';
       document.getElementById('f-day').value = (defaultDay !== undefined) ? defaultDay : activeMobileDay;
       document.getElementById('f-date').value = defaultDate || getLocalDateStr();
+      if(document.getElementById('f-end-date')) document.getElementById('f-end-date').value = defaultDate || getLocalDateStr();
       document.getElementById('f-start').value = defaultStart || '09:00';
       document.getElementById('f-end').value = defaultEnd || '10:00';
       document.getElementById('f-title').value = '';
@@ -6037,6 +6407,15 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
       document.getElementById('f-loc').value = '';
       document.getElementById('f-color').value = 'auto';
       if(syncTaskChk) syncTaskChk.checked = true;
+
+      if(fHasRemind) {
+        fHasRemind.checked = false;
+        if(fRemindWrap) fRemindWrap.style.display = 'none';
+        if(fRemindTiming) fRemindTiming.value = '10_min';
+        if(fRemindCustWrap) fRemindCustWrap.style.display = 'none';
+        if(document.getElementById('f-remind-date')) document.getElementById('f-remind-date').value = defaultDate || getLocalDateStr();
+        if(document.getElementById('f-remind-time')) document.getElementById('f-remind-time').value = '08:30';
+      }
     }
 
     updateFreqUI();
@@ -6051,6 +6430,22 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     var syncScheduleChk = document.getElementById('t-sync-schedule');
     var timeWrap = document.getElementById('t-time-wrap');
 
+    var tHasRemind = document.getElementById('t-has-reminder');
+    var tRemindWrap = document.getElementById('t-reminder-wrap');
+    var tRemindTiming = document.getElementById('t-remind-timing');
+    var tRemindCustWrap = document.getElementById('t-remind-custom-wrap');
+
+    if(tHasRemind && tRemindWrap) {
+      tHasRemind.onchange = function() {
+        tRemindWrap.style.display = tHasRemind.checked ? 'block' : 'none';
+      };
+    }
+    if(tRemindTiming && tRemindCustWrap) {
+      tRemindTiming.onchange = function() {
+        tRemindCustWrap.style.display = tRemindTiming.value === 'custom' ? 'block' : 'none';
+      };
+    }
+
     function updateTaskSyncUI() {
       if(timeWrap && syncScheduleChk) {
         timeWrap.style.display = syncScheduleChk.checked ? 'flex' : 'none';
@@ -6062,7 +6457,10 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     if(entry) {
       document.getElementById('t-id').value = id;
       document.getElementById('t-text').value = entry.text || '';
+      if(document.getElementById('t-category')) document.getElementById('t-category').value = entry.category || 'assignment';
       document.getElementById('t-subject').value = entry.subject || '';
+      if(document.getElementById('t-color')) document.getElementById('t-color').value = entry.customColor || 'auto';
+      if(document.getElementById('t-start-date')) document.getElementById('t-start-date').value = entry.startDate || '';
       document.getElementById('t-due').value = entry.due || '';
       document.getElementById('t-priority').value = entry.priority || 'med';
       
@@ -6072,15 +6470,36 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
       if(syncScheduleChk) {
         syncScheduleChk.checked = entry.syncToSchedule !== undefined ? entry.syncToSchedule : (!!linkedSch);
       }
+
+      if(tHasRemind) {
+        tHasRemind.checked = !!entry.hasReminder;
+        if(tRemindWrap) tRemindWrap.style.display = entry.hasReminder ? 'block' : 'none';
+        if(tRemindTiming) tRemindTiming.value = entry.reminderTiming || '1_day';
+        if(tRemindCustWrap) tRemindCustWrap.style.display = entry.reminderTiming === 'custom' ? 'block' : 'none';
+        if(document.getElementById('t-remind-date')) document.getElementById('t-remind-date').value = entry.remindDate || entry.due || '';
+        if(document.getElementById('t-remind-time')) document.getElementById('t-remind-time').value = entry.remindTime || '09:00';
+      }
     } else {
       document.getElementById('t-id').value = '';
       document.getElementById('t-text').value = '';
+      if(document.getElementById('t-category')) document.getElementById('t-category').value = 'assignment';
       document.getElementById('t-subject').value = '';
+      if(document.getElementById('t-color')) document.getElementById('t-color').value = 'auto';
+      if(document.getElementById('t-start-date')) document.getElementById('t-start-date').value = '';
       document.getElementById('t-due').value = defaultDate || getLocalDateStr();
       document.getElementById('t-priority').value = 'med';
       document.getElementById('t-start').value = '09:00';
       document.getElementById('t-end').value = '10:00';
       if(syncScheduleChk) syncScheduleChk.checked = true;
+
+      if(tHasRemind) {
+        tHasRemind.checked = false;
+        if(tRemindWrap) tRemindWrap.style.display = 'none';
+        if(tRemindTiming) tRemindTiming.value = '1_day';
+        if(tRemindCustWrap) tRemindCustWrap.style.display = 'none';
+        if(document.getElementById('t-remind-date')) document.getElementById('t-remind-date').value = defaultDate || getLocalDateStr();
+        if(document.getElementById('t-remind-time')) document.getElementById('t-remind-time').value = '09:00';
+      }
     }
     updateTaskSyncUI();
     openModal('taskModal');
@@ -6111,7 +6530,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
   window.openDayDetailModal = function(dateStr) {
     selectedDayDateStr = dateStr;
     var d = new Date(dateStr + 'T00:00:00');
-    var dayOfWeekIdx = d.getDay() === 0 ? 6 : d.getDay() - 1; // 0=Mon
+    var dayOfWeekIdx = d.getDay(); // 0 = Sunday
     
     document.getElementById('dayDetailTitle').innerHTML = '<i class="ph-fill ph-calendar-check"></i> ' + d.toLocaleDateString(undefined, {weekday:'long', month:'short', day:'numeric', year:'numeric'});
     
@@ -6121,50 +6540,63 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     // Milestones on this day
     var ms = data.milestones.filter(function(m){ return m.date === dateStr; });
     if(ms.length > 0) {
-      html += '<div style="margin-bottom:12px;"><strong>Milestones & Exams:</strong>';
+      html += '<div style="margin-bottom:12px;"><strong>Milestones &amp; Exams:</strong>';
       ms.forEach(function(m){
         html += '<div class="task-item" onclick="openMilestoneModal(\''+m.id+'\')" style="background:var(--coral);color:var(--coral-dark);font-weight:600;margin-top:4px;"><i class="ph-fill ph-flag-banner"></i> '+m.title+'</div>';
       });
       html += '</div>';
     }
 
-    // Single-date & Recurring schedule entries on this day
+    // Single-date, Multi-day & Recurring schedule entries on this day
     var dayWeekType = getWeekType(d);
     var dayEvents = data.schedule.filter(function(c){
       if(c.freq === 'single') return c.date === dateStr;
+      if(c.freq === 'date_range') return isDateInRange(dateStr, c.date, c.endDate);
       if(c.freq === 'week_a') return dayWeekType === 'week_a' && c.day === dayOfWeekIdx;
       if(c.freq === 'week_b') return dayWeekType === 'week_b' && c.day === dayOfWeekIdx;
       return (!c.freq || c.freq === 'weekly') && c.day === dayOfWeekIdx;
     });
-    html += '<div style="margin-bottom:12px;"><strong>Schedule & Events ('+dayEvents.length+'):</strong>';
+    html += '<div style="margin-bottom:12px;"><strong>Schedule &amp; Events ('+dayEvents.length+'):</strong>';
     if(dayEvents.length === 0) {
       html += '<div style="font-size:12.5px;color:var(--ink-soft);padding:4px 0;">No classes or events on this day.</div>';
     } else {
       dayEvents.forEach(function(c){
         var isSingle = c.freq === 'single';
+        var isMulti = c.freq === 'date_range';
         var isTaskDone = c.isDone;
         var iconHtml = isTaskDone ? '<i class="ph-fill ph-check-circle" style="color:var(--sage-dark);"></i> ' : '<i class="ph '+getCategoryIcon(c.category)+'"></i> ';
         var textStyle = isTaskDone ? 'text-decoration:line-through;opacity:0.7;' : '';
+        var multiBadge = isMulti ? ' <span class="date-range-badge"><i class="ph ph-calendar"></i> ' + formatDateRange(c.date, c.endDate) + '</span>' : '';
+        var singleBadge = isSingle ? ' <span class="pill pri-low" style="font-size:10px;">One-time</span>' : '';
+        var doneBadge = isTaskDone ? ' <span class="pill pri-low" style="font-size:10px;color:var(--sage-dark);">Done</span>' : '';
+        var col = c.color || getColorForString(c.subject || c.title, c.category);
+
         html += '<div class="task-item" onclick="openClassModal(\''+c.id+'\')">'+
-                '<div style="width:10px;height:10px;border-radius:50%;background:var(--'+(c.color||'sky')+'-dark);margin-top:5px;flex-shrink:0;"></div>'+
-                '<div class="task-body"><div class="task-text">' + iconHtml + (c.subject?'['+c.subject+'] ':'') + '<span style="' + textStyle + '">' + c.title + '</span>' + (isSingle?' <span class="pill pri-low" style="font-size:10px;">One-time</span>':'') + (isTaskDone ? ' <span class="pill pri-low" style="font-size:10px;color:var(--sage-dark);">Done</span>' : '') + '</div>'+
+                '<div style="width:10px;height:10px;border-radius:50%;background:var(--'+col+'-dark);margin-top:5px;flex-shrink:0;"></div>'+
+                '<div class="task-body"><div class="task-text">' + iconHtml + (c.subject?'['+c.subject+'] ':'') + '<span style="' + textStyle + '">' + c.title + '</span>' + singleBadge + multiBadge + doneBadge + '</div>'+
                 '<div class="task-meta"><i class="ph ph-clock"></i> '+fmtTime(c.start)+' - '+fmtTime(c.end)+' &middot; '+(c.loc||'General')+'</div></div></div>';
       });
     }
     html += '</div>';
 
-    // Tasks due on this day
-    var tasks = data.tasks.filter(function(t){ return t.due === dateStr; });
+    // Tasks due or within range on this day
+    var tasks = data.tasks.filter(function(t){
+      return isDateInRange(dateStr, t.startDate || t.due, t.due);
+    });
     html += '<div><strong>Tasks Due ('+tasks.length+'):</strong>';
     if(tasks.length === 0) {
       html += '<div style="font-size:12.5px;color:var(--ink-soft);padding:4px 0;">No tasks due on this date.</div>';
     } else {
       tasks.forEach(function(t){
         var timeBadge = t.time ? '<span><i class="ph ph-clock"></i> ' + fmtTime(t.time) + '</span>' : '';
+        var dateRangeStr = (t.startDate && t.due && t.startDate !== t.due) ? '<span class="date-range-badge"><i class="ph ph-calendar"></i> ' + formatDateRange(t.startDate, t.due) + '</span>' : '';
+        var examPill = (t.category === 'exam_midterm') ? '<span class="pill tag-exam-midterm"><i class="ph-fill ph-file-text"></i> สอบกลางภาค</span>' : (t.category === 'exam_final') ? '<span class="pill tag-exam-final"><i class="ph-fill ph-graduation-cap"></i> สอบปลายภาค</span>' : (t.category === 'quiz') ? '<span class="pill tag-quiz"><i class="ph-fill ph-lightning"></i> ควิซ</span>' : '';
+        var col = t.color || getColorForString(t.subject || t.text, t.category);
+
         html += '<div class="task-item '+(t.done?'done':'')+'" onclick="openTaskModal(\''+t.id+'\')">'+
                 '<div class="check '+(t.done?'checked':'')+'"></div>'+
-                '<div class="task-body"><div class="task-text">'+t.text+'</div>'+
-                '<div class="task-meta"><span class="pill pri-'+t.priority+'">'+t.priority+'</span>'+(t.subject?'<span>'+t.subject+'</span>':'')+timeBadge+'</div></div></div>';
+                '<div class="task-body"><div class="task-text">'+t.text+' '+examPill+'</div>'+
+                '<div class="task-meta"><span class="pill pri-'+t.priority+'">'+t.priority+'</span>'+(t.subject?'<span>'+t.subject+'</span>':'')+timeBadge+dateRangeStr+'</div></div></div>';
       });
     }
     html += '</div>';
@@ -6177,7 +6609,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
   window.openDailyBriefingModal = function(isManual) {
     var now = new Date();
     var todayStr = getLocalDateStr(now);
-    var todayDayIdx = now.getDay() === 0 ? 6 : now.getDay() - 1; // 0=Mon
+    var todayDayIdx = now.getDay(); // 0 = Sunday
     var currentMinutes = now.getHours() * 60 + now.getMinutes();
     var hour = now.getHours();
 
@@ -6226,6 +6658,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     var todayWeekType = getWeekType(now);
     var todaySchedule = data.schedule.filter(function(c){
       if (c.freq === 'single') return c.date === todayStr;
+      if (c.freq === 'date_range') return isDateInRange(todayStr, c.date, c.endDate);
       if (c.freq === 'week_a') return todayWeekType === 'week_a' && c.day === todayDayIdx;
       if (c.freq === 'week_b') return todayWeekType === 'week_b' && c.day === todayDayIdx;
       return (!c.freq || c.freq === 'weekly') && c.day === todayDayIdx;
@@ -6440,7 +6873,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 
   function renderToday() {
     var now = new Date();
-    var todayDayIdx = now.getDay() === 0 ? 6 : now.getDay() - 1;
+    var todayDayIdx = now.getDay();
     var todayStr = getLocalDateStr(now);
     
     document.getElementById('todayDateStr').textContent = now.toLocaleDateString(undefined, {weekday: 'long', month:'short', day:'numeric', year:'numeric'});
@@ -6499,6 +6932,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     var todayWeekType = getWeekType(now);
     var todaySchedule = data.schedule.filter(function(c){
       if(c.freq === 'single') return c.date === todayStr;
+      if(c.freq === 'date_range') return isDateInRange(todayStr, c.date, c.endDate);
       if(c.freq === 'week_a') return todayWeekType === 'week_a' && c.day === todayDayIdx;
       if(c.freq === 'week_b') return todayWeekType === 'week_b' && c.day === todayDayIdx;
       return (!c.freq || c.freq === 'weekly') && c.day === todayDayIdx;
@@ -6509,12 +6943,25 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
       todaySchedule.forEach(function(c){
         var d = document.createElement('div'); d.className = 'task-item' + (c.isDone ? ' done' : '');
         var isSingle = c.freq === 'single';
+        var isRange = c.freq === 'date_range';
         var isTask = c.category === 'task' || !!c.linkedTaskId;
+        var itemColor = c.color || getColorForString(c.subject || c.title, c.category);
         var subjectBadge = c.subject ? '<span style="opacity:0.75;font-weight:600;margin-right:4px;">['+c.subject+']</span>' : '';
         var checkIcon = c.isDone ? '<i class="ph-fill ph-check-circle" style="color:var(--sage-dark);"></i> ' : '<i class="ph ' + getCategoryIcon(c.category) + '"></i> ';
         var textStyle = c.isDone ? 'text-decoration:line-through;opacity:0.7;' : '';
-        d.innerHTML = '<div style="width:10px;height:10px;border-radius:50%;margin-top:5px;flex-shrink:0;background:var(--'+(c.color||'sky')+'-dark);"></div>' +
-                      '<div class="task-body"><div class="task-text">' + checkIcon + subjectBadge + '<span style="' + textStyle + '">' + c.title + '</span>' + (isSingle ? ' <span class="pill pri-low" style="font-size:10px;">One-time</span>' : '') + (c.isDone ? ' <span class="pill pri-low" style="font-size:10px;color:var(--sage-dark);border-color:var(--sage);">Done</span>' : '') + '</div>' + 
+        
+        var examPill = '';
+        if(c.category === 'exam_midterm') examPill = ' <span class="tag-exam-midterm"><i class="ph-fill ph-file-text"></i> กลางภาค</span>';
+        else if(c.category === 'exam_final') examPill = ' <span class="tag-exam-final"><i class="ph-fill ph-graduation-cap"></i> ปลายภาค</span>';
+        else if(c.category === 'quiz') examPill = ' <span class="tag-quiz"><i class="ph-fill ph-lightning"></i> ควิซ</span>';
+
+        var rangeBadge = isRange ? ' <span class="date-range-badge"><i class="ph ph-calendar"></i> ' + formatDateRange(c.date, c.endDate) + '</span>' : '';
+        var singleBadge = isSingle ? ' <span class="pill pri-low" style="font-size:10px;">One-time</span>' : '';
+        var doneBadge = c.isDone ? ' <span class="pill pri-low" style="font-size:10px;color:var(--sage-dark);border-color:var(--sage);">Done</span>' : '';
+        var reminderBadge = c.hasReminder ? ' <span title="Reminder Active" style="color:var(--amber-dark);"><i class="ph-fill ph-bell"></i></span>' : '';
+
+        d.innerHTML = '<div style="width:10px;height:10px;border-radius:50%;margin-top:5px;flex-shrink:0;background:var(--'+itemColor+'-dark);"></div>' +
+                      '<div class="task-body"><div class="task-text">' + checkIcon + subjectBadge + '<span style="' + textStyle + '">' + c.title + '</span>' + examPill + singleBadge + rangeBadge + doneBadge + reminderBadge + '</div>' + 
                       '<div class="task-meta"><i class="ph ph-clock"></i> '+fmtTime(c.start)+' - '+fmtTime(c.end)+' &middot; <i class="ph ph-map-pin"></i> '+(c.loc||(isTask?'Task Focus':'General'))+'</div></div>';
         d.onclick = function(evt){ evt.stopPropagation(); showEventPopover(c.id, d); };
         clList.appendChild(d);
@@ -6570,13 +7017,13 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     ring.style.strokeDashoffset = offset;
   }
 
-  // --- Schedule Week View ---
+  // --- Schedule Week View (Sunday First) ---
   function getStartOfWeek(date, offsetWeeks) {
     var d = new Date(date);
     d.setDate(d.getDate() + (offsetWeeks * 7));
     var day = d.getDay();
-    var diff = d.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
-    return new Date(d.setDate(diff));
+    d.setDate(d.getDate() - day);
+    return d;
   }
 
   function renderScheduleWeek() {
@@ -6584,15 +7031,15 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     grid.innerHTML = '';
 
     var now = new Date();
-    var monday = getStartOfWeek(now, weekOffset);
-    var sunday = new Date(monday); sunday.setDate(sunday.getDate() + 6);
+    var weekStart = getStartOfWeek(now, weekOffset);
+    var weekEnd = new Date(weekStart); weekEnd.setDate(weekEnd.getDate() + 6);
     var todayStr = getLocalDateStr(now);
     
     document.getElementById('weekNavRangeTitle').textContent = 
-      monday.toLocaleDateString(undefined, {month:'short', day:'numeric'}) + ' – ' + sunday.toLocaleDateString(undefined, {month:'short', day:'numeric', year:'numeric'});
+      weekStart.toLocaleDateString(undefined, {month:'short', day:'numeric'}) + ' – ' + weekEnd.toLocaleDateString(undefined, {month:'short', day:'numeric', year:'numeric'});
 
     // Update Week A/B badge
-    var currentIsoWeekType = getWeekType(monday);
+    var currentIsoWeekType = getWeekType(weekStart);
     var viewWeekType = manualWeekTypeOverride || currentIsoWeekType;
     var weekAbLabel = document.getElementById('weekABLabel');
     if(weekAbLabel) {
@@ -6612,6 +7059,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
       return data.schedule.filter(function(e){
         if(activeCategoryFilter !== 'all' && e.category !== activeCategoryFilter) return false;
         if(e.freq === 'single') return e.date === colDateStr;
+        if(e.freq === 'date_range') return isDateInRange(colDateStr, e.date, e.endDate);
         if(e.freq === 'week_a') return (viewWeekType === 'week_a') && e.day === dIdx;
         if(e.freq === 'week_b') return (viewWeekType === 'week_b') && e.day === dIdx;
         return (!e.freq || e.freq === 'weekly') && e.day === dIdx;
@@ -6623,7 +7071,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     if(smartCropEnabled) {
       var allWeekEntries = [];
       for(var d = 0; d < 7; d++) {
-        var dDate = new Date(monday); dDate.setDate(monday.getDate() + d);
+        var dDate = new Date(weekStart); dDate.setDate(weekStart.getDate() + d);
         allWeekEntries = allWeekEntries.concat(getEntriesForDay(d, getLocalDateStr(dDate)));
       }
       if(allWeekEntries.length === 0) {
@@ -6677,7 +7125,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     grid.appendChild(document.createElement('div')); // corner
 
     DAY_NAMES.forEach(function(name, i){
-      var colDate = new Date(monday); colDate.setDate(monday.getDate() + i);
+      var colDate = new Date(weekStart); colDate.setDate(weekStart.getDate() + i);
       var colDateStr = getLocalDateStr(colDate);
       var isTodayCol = colDateStr === todayStr;
 
@@ -6699,7 +7147,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     grid.appendChild(timeCol);
 
     for(var d=0; d<7; d++){
-      var colDateForDay = new Date(monday); colDateForDay.setDate(monday.getDate() + d);
+      var colDateForDay = new Date(weekStart); colDateForDay.setDate(weekStart.getDate() + d);
       var colDateStrForDay = getLocalDateStr(colDateForDay);
 
       var col = document.createElement('div');
@@ -6715,8 +7163,8 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
         var entry = data.schedule.find(function(x){ return x.id === draggedEntryId; });
         var targetDay = parseInt(this.dataset.day, 10);
         if(entry && entry.day !== targetDay) {
-          var targetColDate = new Date(monday);
-          targetColDate.setDate(monday.getDate() + targetDay);
+          var targetColDate = new Date(weekStart);
+          targetColDate.setDate(weekStart.getDate() + targetDay);
           var targetDateStr = getLocalDateStr(targetColDate);
 
           if(checkConflict(targetDay, entry.start, entry.end, entry.id, targetDateStr, entry.freq || 'weekly')) {
@@ -6746,7 +7194,8 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
         var e = item.entry;
         var isTaskDone = e.isDone;
         var box = document.createElement('div');
-        box.className = 'entry c-' + (e.color || 'sky') + (isTaskDone ? ' done' : '');
+        var itemColor = e.color || getColorForString(e.subject || e.title, e.category);
+        box.className = 'entry c-' + itemColor + (isTaskDone ? ' done' : '');
         box.style.top = Math.max(0, item.top) + 'px';
         box.style.height = Math.max(26, item.height) + 'px';
         if(item.totalLanes > 1) {
@@ -6764,8 +7213,17 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
         var subjectBadge = e.subject ? '<span style="font-weight:700;margin-right:3px;">[' + e.subject + ']</span>' : '';
         var iconHtml = isTaskDone ? '<i class="ph-fill ph-check-circle" style="color:#16A34A;"></i> ' : '<i class="ph ' + getCategoryIcon(e.category) + '"></i> ';
         var textStyle = isTaskDone ? 'text-decoration:line-through;' : '';
-        box.querySelector('.t').innerHTML = iconHtml + subjectBadge + '<span style="' + textStyle + '">' + e.title + '</span>';
-        box.querySelector('.m').innerHTML = '<i class="ph ph-clock"></i> '+fmtTime(e.start) + (e.loc ? ' &middot; ' + e.loc : '');
+
+        var examBadge = '';
+        if(e.category === 'exam_midterm') examBadge = '<span class="tag-exam-midterm" style="font-size:9px;padding:1px 4px;margin-right:3px;">กลางภาค</span>';
+        else if(e.category === 'exam_final') examBadge = '<span class="tag-exam-final" style="font-size:9px;padding:1px 4px;margin-right:3px;">ปลายภาค</span>';
+        else if(e.category === 'quiz') examBadge = '<span class="tag-quiz" style="font-size:9px;padding:1px 4px;margin-right:3px;">ควิซ</span>';
+
+        var reminderIcon = e.hasReminder ? ' <i class="ph-fill ph-bell" style="color:var(--amber-dark);font-size:11px;" title="ตั้งเตือนแล้ว"></i>' : '';
+        box.querySelector('.t').innerHTML = iconHtml + examBadge + subjectBadge + '<span style="' + textStyle + '">' + e.title + '</span>' + reminderIcon;
+        
+        var rangeText = e.freq === 'date_range' ? ' (' + formatDateRange(e.date, e.endDate) + ')' : '';
+        box.querySelector('.m').innerHTML = '<i class="ph ph-clock"></i> '+fmtTime(e.start) + (e.loc ? ' &middot; ' + e.loc : '') + rangeText;
         
         box.addEventListener('dragstart', function(evt){ draggedEntryId = e.id; evt.dataTransfer.setData('text/plain', e.id); });
         box.addEventListener('click', function(evt){ evt.stopPropagation(); showEventPopover(e.id, box); });
@@ -6818,8 +7276,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
       container.appendChild(dh);
     });
 
-    var firstDayIdx = new Date(viewYear, viewMonth, 1).getDay();
-    firstDayIdx = firstDayIdx === 0 ? 6 : firstDayIdx - 1; // 0=Mon
+    var firstDayIdx = new Date(viewYear, viewMonth, 1).getDay(); // 0=Sun
     var daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
     var daysInPrevMonth = new Date(viewYear, viewMonth, 0).getDate();
 
@@ -6839,8 +7296,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
       var dateStr = viewYear + '-' + String(viewMonth + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
       var isToday = dateStr === todayStr;
       var isSelected = dateStr === selectedDayDateStr;
-      var dayOfWeekIdx = new Date(viewYear, viewMonth, day).getDay();
-      dayOfWeekIdx = dayOfWeekIdx === 0 ? 6 : dayOfWeekIdx - 1;
+      var dayOfWeekIdx = new Date(viewYear, viewMonth, day).getDay(); // 0=Sun
 
       var cell = document.createElement('div');
       cell.className = 'month-cal-cell' + (isToday ? ' is-today' : '') + (isSelected ? ' is-selected' : '');
@@ -6854,24 +7310,34 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
         badgesHtml += '<div class="month-badge ms-badge" title="'+m.title+'"><i class="ph-fill ph-flag-banner"></i> '+m.title+'</div>';
       });
 
-      // Tasks due
-      var dayTasks = data.tasks.filter(function(t){ return t.due === dateStr && !t.done; });
+      // Tasks due or multi-day
+      var dayTasks = data.tasks.filter(function(t){
+        if(t.done) return false;
+        if(t.startDate && t.due) return isDateInRange(dateStr, t.startDate, t.due);
+        return t.due === dateStr;
+      });
       dayTasks.slice(0, 3).forEach(function(t){
-        badgesHtml += '<div class="month-badge task-badge" title="'+t.text+'"><i class="ph ph-check"></i> '+t.text+'</div>';
+        var col = t.color || getColorForString(t.subject || t.text, t.category);
+        var isExam = t.category && (t.category.startsWith('exam_') || t.category === 'quiz');
+        var iconClass = isExam ? 'ph-fill ph-file-text' : 'ph ph-check';
+        badgesHtml += '<div class="month-badge task-badge" style="background:var(--'+col+');color:var(--'+col+'-dark);border-left:3px solid var(--'+col+'-dark);font-weight:600;" title="'+t.text+'"><i class="'+iconClass+'"></i> '+t.text+'</div>';
       });
       if(dayTasks.length > 3) {
         badgesHtml += '<div style="font-size:10px;color:var(--ink-soft);">+'+(dayTasks.length-3)+' more</div>';
       }
 
-      // Single-date events on this date (prevent duplicate if already shown as task)
+      // Single-date or multi-day events on this date
       var daySingleEvents = data.schedule.filter(function(e){
-        if(e.freq !== 'single' || e.date !== dateStr) return false;
         if(e.linkedTaskId && dayTasks.some(function(t){ return t.id === e.linkedTaskId; })) return false;
-        return true;
+        if(e.freq === 'single') return e.date === dateStr;
+        if(e.freq === 'date_range') return isDateInRange(dateStr, e.date, e.endDate);
+        return false;
       });
       daySingleEvents.forEach(function(e){
-        var col = e.color || 'sky';
-        badgesHtml += '<div class="month-badge" style="background:var(--'+col+');color:var(--'+col+'-dark);font-weight:600;" title="'+e.title+'"><i class="ph '+getCategoryIcon(e.category)+'"></i> '+e.title+'</div>';
+        var col = e.color || getColorForString(e.subject || e.title, e.category);
+        var isExam = e.category && (e.category.startsWith('exam_') || e.category === 'quiz');
+        var iconClass = isExam ? 'ph-fill ph-file-text' : ('ph ' + getCategoryIcon(e.category));
+        badgesHtml += '<div class="month-badge" style="background:var(--'+col+');color:var(--'+col+'-dark);border-left:3px solid var(--'+col+'-dark);font-weight:600;" title="'+e.title+'"><i class="'+iconClass+'"></i> '+e.title+'</div>';
       });
 
       // Classes and recurring events indicator
@@ -6953,18 +7419,37 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     });
 
     var searchQuery = document.getElementById('taskSearch').value.toLowerCase().trim();
+    var filterType = document.getElementById('filterType') ? document.getElementById('filterType').value : '';
     var filterSubj = subjFilter.value;
     var filterPri = document.getElementById('filterPriority').value;
 
+    var now = new Date();
+    var todayStr = getLocalDateStr(now);
+
     var filteredTasks = data.tasks.filter(function(t){
       if(searchQuery && !t.text.toLowerCase().includes(searchQuery) && !(t.subject && t.subject.toLowerCase().includes(searchQuery))) return false;
+      
+      // Quick Chip Filter
+      if(activeTaskFilter === 'pending' && t.done) return false;
+      if(activeTaskFilter === 'completed' && !t.done) return false;
+      if(activeTaskFilter === 'exams') {
+        var isExam = t.category && (t.category.startsWith('exam_') || t.category === 'quiz');
+        if(!isExam) return false;
+      }
+      if(activeTaskFilter === 'urgent') {
+        if(t.done) return false;
+        var isOverdue = t.due && t.due < todayStr;
+        var isHighPri = t.priority === 'high';
+        var isToday = t.due === todayStr;
+        if(!isOverdue && !isHighPri && !isToday) return false;
+      }
+
+      // Dropdown Filters
+      if(filterType && t.category !== filterType) return false;
       if(filterSubj && t.subject !== filterSubj) return false;
       if(filterPri && t.priority !== filterPri) return false;
       return true;
     });
-
-    var now = new Date();
-    var todayStr = getLocalDateStr(now);
     
     var overdue=[], today=[], thisWk=[], later=[], completed=[];
     var msInDay = 24*60*60*1000;
@@ -6986,13 +7471,30 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
       list.sort(function(a,b){ return (a.due||'9999').localeCompare(b.due||'9999'); }).forEach(function(t){
         var timeBadge = t.time ? '<span><i class="ph ph-clock"></i> '+fmtTime(t.time)+(t.endTime?' - '+fmtTime(t.endTime):'')+'</span>' : '';
         var schBadge = (t.syncToSchedule || t.linkedScheduleId) ? '<span class="pill pri-low" style="font-size:10px;"><i class="ph ph-calendar"></i> In Schedule</span>' : '';
+        
+        var dateBadge = '';
+        if(t.startDate && t.due && t.startDate !== t.due) {
+          dateBadge = '<span class="date-range-badge"><i class="ph ph-calendar"></i> ' + formatDateRange(t.startDate, t.due) + '</span>';
+        } else if(t.due) {
+          dateBadge = '<span><i class="ph ph-calendar"></i> ' + t.due + '</span>';
+        }
+
+        var examBadge = '';
+        if(t.category === 'exam_midterm') examBadge = '<span class="tag-exam-midterm"><i class="ph-fill ph-file-text"></i> สอบกลางภาค</span>';
+        else if(t.category === 'exam_final') examBadge = '<span class="tag-exam-final"><i class="ph-fill ph-graduation-cap"></i> สอบปลายภาค</span>';
+        else if(t.category === 'quiz') examBadge = '<span class="tag-quiz"><i class="ph-fill ph-lightning"></i> ควิซ</span>';
+
+        var reminderBadge = t.hasReminder ? '<span class="pill pri-low" style="font-size:10px;" title="ตั้งเตือนไว้แล้ว"><i class="ph-fill ph-bell" style="color:var(--amber-dark);"></i> เตือน</span>' : '';
+        var itemColor = t.color || getColorForString(t.subject || t.text, t.category);
+
         html += '<li class="task-item '+(t.done?'done':'')+'" data-id="'+t.id+'">'+
                 '<div class="check '+(t.done?'checked':'')+'" role="checkbox"></div>'+
                 '<div class="task-body"><div class="task-text">'+t.text+'</div><div class="task-meta">'+
                 '<span class="pill pri-'+(t.priority||'med')+'">'+(t.priority==='high'?'High':t.priority==='low'?'Low':'Med')+'</span>'+
-                (t.subject?'<span class="subj-dot" style="background:var(--'+getColorForString(t.subject)+'-dark)"></span>'+t.subject:'')+
-                (t.due?'<span><i class="ph ph-calendar"></i> '+t.due+'</span>':'')+
-                timeBadge + schBadge + '</div></div></li>';
+                examBadge +
+                (t.subject?'<span class="subj-dot" style="background:var(--'+itemColor+'-dark)"></span>'+t.subject:'')+
+                dateBadge +
+                timeBadge + schBadge + reminderBadge + '</div></div></li>';
       });
       html += '</ul></div>';
       return html;
@@ -7079,6 +7581,300 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     });
   }
 
+  // --- Reminders & Notifications System ---
+  var firedReminderKeys = {};
+
+  function computeReminderTimestamp(item, isTask) {
+    var eventDateStr = '';
+    var eventTimeStr = '09:00';
+    var now = new Date();
+
+    if (isTask) {
+      eventDateStr = item.startDate || item.due || getLocalDateStr(now);
+      eventTimeStr = item.time || '09:00';
+    } else {
+      if (item.freq === 'single' || item.freq === 'date_range') {
+        eventDateStr = item.date || getLocalDateStr(now);
+      } else {
+        var currentDay = now.getDay();
+        var diff = (item.day - currentDay + 7) % 7;
+        var nextDate = new Date(now.getTime() + diff * 86400000);
+        eventDateStr = getLocalDateStr(nextDate);
+      }
+      eventTimeStr = item.start || '09:00';
+    }
+
+    if (item.reminderTiming === 'custom') {
+      if (item.remindDate && item.remindTime) {
+        return new Date(item.remindDate + 'T' + item.remindTime + ':00');
+      }
+      return new Date(eventDateStr + 'T' + eventTimeStr + ':00');
+    }
+
+    var baseTime = new Date(eventDateStr + 'T' + eventTimeStr + ':00');
+    var offsetMin = 0;
+    if (item.reminderTiming === '5m') offsetMin = 5;
+    else if (item.reminderTiming === '10m') offsetMin = 10;
+    else if (item.reminderTiming === '15m') offsetMin = 15;
+    else if (item.reminderTiming === '30m') offsetMin = 30;
+    else if (item.reminderTiming === '1h') offsetMin = 60;
+    else if (item.reminderTiming === '1d') offsetMin = 1440;
+
+    return new Date(baseTime.getTime() - offsetMin * 60000);
+  }
+
+  function getReminderTimingLabel(timing, remindDate, remindTime) {
+    if (timing === 'at_time') return 'เมื่อถึงเวลาเริ่ม';
+    if (timing === '5m') return '5 นาทีก่อนเริ่ม';
+    if (timing === '10m') return '10 นาทีก่อนเริ่ม';
+    if (timing === '15m') return '15 นาทีก่อนเริ่ม';
+    if (timing === '30m') return '30 นาทีก่อนเริ่ม';
+    if (timing === '1h') return '1 ชั่วโมงก่อนเริ่ม';
+    if (timing === '1d') return '1 วันก่อนหน้า';
+    if (timing === 'custom' && remindDate && remindTime) return 'เวลาที่กำหนด: ' + remindDate + ' ' + fmtTime(remindTime);
+    return '15 นาทีก่อนเริ่ม';
+  }
+
+  function getAllActiveReminders() {
+    var list = [];
+    data.schedule.forEach(function(s){
+      if (s.hasReminder && !s.isDone) {
+        var fireAt = computeReminderTimestamp(s, false);
+        list.push({
+          id: s.id,
+          title: s.title,
+          subject: s.subject,
+          type: 'schedule',
+          category: s.category,
+          color: s.color || getColorForString(s.subject || s.title, s.category),
+          fireAt: fireAt,
+          timingLabel: getReminderTimingLabel(s.reminderTiming, s.remindDate, s.remindTime),
+          dateStr: s.date || (s.freq === 'weekly' ? DAY_NAMES[s.day] : ''),
+          timeStr: s.start ? fmtTime(s.start) : '',
+          raw: s
+        });
+      }
+    });
+
+    data.tasks.forEach(function(t){
+      if (t.hasReminder && !t.done) {
+        var fireAt = computeReminderTimestamp(t, true);
+        list.push({
+          id: t.id,
+          title: t.text,
+          subject: t.subject,
+          type: 'task',
+          category: t.category,
+          color: t.color || getColorForString(t.subject || t.text, t.category),
+          fireAt: fireAt,
+          timingLabel: getReminderTimingLabel(t.reminderTiming, t.remindDate, t.remindTime),
+          dateStr: t.due || '',
+          timeStr: t.time ? fmtTime(t.time) : '',
+          raw: t
+        });
+      }
+    });
+
+    list.sort(function(a, b){ return a.fireAt - b.fireAt; });
+    return list;
+  }
+
+  function updateReminderBadge() {
+    var reminders = getAllActiveReminders();
+    var count = reminders.length;
+    var badge = document.getElementById('notifBadgeCount');
+    var modalBadge = document.getElementById('reminderCountBadge');
+
+    if (badge) {
+      if (count > 0) {
+        badge.textContent = count > 99 ? '99+' : count;
+        badge.style.display = 'flex';
+      } else {
+        badge.style.display = 'none';
+      }
+    }
+    if (modalBadge) {
+      modalBadge.textContent = count + ' active';
+    }
+  }
+
+  function openReminderCenterModal() {
+    var listCont = document.getElementById('reminderCenterList');
+    var statusText = document.getElementById('notifStatusText');
+    var statusIcon = document.getElementById('notifStatusIcon');
+    var enableBtn = document.getElementById('enableNotifInCenterBtn');
+
+    if ("Notification" in window) {
+      var perm = Notification.permission;
+      if (perm === "granted") {
+        statusText.textContent = "การแจ้งเตือนบนอุปกรณ์: อนุญาตแล้ว พร้อมเด้งเตือน ✅";
+        statusIcon.className = "ph-fill ph-check-circle";
+        statusIcon.style.color = "var(--sage-dark)";
+        if(enableBtn) enableBtn.style.display = "none";
+      } else if (perm === "denied") {
+        statusText.textContent = "การแจ้งเตือนถูกปิดกั้นในเบราว์เซอร์ (กรุณาเปิดในตั้งค่าเบราว์เซอร์)";
+        statusIcon.className = "ph-fill ph-x-circle";
+        statusIcon.style.color = "var(--coral-dark)";
+        if(enableBtn) enableBtn.style.display = "none";
+      } else {
+        statusText.textContent = "ยังไม่ได้เปิดรับการแจ้งเตือนบนอุปกรณ์นี้";
+        statusIcon.className = "ph-fill ph-bell-ringing";
+        statusIcon.style.color = "var(--amber-dark)";
+        if(enableBtn) {
+          enableBtn.style.display = "inline-flex";
+          enableBtn.onclick = function(){
+            Notification.requestPermission().then(function(newPerm){
+              openReminderCenterModal();
+              if(newPerm === "granted") showToast("เปิดการแจ้งเตือนสำเร็จ! 🔔");
+            });
+          };
+        }
+      }
+    } else {
+      statusText.textContent = "เบราว์เซอร์นี้ไม่รองรับ Web Notification API";
+      statusIcon.className = "ph-fill ph-warning-circle";
+      statusIcon.style.color = "var(--ink-soft)";
+      if(enableBtn) enableBtn.style.display = "none";
+    }
+
+    var reminders = getAllActiveReminders();
+    listCont.innerHTML = '';
+
+    if (reminders.length === 0) {
+      listCont.innerHTML = '<div style="text-align:center; padding:32px 16px; color:var(--ink-soft); font-size:13px;">' +
+        '<i class="ph ph-bell-slash" style="font-size:36px; opacity:0.4; display:block; margin-bottom:10px;"></i>' +
+        '<strong>ยังไม่มีรายการที่ตั้งเตือน</strong><br>' +
+        'คุณสามารถเปิดสวิตช์ "แจ้งเตือนล่วงหน้า" ในแบบฟอร์มเพิ่มงานหรือตารางเรียนได้' +
+        '</div>';
+    } else {
+      reminders.forEach(function(rem){
+        var itemDiv = document.createElement('div');
+        itemDiv.className = 'reminder-item';
+        
+        var isExam = rem.category && (rem.category.startsWith('exam_') || rem.category === 'quiz');
+        var catBadge = '';
+        if (rem.category === 'exam_midterm') catBadge = '<span class="tag-exam-midterm" style="font-size:10px;">สอบกลางภาค</span>';
+        else if (rem.category === 'exam_final') catBadge = '<span class="tag-exam-final" style="font-size:10px;">สอบปลายภาค</span>';
+        else if (rem.category === 'quiz') catBadge = '<span class="tag-quiz" style="font-size:10px;">ควิซ</span>';
+
+        var fireDateFormatted = rem.fireAt.toLocaleDateString(undefined, {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'});
+
+        itemDiv.innerHTML = 
+          '<div style="width:36px; height:36px; border-radius:10px; background:var(--' + rem.color + '); color:var(--' + rem.color + '-dark); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0;">' +
+            '<i class="ph-fill ' + (isExam ? 'ph-file-text' : (rem.type==='task'?'ph-check-square':'ph-calendar-blank')) + '"></i>' +
+          '</div>' +
+          '<div style="flex:1; min-width:0;">' +
+            '<div style="font-weight:700; font-size:13.5px; color:var(--ink); display:flex; align-items:center; gap:6px; flex-wrap:wrap;">' +
+              (rem.subject ? '<span style="font-size:11px; opacity:0.8;">[' + rem.subject + ']</span> ' : '') +
+              '<span>' + rem.title + '</span>' + catBadge +
+            '</div>' +
+            '<div style="font-size:12px; color:var(--ink-soft); margin-top:2px;">' +
+              '<i class="ph-fill ph-bell" style="color:var(--amber-dark);"></i> เตือน: <strong>' + rem.timingLabel + '</strong>' +
+              ' &middot; <span style="opacity:0.9;">(' + fireDateFormatted + ')</span>' +
+            '</div>' +
+          '</div>' +
+          '<button class="btn small ghost" style="padding:4px 8px; font-size:11px; color:var(--coral-dark);" title="ปิดการแจ้งเตือน">' +
+            '<i class="ph ph-bell-slash"></i>' +
+          '</button>';
+
+        itemDiv.querySelector('button').addEventListener('click', function(e){
+          e.stopPropagation();
+          rem.raw.hasReminder = false;
+          save();
+          refreshViews();
+          openReminderCenterModal();
+          showToast('ยกเลิกการตั้งเตือนเรียบร้อย');
+        });
+
+        itemDiv.addEventListener('click', function(){
+          closeAllModals();
+          if (rem.type === 'task') openTaskModal(rem.id);
+          else openClassModal(rem.id);
+        });
+
+        listCont.appendChild(itemDiv);
+      });
+    }
+
+    openModal('reminderCenterModal');
+  }
+
+  function triggerDeviceNotification(title, options) {
+    if (!("Notification" in window)) return;
+    if (Notification.permission !== "granted") return;
+
+    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({
+        type: 'SCHEDULE_NOTIFICATION',
+        title: title,
+        options: options
+      });
+    } else {
+      try {
+        new Notification(title, options);
+      } catch (e) {
+        console.warn('Native notification error:', e);
+      }
+    }
+  }
+
+  function triggerTestNotification() {
+    if (!("Notification" in window)) {
+      alert("เบราว์เซอร์ของคุณไม่รองรับ Notification API");
+      return;
+    }
+
+    Notification.requestPermission().then(function(perm){
+      if (perm === "granted") {
+        playSuccessChime();
+        triggerDeviceNotification("🔔 Campus Planner Reminder", {
+          body: "การแจ้งเตือนบนอุปกรณ์ของคุณทำงานเรียบร้อยแล้ว!",
+          icon: "icon-192.png",
+          badge: "favicon-32x32.png",
+          vibrate: [200, 100, 200],
+          tag: "test-notification"
+        });
+        showToast("ส่งการแจ้งเตือนไปยังเครื่องของคุณแล้ว! 🎉");
+        openReminderCenterModal();
+      } else {
+        alert("คุณยังไม่ได้อนุญาตการแจ้งเตือน กรุณากดอนุญาตที่แถบเบราว์เซอร์");
+      }
+    });
+  }
+
+  function checkDueReminders() {
+    if (!("Notification" in window) || Notification.permission !== "granted") return;
+
+    var now = new Date();
+    var nowMs = now.getTime();
+    var reminders = getAllActiveReminders();
+
+    reminders.forEach(function(rem){
+      var diff = nowMs - rem.fireAt.getTime();
+      if (diff >= 0 && diff < 5 * 60 * 1000) {
+        var reminderKey = rem.id + '_' + rem.fireAt.getTime();
+        if (!firedReminderKeys[reminderKey]) {
+          firedReminderKeys[reminderKey] = true;
+          
+          var notifBody = (rem.subject ? '[' + rem.subject + '] ' : '') + rem.title;
+          if (rem.dateStr) notifBody += ' - ' + rem.dateStr;
+          if (rem.timeStr) notifBody += ' เวลา ' + rem.timeStr;
+
+          triggerDeviceNotification("🔔 เตือน: " + rem.title, {
+            body: notifBody,
+            icon: "icon-192.png",
+            badge: "favicon-32x32.png",
+            vibrate: [300, 150, 300],
+            tag: rem.id
+          });
+
+          playPopSound();
+          showToast("🔔 ถึงเวลาแจ้งเตือน: " + rem.title);
+        }
+      }
+    });
+  }
+
   function refreshViews() {
     updateHeader();
     renderToday();
@@ -7087,6 +7883,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     renderTasks();
     renderNotes();
     updateMobileDayPickerVisibility();
+    updateReminderBadge();
   }
 
   // --- Wire All DOM Events ---
@@ -7332,17 +8129,28 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
       
       var day = parseInt(document.getElementById('f-day').value, 10);
       var date = document.getElementById('f-date').value;
+      var endDate = document.getElementById('f-end-date') ? document.getElementById('f-end-date').value : '';
       
+      var hasReminder = document.getElementById('f-has-reminder') ? document.getElementById('f-has-reminder').checked : false;
+      var reminderTiming = document.getElementById('f-remind-timing') ? document.getElementById('f-remind-timing').value : '15m';
+      var remindDate = document.getElementById('f-remind-date') ? document.getElementById('f-remind-date').value : '';
+      var remindTime = document.getElementById('f-remind-time') ? document.getElementById('f-remind-time').value : '';
+
       if(!title){ alert('Please enter a title or event name.'); return; }
       if(!start || !end || timeToMin(end) <= timeToMin(start)){ alert('Please check the start and end times.'); return; }
       
       if(freq === 'single') {
         if(!date) { alert('Please select a date for this event.'); return; }
         var dObj = new Date(date + 'T00:00:00');
-        day = dObj.getDay() === 0 ? 6 : dObj.getDay() - 1;
+        day = dObj.getDay(); // 0=Sunday
+      } else if(freq === 'date_range') {
+        if(!date || !endDate) { alert('กรุณาระบุทั้งวันที่เริ่มและวันที่สิ้นสุด (Please select both start and end dates)'); return; }
+        if(endDate < date) { alert('วันที่สิ้นสุดต้องไม่ก่อนวันที่เริ่มต้น (End date cannot be earlier than start date)'); return; }
+        var dObj = new Date(date + 'T00:00:00');
+        day = dObj.getDay(); // 0=Sunday
       }
 
-      if(checkConflict(day, start, end, id || null, freq === 'single' ? date : null, freq)){
+      if(checkConflict(day, start, end, id || null, (freq === 'single' || freq === 'date_range') ? date : null, freq)){
         if(!confirm('Time overlaps with another schedule entry! Save anyway?')) return;
       }
 
@@ -7353,7 +8161,8 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
       entry.category = category;
       entry.freq = freq;
       entry.day = day;
-      entry.date = freq === 'single' ? date : null;
+      entry.date = (freq === 'single' || freq === 'date_range') ? date : null;
+      entry.endDate = freq === 'date_range' ? endDate : null;
       entry.start = start;
       entry.end = end;
       entry.subject = subject;
@@ -7361,16 +8170,20 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
       entry.customColor = customColor;
       entry.color = color;
       entry.syncToTask = syncToTask;
+      entry.hasReminder = hasReminder;
+      entry.reminderTiming = reminderTiming;
+      entry.remindDate = (hasReminder && reminderTiming === 'custom') ? remindDate : null;
+      entry.remindTime = (hasReminder && reminderTiming === 'custom') ? remindTime : null;
       
       if(!id) data.schedule.push(entry);
 
       // Handle Bidirectional Sync to Tasks
       if(syncToTask) {
-        var targetDue = (freq === 'single') ? date : null; 
+        var targetDue = (freq === 'single') ? date : (freq === 'date_range' ? endDate : null);
         
         if(!targetDue && (freq === 'weekly' || freq === 'week_a' || freq === 'week_b')) {
           var nowD = new Date();
-          var currentDay = nowD.getDay() === 0 ? 6 : nowD.getDay() - 1;
+          var currentDay = nowD.getDay();
           var diff = (day - currentDay + 7) % 7;
           var targetDateObj = new Date(nowD.getTime() + diff * 86400000);
           if(freq === 'week_a' || freq === 'week_b') {
@@ -7390,10 +8203,18 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 
         linkedT.text = title;
         linkedT.subject = subject;
+        linkedT.startDate = (freq === 'date_range') ? date : null;
         linkedT.due = targetDue || getLocalDateStr();
         linkedT.time = start;
         linkedT.endTime = end;
+        linkedT.category = category;
         linkedT.priority = category === 'task' ? 'high' : 'med';
+        linkedT.color = color;
+        linkedT.customColor = customColor;
+        linkedT.hasReminder = hasReminder;
+        linkedT.reminderTiming = reminderTiming;
+        linkedT.remindDate = entry.remindDate;
+        linkedT.remindTime = entry.remindTime;
         linkedT.linkedScheduleId = entry.id;
         linkedT.syncToSchedule = true;
         entry.isDone = !!linkedT.done;
@@ -7403,7 +8224,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
         entry.linkedTaskId = null;
       }
 
-      save(); refreshViews(); closeAllModals(); showToast(id ? 'Schedule updated' : 'Schedule entry added');
+      save(); refreshViews(); updateReminderBadge(); closeAllModals(); showToast(id ? 'Schedule updated' : 'Schedule entry added');
     });
 
     document.getElementById('deleteClassBtn').addEventListener('click', function(){
@@ -7421,18 +8242,33 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
         return;
       }
       
+      var category = document.getElementById('t-category') ? document.getElementById('t-category').value : 'other';
+      var startDate = document.getElementById('t-start-date') ? document.getElementById('t-start-date').value : '';
       var due = document.getElementById('t-due').value;
       var priority = document.getElementById('t-priority').value || 'med';
       var subject = document.getElementById('t-subject').value.trim().toUpperCase();
+      var customColor = document.getElementById('t-color') ? document.getElementById('t-color').value : 'auto';
       var syncChk = document.getElementById('t-sync-schedule');
       var syncToSchedule = syncChk ? syncChk.checked : false;
       var startTime = (document.getElementById('t-start') && document.getElementById('t-start').value) || '09:00';
       var endTime = (document.getElementById('t-end') && document.getElementById('t-end').value) || '10:00';
 
+      var hasReminder = document.getElementById('t-has-reminder') ? document.getElementById('t-has-reminder').checked : false;
+      var reminderTiming = document.getElementById('t-remind-timing') ? document.getElementById('t-remind-timing').value : '15m';
+      var remindDate = document.getElementById('t-remind-date') ? document.getElementById('t-remind-date').value : '';
+      var remindTime = document.getElementById('t-remind-time') ? document.getElementById('t-remind-time').value : '';
+
+      if(startDate && due && due < startDate) {
+        alert('วันครบกำหนดต้องไม่ก่อนวันเริ่มต้น (Due date cannot be earlier than start date)');
+        return;
+      }
+
       if(syncToSchedule && due && timeToMin(endTime) <= timeToMin(startTime)) {
         alert('เวลาสิ้นสุดต้องมากกว่าเวลาเริ่มต้น (End time must be after start time)');
         return;
       }
+
+      var color = customColor !== 'auto' ? customColor : getColorForString(subject || text, category);
       
       var entry = id ? data.tasks.find(function(x){ return x.id === id; }) : null;
       if (!entry) {
@@ -7440,18 +8276,27 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
         data.tasks.push(entry);
       }
       entry.text = text;
+      entry.category = category;
       entry.subject = subject;
+      entry.startDate = startDate || null;
       entry.due = due;
       entry.priority = priority;
+      entry.customColor = customColor;
+      entry.color = color;
       entry.time = startTime;
       entry.endTime = endTime;
+      entry.hasReminder = hasReminder;
+      entry.reminderTiming = reminderTiming;
+      entry.remindDate = (hasReminder && reminderTiming === 'custom') ? remindDate : null;
+      entry.remindTime = (hasReminder && reminderTiming === 'custom') ? remindTime : null;
       entry.syncToSchedule = syncToSchedule;
 
       // Handle Bidirectional Sync to Schedule
-      if(syncToSchedule && due) {
-        var dObj = new Date(due + 'T00:00:00');
-        var dayIdx = dObj.getDay() === 0 ? 6 : dObj.getDay() - 1;
-        var schColor = priority === 'high' ? 'coral' : (priority === 'low' ? 'sage' : 'sky');
+      if(syncToSchedule && (due || startDate)) {
+        var eventDate = startDate || due;
+        var dObj = new Date(eventDate + 'T00:00:00');
+        var dayIdx = dObj.getDay(); // 0=Sunday
+        var isMultiDay = startDate && due && startDate !== due;
 
         var linkedSch = entry.linkedScheduleId ? data.schedule.find(function(s){ return s.id === entry.linkedScheduleId; }) : null;
         if(!linkedSch) {
@@ -7461,15 +8306,20 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
         }
 
         linkedSch.title = text;
-        linkedSch.category = 'task';
-        linkedSch.freq = 'single';
-        linkedSch.date = due;
+        linkedSch.category = category || 'task';
+        linkedSch.freq = isMultiDay ? 'date_range' : 'single';
+        linkedSch.date = eventDate;
+        linkedSch.endDate = isMultiDay ? due : null;
         linkedSch.day = dayIdx;
         linkedSch.start = startTime;
         linkedSch.end = endTime;
         linkedSch.subject = subject;
-        linkedSch.color = schColor;
-        linkedSch.customColor = schColor;
+        linkedSch.color = color;
+        linkedSch.customColor = customColor;
+        linkedSch.hasReminder = hasReminder;
+        linkedSch.reminderTiming = reminderTiming;
+        linkedSch.remindDate = entry.remindDate;
+        linkedSch.remindTime = entry.remindTime;
         linkedSch.linkedTaskId = entry.id;
         linkedSch.isDone = !!entry.done;
         linkedSch.syncToTask = true;
@@ -7481,6 +8331,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 
       save();
       refreshViews();
+      updateReminderBadge();
       closeAllModals();
       playPopSound();
       showToast(id ? 'อัปเดตงานเรียบร้อย ✨' : 'เพิ่มงานใหม่สำเร็จ! 🎉');
@@ -7514,6 +8365,43 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     document.getElementById('taskSearch').addEventListener('input', renderTasks);
     document.getElementById('filterSubject').addEventListener('change', renderTasks);
     document.getElementById('filterPriority').addEventListener('change', renderTasks);
+
+    var fType = document.getElementById('filterType');
+    if(fType) fType.addEventListener('change', renderTasks);
+
+    // Quick Task Filter Chips Bar
+    var filterBar = document.getElementById('taskFilterBar');
+    if(filterBar) {
+      filterBar.querySelectorAll('.task-filter-chip').forEach(function(chip){
+        chip.addEventListener('click', function(){
+          filterBar.querySelectorAll('.task-filter-chip').forEach(function(c){ c.classList.remove('active'); });
+          this.classList.add('active');
+          activeTaskFilter = this.dataset.filter || 'all';
+          renderTasks();
+          playPopSound();
+        });
+      });
+    }
+
+    // Notification Center & Reminders
+    var notifBellBtn = document.getElementById('notifBellBtn');
+    if(notifBellBtn) {
+      notifBellBtn.addEventListener('click', function(){
+        openReminderCenterModal();
+      });
+    }
+
+    var closeRemBtn = document.getElementById('closeReminderCenterBtn');
+    if(closeRemBtn) {
+      closeRemBtn.addEventListener('click', closeAllModals);
+    }
+
+    var testNotifBtn = document.getElementById('testNotifBtn');
+    if(testNotifBtn) {
+      testNotifBtn.addEventListener('click', function(){
+        triggerTestNotification();
+      });
+    }
 
     // Notes
     document.getElementById('addNoteBtn').addEventListener('click', function(){
@@ -7977,31 +8865,22 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
       });
     }
 
-    // Browser Notifications
-    document.getElementById('reqNotifyBtn').addEventListener('click', function(){
-      if ("Notification" in window) {
-        Notification.requestPermission().then(function(perm){
-          showToast(perm === "granted" ? "Notifications active!" : "Notification permission denied.");
-        });
-      } else { alert("Notifications not supported in this browser."); }
-    });
+    // Browser Notifications Enable Button in Settings
+    var reqNotifyBtn = document.getElementById('reqNotifyBtn');
+    if(reqNotifyBtn) {
+      reqNotifyBtn.addEventListener('click', function(){
+        if ("Notification" in window) {
+          Notification.requestPermission().then(function(perm){
+            showToast(perm === "granted" ? "เปิดรับการแจ้งเตือนแล้ว! 🔔" : "การแจ้งเตือนถูกปฏิเสธ");
+            updateReminderBadge();
+          });
+        } else { alert("เบราว์เซอร์นี้ไม่รองรับ Notification API"); }
+      });
+    }
 
-    setInterval(function(){
-      if (window.Notification && Notification.permission === "granted") {
-        var now = new Date();
-        var todayStr = getLocalDateStr(now);
-        var dIdx = now.getDay() === 0 ? 6 : now.getDay() - 1;
-        var nowMin = now.getHours() * 60 + now.getMinutes();
-        data.schedule.forEach(function(c){
-          if (c.isDone) return;
-          if (c.freq === 'single' && c.date !== todayStr) return;
-          if ((!c.freq || c.freq === 'weekly') && c.day !== dIdx) return;
-          if (timeToMin(c.start) - nowMin === 10) {
-            new Notification("Class in 10 minutes: " + c.title, { body: c.loc || 'Campus' });
-          }
-        });
-      }
-    }, 60000);
+    // Periodic reminder checker (every 30 seconds)
+    checkDueReminders();
+    setInterval(checkDueReminders, 30000);
   }
 
   function init(){
