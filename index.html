@@ -4133,15 +4133,15 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
         </div>
         <div class="actions-group">
           <div class="view-switcher" id="scheduleViewSwitcher">
-            <button class="active" data-view="week"><i class="ph ph-columns"></i> Week</button>
-            <button data-view="month"><i class="ph ph-calendar-blank"></i> Month</button>
+            <button data-view="week"><i class="ph ph-columns"></i> Week</button>
+            <button class="active" data-view="month"><i class="ph ph-calendar-blank"></i> Month</button>
           </div>
           <button class="btn primary" id="addClassBtn"><i class="ph ph-plus"></i> Add Class / Event</button>
         </div>
       </div>
 
       <!-- WEEK VIEW -->
-      <div class="week-view-container active" id="weekViewContainer">
+      <div class="week-view-container" id="weekViewContainer">
         <div class="week-nav">
           <div style="display:flex; align-items:center; gap:8px;">
             <button class="btn small ghost" id="prevWeekBtn" aria-label="Previous week"><i class="ph ph-caret-left"></i></button>
@@ -4179,7 +4179,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
       </div>
 
       <!-- FULL MONTH VIEW (Cross-month view) -->
-      <div class="month-view-container" id="monthViewContainer">
+      <div class="month-view-container active" id="monthViewContainer">
         <div class="calendar-nav-bar">
           <div class="calendar-month-title" id="monthViewTitle">September 2026</div>
           <div style="display:flex; align-items:center; gap:8px;">
@@ -6884,6 +6884,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 
     if(newData.settings.soundEnabled === undefined) newData.settings.soundEnabled = true;
     if(!newData.settings.themeMood) newData.settings.themeMood = 'aurora';
+    if(!newData.settings.calendarView) newData.settings.calendarView = 'month';
     
     // Auto-migrate from Monday=0 to Sunday=0 without breaking any user data!
     if (!newData.settings.weekStartSunday) {
@@ -7141,7 +7142,11 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     closeAllModals();
     closeMobileDrawer();
     updateMobileDayPickerVisibility();
-    if(panelName === 'schedule') renderScheduleWeek();
+    if(panelName === 'schedule') {
+      var curView = (data.settings && data.settings.calendarView) ? data.settings.calendarView : 'month';
+      if(curView === 'week') renderScheduleWeek();
+      else renderFullMonthCalendar();
+    }
   }
 
   // --- Modal Helpers ---
@@ -9243,9 +9248,11 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
   // Helper for responsive day-picker display
   function updateMobileDayPickerVisibility() {
     var dp = document.getElementById('dayPicker');
-    var activeNav = document.querySelector('.nav-bar button.active');
+    var activeNav = document.querySelector('.nav-bar button.active') || document.querySelector('#tabButtons button.active');
     if(dp) {
-      if(activeNav && activeNav.dataset.panel === 'schedule' && window.innerWidth <= 640) {
+      var curView = (data.settings && data.settings.calendarView) ? data.settings.calendarView : 'month';
+      var isWeek = curView === 'week';
+      if(activeNav && activeNav.dataset.panel === 'schedule' && isWeek && window.innerWidth <= 640) {
         dp.style.display = 'flex';
       } else {
         dp.style.display = 'none';
@@ -9776,6 +9783,18 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     });
   }
 
+  function applyCalendarViewMode() {
+    var view = (data && data.settings && data.settings.calendarView) ? data.settings.calendarView : 'month';
+    document.querySelectorAll('#scheduleViewSwitcher button').forEach(function(btn){
+      btn.classList.toggle('active', btn.dataset.view === view);
+    });
+    var weekEl = document.getElementById('weekViewContainer');
+    var monthEl = document.getElementById('monthViewContainer');
+    if(weekEl) weekEl.classList.toggle('active', view === 'week');
+    if(monthEl) monthEl.classList.toggle('active', view === 'month');
+    updateMobileDayPickerVisibility();
+  }
+
   function refreshViews() {
     updateHeader();
     renderToday();
@@ -9783,7 +9802,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     renderFullMonthCalendar();
     renderTasks();
     renderNotes();
-    updateMobileDayPickerVisibility();
+    applyCalendarViewMode();
     updateReminderBadge();
   }
 
@@ -9832,14 +9851,20 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
         document.querySelectorAll('#scheduleViewSwitcher button').forEach(function(x){ x.classList.remove('active'); });
         btn.classList.add('active');
         var view = btn.dataset.view;
+        if(data && data.settings) {
+          data.settings.calendarView = view;
+          save();
+        }
         if(view === 'week') {
           document.getElementById('weekViewContainer').classList.add('active');
           document.getElementById('monthViewContainer').classList.remove('active');
+          renderScheduleWeek();
         } else {
           document.getElementById('weekViewContainer').classList.remove('active');
           document.getElementById('monthViewContainer').classList.add('active');
           renderFullMonthCalendar();
         }
+        updateMobileDayPickerVisibility();
       });
     });
 
