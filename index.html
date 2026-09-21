@@ -1022,6 +1022,17 @@ button, input, select, textarea {
   content: ""; position: absolute; left: 6px; top: 2px; width: 4px; height: 9px;
   border: solid white; border-width: 0 2px 2px 0; transform: rotate(45deg);
 }
+.task-info-badge {
+  flex: none; width: 20px; height: 20px; border-radius: 50%;
+  margin-top: 1px; display: inline-flex; align-items: center; justify-content: center;
+  font-size: 13px; color: var(--primary); background: rgba(59, 130, 246, 0.12);
+  border: 1.5px solid rgba(59, 130, 246, 0.35); transition: all 0.2s ease;
+}
+.task-item:hover .task-info-badge {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #FFFFFF;
+}
 .task-body { flex: 1; min-width: 0; }
 .task-text { font-size: 14.5px; font-weight: 500; color: var(--ink); margin-bottom: 3px; }
 .task-meta { font-size: 12px; color: var(--ink-soft); display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
@@ -1265,6 +1276,40 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
   background: rgba(245, 158, 11, 0.12);
   border-color: var(--amber-dark);
   color: var(--amber-dark);
+}
+.task-mode-selector {
+  display: inline-flex;
+  align-items: center;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  padding: 3px;
+  border-radius: 20px;
+  gap: 3px;
+}
+.task-mode-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--ink-soft);
+  transition: all 0.18s ease;
+  user-select: none;
+}
+.task-mode-option:hover {
+  color: var(--ink);
+}
+.task-mode-option.active {
+  background: var(--surface);
+  color: var(--primary);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  border: 1px solid var(--line);
+}
+.task-mode-option.mode-info.active {
+  color: var(--primary);
 }
 
 /* ---------- Solid Anchored Form Grouping & Rich Attachments UI ---------- */
@@ -3443,6 +3488,303 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 }
 .quote-refresh-btn:hover { color: var(--ink); background: var(--surface-hover); transform: rotate(180deg); }
 
+/* ---------- Side Companion Dock & Modular Widgets ---------- */
+.app-wrap {
+  transition: max-width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.app-wrap.has-side-dock,
+.app-wrap.is-dragging-any {
+  max-width: 1280px !important;
+}
+.app-body-flex {
+  display: flex;
+  align-items: flex-start;
+  gap: 22px;
+  width: 100%;
+}
+.app-body-flex > .main-container {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+}
+
+.side-dock-rail {
+  width: 300px;
+  flex-shrink: 0;
+  display: none;
+  flex-direction: column;
+  gap: 14px;
+  position: sticky;
+  top: 24px;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-bottom: 24px;
+  scrollbar-width: thin;
+}
+.app-wrap.has-side-dock .side-dock-rail,
+.app-wrap.is-dragging-any .side-dock-rail {
+  display: flex;
+  animation: dockSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes dockSlideIn {
+  from { opacity: 0; transform: translateX(24px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.side-dock-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shadow-sm);
+}
+.side-dock-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.side-dock-clear-btn {
+  background: transparent;
+  border: none;
+  color: var(--ink-soft);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 11.5px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s;
+}
+.side-dock-clear-btn:hover {
+  background: var(--surface-hover);
+  color: var(--ink);
+}
+
+.side-dock-dropzone {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 90px;
+  transition: all 0.25s ease;
+  border-radius: 16px;
+}
+.side-dock-dropzone.drag-active {
+  border: 2px dashed var(--primary);
+  background: rgba(59, 130, 246, 0.05);
+  min-height: 130px;
+}
+.side-dock-dropzone.drag-over {
+  border-color: var(--primary-hover);
+  background: rgba(59, 130, 246, 0.12);
+  transform: scale(1.02);
+}
+
+.side-dock-drop-hint {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px;
+  border: 2px dashed var(--line);
+  border-radius: 14px;
+  color: var(--ink-soft);
+  font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+}
+.app-wrap.is-dragging-any .side-dock-drop-hint,
+.side-dock-dropzone:empty + .side-dock-drop-hint {
+  display: flex;
+}
+
+/* Docked Card Styles */
+.docked-card {
+  background: var(--container-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--container-border);
+  border-radius: 16px;
+  padding: 14px 16px;
+  box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  animation: cardPopIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes cardPopIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+.docked-card:hover {
+  box-shadow: 0 12px 28px -4px rgba(15, 23, 42, 0.12);
+}
+.docked-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 8px;
+}
+.docked-card-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.docked-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.docked-action-btn {
+  background: transparent;
+  border: none;
+  color: var(--ink-soft);
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+.docked-action-btn:hover {
+  background: var(--surface-hover);
+  color: var(--ink);
+}
+
+/* Specific Docked Card Content */
+.docked-quote-body {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink);
+  font-style: italic;
+  padding: 2px 0;
+}
+.docked-quote-author {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--primary);
+  text-align: right;
+  font-style: normal;
+}
+.docked-timer-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
+.docked-timer-digits {
+  font-size: 34px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+}
+.docked-timer-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Dragging & Handle elements */
+.dockable-widget {
+  transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+}
+.dockable-widget.is-dragging {
+  opacity: 0.45;
+  transform: scale(0.98);
+}
+.widget-drag-handle {
+  cursor: grab;
+  color: var(--ink-soft);
+  opacity: 0.5;
+  padding: 3px 5px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.15s, background 0.15s;
+  font-size: 15px;
+  user-select: none;
+}
+.widget-drag-handle:hover {
+  opacity: 1;
+  background: var(--surface-hover);
+  color: var(--primary);
+}
+.widget-drag-handle:active {
+  cursor: grabbing;
+}
+.widget-dock-btn {
+  background: transparent;
+  border: none;
+  color: var(--ink-soft);
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  opacity: 0.6;
+}
+.widget-dock-btn:hover {
+  opacity: 1;
+  background: var(--surface-hover);
+  color: var(--primary);
+}
+
+/* Main Container Placeholder */
+.widget-placeholder {
+  border: 1.5px dashed var(--line);
+  border-radius: 12px;
+  padding: 9px 14px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  background: rgba(0,0,0,0.01);
+  transition: all 0.2s;
+}
+.widget-placeholder:hover,
+.widget-placeholder.drag-over {
+  border-color: var(--primary);
+  background: rgba(59, 130, 246, 0.05);
+}
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .app-wrap.has-side-dock {
+    max-width: 960px !important;
+  }
+  .app-body-flex {
+    flex-direction: column;
+  }
+  .side-dock-rail {
+    width: 100%;
+    position: static;
+    max-height: none;
+  }
+}
+
 /* ---------- Mood Selector ---------- */
 .mood-selector { display: flex; gap: 8px; flex-wrap: wrap; }
 .mood-btn {
@@ -4049,25 +4391,37 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     <button data-panel="settings"><i class="ph ph-gear"></i> Settings</button>
   </nav>
 
-  <main class="main-container">
+  <div class="app-body-flex" id="appBodyFlex">
+    <main class="main-container">
 
-    <!-- TODAY PANEL -->
-    <section class="panel active" id="panel-today">
-      <div class="panel-head">
-        <div>
-          <h2 id="greetingTitle"><i class="ph ph-compass"></i> Overview</h2>
-          <div class="sub" id="todayDateStr"></div>
+      <!-- TODAY PANEL -->
+      <section class="panel active" id="panel-today">
+        <div class="panel-head">
+          <div>
+            <h2 id="greetingTitle"><i class="ph ph-compass"></i> Overview</h2>
+            <div class="sub" id="todayDateStr"></div>
+          </div>
         </div>
-      </div>
 
-      <!-- Motivational Quote Pill -->
-      <div class="quote-pill" id="quotePill">
-        <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:0;">
-          <i class="ph-fill ph-sparkle" style="color:var(--primary); font-size:16px; flex-shrink:0;"></i>
-          <span id="quoteText" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Loading daily inspiration...</span>
+        <!-- Motivational Quote Pill -->
+        <div class="quote-pill dockable-widget" id="quotePill" draggable="true" data-widget="quote">
+          <div class="widget-drag-handle" title="คลิกลากไปไว้แถบข้างๆ (Drag to side dock)"><i class="ph ph-dots-six-vertical"></i></div>
+          <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:0;">
+            <i class="ph-fill ph-sparkle" style="color:var(--primary); font-size:16px; flex-shrink:0;"></i>
+            <span id="quoteText" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Loading daily inspiration...</span>
+          </div>
+          <button class="quote-refresh-btn" id="shuffleQuoteBtn" title="New Inspiration"><i class="ph ph-arrows-clockwise"></i></button>
+          <button class="widget-dock-btn" onclick="dockWidget('quote')" title="ย้ายไปไว้ข้างๆ (Pin to side dock)"><i class="ph ph-arrow-square-out"></i></button>
         </div>
-        <button class="quote-refresh-btn" id="shuffleQuoteBtn" title="New Inspiration"><i class="ph ph-arrows-clockwise"></i></button>
-      </div>
+
+        <!-- Placeholder when Quote is docked -->
+        <div class="widget-placeholder" id="quotePillPlaceholder" style="display:none;" data-widget="quote">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <i class="ph-fill ph-sparkle" style="color:var(--primary);"></i>
+            <span>✨ คำคมกำลังใจถูกตรึงไว้ที่แถบข้างจอ (Docked to side)</span>
+          </div>
+          <button class="btn small ghost" onclick="undockWidget('quote')"><i class="ph ph-arrow-u-down-left"></i> นำกลับมา</button>
+        </div>
       
       <!-- Milestones Countdown Carousel -->
       <div id="milestonesContainer" class="milestone-container" style="display:none;"></div>
@@ -4095,14 +4449,26 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
             </div>
           </div>
           
-          <div class="metric-card" style="flex-direction:column; gap:8px; text-align:center;">
-            <div style="font-size:12px; font-weight:600; color:var(--ink-soft); display:flex; align-items:center; justify-content:center; gap:5px;"><i class="ph ph-timer"></i> Focus Timer</div>
+          <div class="metric-card dockable-widget" id="focusTimerCard" draggable="true" data-widget="timer" style="flex-direction:column; gap:8px; text-align:center; position:relative;">
+            <div style="display:flex; align-items:center; justify-content:space-between; width:100%;">
+              <div class="widget-drag-handle" title="คลิกลากไปไว้แถบข้างๆ (Drag to side dock)"><i class="ph ph-dots-six-vertical"></i></div>
+              <div style="font-size:12px; font-weight:600; color:var(--ink-soft); display:flex; align-items:center; gap:5px;"><i class="ph ph-timer"></i> Focus Timer</div>
+              <button class="widget-dock-btn" onclick="dockWidget('timer')" title="ย้ายไปไว้ข้างๆ (Pin to side dock)"><i class="ph ph-arrow-square-out"></i></button>
+            </div>
             <div class="pomo-time" id="pomoTime" style="margin:0;">25:00</div>
             <div class="pomo-controls">
               <button class="btn small primary" id="pomoStart"><i class="ph ph-play"></i> Focus</button>
               <button class="btn small ghost" id="pomoReset"><i class="ph ph-arrow-counter-clockwise"></i></button>
               <button class="btn small ghost" id="openZenBtn" title="Zen Fullscreen Study Mode"><i class="ph ph-arrows-out"></i> Zen</button>
             </div>
+          </div>
+          <!-- Focus Timer Placeholder -->
+          <div class="widget-placeholder" id="timerPlaceholder" style="display:none; margin:0;" data-widget="timer">
+            <div style="display:flex; align-items:center; gap:6px; font-size:11.5px;">
+              <i class="ph-fill ph-timer" style="color:var(--primary);"></i>
+              <span>⏱️ Focus Timer อยู่ที่แถบข้างจอ</span>
+            </div>
+            <button class="btn small ghost" onclick="undockWidget('timer')" style="padding:2px 6px; font-size:11px;"><i class="ph ph-arrow-u-down-left"></i></button>
           </div>
         </div>
       </div>
@@ -4114,12 +4480,26 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
           </div>
           <div id="todayClassesList"></div>
         </div>
-        <div class="card">
+        <div class="card dockable-widget" id="todayTasksCard" draggable="true" data-widget="urgentTasks">
           <div class="card-header" style="display:flex; align-items:center; justify-content:space-between;">
-            <h3><i class="ph ph-warning-circle"></i> Urgent Tasks</h3>
-            <button class="btn small ghost" id="todayAddTaskBtn" style="padding:4px 10px; font-size:12px;"><i class="ph ph-plus"></i> Add Task</button>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <div class="widget-drag-handle" title="คลิกลากไปไว้แถบข้างๆ (Drag to side dock)"><i class="ph ph-dots-six-vertical"></i></div>
+              <h3><i class="ph ph-warning-circle"></i> Urgent Tasks</h3>
+            </div>
+            <div style="display:flex; align-items:center; gap:4px;">
+              <button class="widget-dock-btn" onclick="dockWidget('urgentTasks')" title="ย้ายไปไว้ข้างๆ (Pin to side dock)"><i class="ph ph-arrow-square-out"></i></button>
+              <button class="btn small ghost" id="todayAddTaskBtn" style="padding:4px 10px; font-size:12px;"><i class="ph ph-plus"></i> Add Task</button>
+            </div>
           </div>
           <ul class="task-list" id="todayTasksList"></ul>
+        </div>
+        <!-- Urgent Tasks Placeholder -->
+        <div class="widget-placeholder" id="urgentTasksPlaceholder" style="display:none; margin-top:10px;" data-widget="urgentTasks">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <i class="ph-fill ph-warning-circle" style="color:var(--coral-dark);"></i>
+            <span>📋 Urgent Tasks ถูกตรึงไว้ที่แถบข้างจอ (Docked)</span>
+          </div>
+          <button class="btn small ghost" onclick="undockWidget('urgentTasks')"><i class="ph ph-arrow-u-down-left"></i> นำกลับมา</button>
         </div>
       </div>
     </section>
@@ -4341,7 +4721,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
         <h3><i class="ph ph-info"></i> About &amp; Copyright</h3>
         <div style="background:var(--surface-2); padding:14px; border-radius:12px; border:1px solid var(--border); font-size:13px; line-height:1.6;">
           <div style="font-weight:700; color:var(--ink); display:flex; align-items:center; gap:6px;">
-            <i class="ph-fill ph-student" style="color:var(--primary);"></i> Campus Planner v2.5
+            <i class="ph-fill ph-student" style="color:var(--primary);"></i> Campus Planner <span id="appAboutVersion">v3.0</span>
           </div>
           <div style="margin-top:4px; color:var(--ink-soft);">
             ออกแบบและสร้างสรรค์โดย <strong style="color:var(--primary); font-weight:700;">@SUKI SKY SUPAKON KEANCHA</strong>
@@ -4356,11 +4736,32 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     </section>
   </main>
 
+    <!-- Side Companion Dock -->
+    <aside class="side-dock-rail" id="sideDockRail">
+      <div class="side-dock-header">
+        <div class="side-dock-title">
+          <i class="ph-fill ph-cards" style="color:var(--primary);"></i>
+          <span>Companion Dock</span>
+        </div>
+        <button class="side-dock-clear-btn" id="dockResetAllBtn" title="นำวิดเจ็ตทั้งหมดกลับเข้าสู่หน้าหลัก">
+          <i class="ph ph-arrow-u-down-left"></i> นำกลับทั้งหมด
+        </button>
+      </div>
+      <div class="side-dock-dropzone" id="sideDockDropzone">
+        <!-- Docked cards rendered dynamically by JavaScript -->
+      </div>
+      <div class="side-dock-drop-hint" id="sideDockDropHint">
+        <i class="ph-fill ph-hand-grabbing" style="color:var(--primary); font-size:18px;"></i>
+        <span>ลากการ์ดมาวางตรงนี้เพื่อตรึงไว้ข้างๆ</span>
+      </div>
+    </aside>
+  </div>
+
   <footer class="app-footer">
     <div class="footer-brand">
       <i class="ph-fill ph-student" style="color:var(--primary); font-size:16px;"></i>
       <span style="font-weight:700; color:var(--ink);">Campus Planner</span>
-      <span class="footer-version-tag">v2.5</span>
+      <span class="footer-version-tag" id="footerVersionTag">v3.0</span>
     </div>
     <div class="footer-copyright">
       &copy; 2026 สร้างโดย <span class="footer-author">@SUKI SKY SUPAKON KEANCHA</span> &middot; All Rights Reserved
@@ -4815,6 +5216,23 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
         </div>
       </div>
 
+      <!-- Sub-panel for To-Do Sync Mode -->
+      <div class="quick-sub-panel" id="f-sync-task-panel" style="display:none; margin-top:8px; padding:8px 12px; background:var(--surface-hover); border:1px solid var(--line); border-radius:10px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+          <span style="font-size:12px; font-weight:600; color:var(--ink-soft);"><i class="ph ph-sliders"></i> รูปแบบรายการใน To-Do:</span>
+          <div class="task-mode-selector" id="f-sync-mode-selector">
+            <label class="task-mode-option active" id="f-sync-mode-task" style="padding:3px 10px; font-size:11.5px;" title="มีปุ่มติ๊กเมื่อทำเสร็จ">
+              <input type="radio" name="f-sync-mode" value="task" checked style="display:none;">
+              <i class="ph-fill ph-check-circle"></i> <span>งานที่ต้องติ๊ก</span>
+            </label>
+            <label class="task-mode-option mode-info" id="f-sync-mode-info" style="padding:3px 10px; font-size:11.5px;" title="ไม่มีปุ่มติ๊ก ไม่นับเป็นงานค้าง">
+              <input type="radio" name="f-sync-mode" value="info" style="display:none;">
+              <i class="ph-fill ph-info"></i> <span>แจ้งทราบ</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
       <!-- Collapsible Panel 1: Attachments & Description -->
       <div class="quick-sub-panel" id="f-attachments-panel">
         <label style="margin-bottom:8px; display:flex; flex-direction:column; gap:4px; font-size:12px; font-weight:600; color:var(--ink-soft);">
@@ -4872,6 +5290,20 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     <!-- Hero Title Input -->
     <div class="modal-hero-title-wrap">
       <input type="text" id="t-text" class="modal-hero-title-input" placeholder="✨ การบ้าน สิ่งที่ต้องทำ หรือโปรเจกต์ (Task title)..." autocomplete="off">
+    </div>
+
+    <!-- Task Mode Selector (Actionable Task vs Info Notice) -->
+    <div style="display:flex; justify-content:flex-start; margin-bottom:12px;">
+      <div class="task-mode-selector" id="t-mode-selector">
+        <label class="task-mode-option active" id="t-mode-task" title="รายการที่ต้องทำ มีปุ่มวงกลมให้ติ๊กเมื่อทำเสร็จ">
+          <input type="radio" name="t-mode" value="task" checked style="display:none;">
+          <i class="ph-fill ph-check-circle"></i> <span>งานที่ต้องทำ (มีปุ่มติ๊ก)</span>
+        </label>
+        <label class="task-mode-option mode-info" id="t-mode-info" title="แจ้งเพื่อทราบ / บันทึกช่วยจำ ไม่มีปุ่มติ๊ก ไม่นับเป็นงานค้างส่ง">
+          <input type="radio" name="t-mode" value="info" style="display:none;">
+          <i class="ph-fill ph-info"></i> <span>แจ้งเพื่อทราบ (ไม่มีปุ่มติ๊ก)</span>
+        </label>
+      </div>
     </div>
 
     <!-- Date, Time & All-Day Row -->
@@ -5285,6 +5717,17 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     }
   }
   // =========================================================================
+
+  // Application Version (Centralized)
+  var APP_VERSION = 'v3.0';
+  window.APP_VERSION = APP_VERSION;
+
+  function applyAppVersion() {
+    var aboutVer = document.getElementById('appAboutVersion');
+    if (aboutVer) aboutVer.textContent = APP_VERSION;
+    var footerVer = document.getElementById('footerVersionTag');
+    if (footerVer) footerVer.textContent = APP_VERSION;
+  }
 
   // Storage Keys
   var STORAGE_GUEST_KEY = 'planner-data-v3';
@@ -6858,6 +7301,10 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     var q = QUOTES[Math.floor(Math.random() * QUOTES.length)];
     var el = document.getElementById('quoteText');
     if(el) el.textContent = '"' + q.text + '" — ' + q.author;
+    var dBody = document.getElementById('dockedQuoteBody');
+    if(dBody) dBody.textContent = '"' + q.text + '"';
+    var dAuthor = document.getElementById('dockedQuoteAuthor');
+    if(dAuthor) dAuthor.textContent = '— ' + q.author;
   }
 
   function updateDynamicGreeting() {
@@ -6885,6 +7332,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     if(newData.settings.soundEnabled === undefined) newData.settings.soundEnabled = true;
     if(!newData.settings.themeMood) newData.settings.themeMood = 'aurora';
     if(!newData.settings.calendarView) newData.settings.calendarView = 'month';
+    if(!Array.isArray(newData.settings.dockedWidgets)) newData.settings.dockedWidgets = [];
     
     // Auto-migrate from Monday=0 to Sunday=0 without breaking any user data!
     if (!newData.settings.weekStartSunday) {
@@ -7565,13 +8013,46 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     }
     freqSelect.onchange = updateFreqUI;
 
+    var fSyncTaskPanel = document.getElementById('f-sync-task-panel');
+    var fSyncModeTask = document.getElementById('f-sync-mode-task');
+    var fSyncModeInfo = document.getElementById('f-sync-mode-info');
+
+    function setSyncMode(mode) {
+      if(fSyncModeTask) fSyncModeTask.classList.toggle('active', mode === 'task');
+      if(fSyncModeInfo) fSyncModeInfo.classList.toggle('active', mode === 'info');
+      var rTask = fSyncModeTask ? fSyncModeTask.querySelector('input') : null;
+      var rInfo = fSyncModeInfo ? fSyncModeInfo.querySelector('input') : null;
+      if(rTask) rTask.checked = (mode === 'task');
+      if(rInfo) rInfo.checked = (mode === 'info');
+    }
+
+    if(fSyncModeTask && !fSyncModeTask._wired) {
+      fSyncModeTask._wired = true;
+      fSyncModeTask.addEventListener('click', function(e){
+        e.preventDefault();
+        setSyncMode('task');
+      });
+    }
+    if(fSyncModeInfo && !fSyncModeInfo._wired) {
+      fSyncModeInfo._wired = true;
+      fSyncModeInfo.addEventListener('click', function(e){
+        e.preventDefault();
+        setSyncMode('info');
+      });
+    }
+
     catSelect.onchange = function() {
       if(catSelect.value === 'milestone' && fIsMilestone) {
         fIsMilestone.checked = true;
       }
       if(catSelect.value === 'task' || catSelect.value === 'lesson_plan' || catSelect.value.startsWith('exam_') || catSelect.value === 'quiz') {
         if(syncTaskChk) syncTaskChk.checked = true;
+        setSyncMode('task');
+      } else if(catSelect.value === 'activity' || catSelect.value === 'personal' || catSelect.value === 'seminar' || catSelect.value === 'class' || catSelect.value === 'other') {
+        setSyncMode('info');
       }
+      if(fSyncTaskPanel) fSyncTaskPanel.style.display = (syncTaskChk && syncTaskChk.checked) ? 'block' : 'none';
+      if(fChipSync && syncTaskChk) fChipSync.classList.toggle('active', syncTaskChk.checked);
     };
 
     if(isEdit) {
@@ -7600,6 +8081,13 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 
       var linkedT = entry.linkedTaskId ? data.tasks.find(function(t){ return t.id === entry.linkedTaskId; }) : null;
       if(syncTaskChk) syncTaskChk.checked = entry.syncToTask !== undefined ? entry.syncToTask : (!!linkedT || entry.category === 'task');
+      if(linkedT) {
+        setSyncMode(linkedT.hasCheckbox !== false ? 'task' : 'info');
+      } else {
+        var currentCat = entry.category || 'class';
+        var isInfo = (currentCat === 'activity' || currentCat === 'personal' || currentCat === 'seminar' || currentCat === 'class' || currentCat === 'other');
+        setSyncMode(isInfo ? 'info' : 'task');
+      }
 
       if(fHasRemind) {
         fHasRemind.checked = !!entry.hasReminder;
@@ -7627,6 +8115,9 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
       if(fIsMilestone) fIsMilestone.checked = !!isMilestoneFlag;
       currentClassAttachments = { voiceNote: null, images: [], files: [] };
       if(syncTaskChk) syncTaskChk.checked = true;
+      var newCat = catSelect.value;
+      var isNewInfo = (newCat === 'activity' || newCat === 'personal' || newCat === 'seminar' || newCat === 'class' || newCat === 'other');
+      setSyncMode(isNewInfo ? 'info' : 'task');
 
       if(fHasRemind) {
         fHasRemind.checked = false;
@@ -7702,9 +8193,11 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
         if(syncTaskChk) {
           syncTaskChk.checked = !syncTaskChk.checked;
           fChipSync.classList.toggle('active', syncTaskChk.checked);
+          if(fSyncTaskPanel) fSyncTaskPanel.style.display = syncTaskChk.checked ? 'block' : 'none';
         }
       });
     }
+    if(fSyncTaskPanel) fSyncTaskPanel.style.display = (syncTaskChk && syncTaskChk.checked) ? 'block' : 'none';
 
     openModal('classModal');
     setTimeout(function(){
@@ -7749,8 +8242,36 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     if(tAllDay) tAllDay.onchange = updateTaskSyncUI;
     if(syncScheduleChk) syncScheduleChk.onchange = updateTaskSyncUI;
 
+    var tModeTask = document.getElementById('t-mode-task');
+    var tModeInfo = document.getElementById('t-mode-info');
+
+    function setTaskMode(mode) {
+      if(tModeTask) tModeTask.classList.toggle('active', mode === 'task');
+      if(tModeInfo) tModeInfo.classList.toggle('active', mode === 'info');
+      var rTask = tModeTask ? tModeTask.querySelector('input') : null;
+      var rInfo = tModeInfo ? tModeInfo.querySelector('input') : null;
+      if(rTask) rTask.checked = (mode === 'task');
+      if(rInfo) rInfo.checked = (mode === 'info');
+    }
+
+    if(tModeTask && !tModeTask._wired) {
+      tModeTask._wired = true;
+      tModeTask.addEventListener('click', function(e){
+        e.preventDefault();
+        setTaskMode('task');
+      });
+    }
+    if(tModeInfo && !tModeInfo._wired) {
+      tModeInfo._wired = true;
+      tModeInfo.addEventListener('click', function(e){
+        e.preventDefault();
+        setTaskMode('info');
+      });
+    }
+
     var entry = isEdit ? data.tasks.find(function(x){ return x.id === id; }) : null;
     if(entry) {
+      setTaskMode(entry.hasCheckbox !== false ? 'task' : 'info');
       document.getElementById('t-id').value = id;
       document.getElementById('t-text').value = entry.text || '';
       if(document.getElementById('t-category')) document.getElementById('t-category').value = entry.category || 'assignment';
@@ -7784,6 +8305,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
         if(document.getElementById('t-remind-time')) document.getElementById('t-remind-time').value = entry.remindTime || '09:00';
       }
     } else {
+      setTaskMode('task');
       document.getElementById('t-id').value = '';
       document.getElementById('t-text').value = '';
       if(document.getElementById('t-category')) document.getElementById('t-category').value = 'assignment';
@@ -8013,8 +8535,8 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     }
 
     // 2. Filter tasks
-    var overdueTasks = data.tasks.filter(function(t){ return !t.done && t.due && t.due < todayStr; });
-    var todayTasks = data.tasks.filter(function(t){ return !t.done && t.due && t.due === todayStr; });
+    var overdueTasks = data.tasks.filter(function(t){ return (t.hasCheckbox !== false) && !t.done && t.due && t.due < todayStr; });
+    var todayTasks = data.tasks.filter(function(t){ return (t.hasCheckbox !== false) && !t.done && t.due && t.due === todayStr; });
     var urgentTasks = overdueTasks.concat(todayTasks);
 
     // Filter today's classes
@@ -8081,9 +8603,9 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
             item.classList.add('done');
             check.classList.add('checked');
 
-            var remainingUrgent = data.tasks.filter(function(x){ return !x.done && x.due && x.due <= todayStr; });
-            var remainingOverdue = data.tasks.filter(function(x){ return !x.done && x.due && x.due < todayStr; });
-            var remainingToday = data.tasks.filter(function(x){ return !x.done && x.due && x.due === todayStr; });
+            var remainingUrgent = data.tasks.filter(function(x){ return (x.hasCheckbox !== false) && !x.done && x.due && x.due <= todayStr; });
+            var remainingOverdue = data.tasks.filter(function(x){ return (x.hasCheckbox !== false) && !x.done && x.due && x.due < todayStr; });
+            var remainingToday = data.tasks.filter(function(x){ return (x.hasCheckbox !== false) && !x.done && x.due && x.due === todayStr; });
             if (overdueCount) overdueCount.textContent = remainingOverdue.length;
             if (overdueBadge) overdueBadge.style.display = remainingOverdue.length > 0 ? 'flex' : 'none';
             if (todayCount) todayCount.textContent = remainingToday.length;
@@ -8486,39 +9008,46 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     else {
       urgTasks.forEach(function(t){
         var li = document.createElement('li'); li.className = 'task-item';
-        var isOverdue = t.due < todayStr;
+        var isOverdue = t.hasCheckbox !== false && t.due < todayStr;
         var timeStr = t.time ? ' &middot; <i class="ph ph-clock"></i> ' + fmtTime(t.time) : '';
-        li.innerHTML = '<div class="check" role="checkbox"></div>'+
+        var checkOrInfo = (t.hasCheckbox !== false)
+          ? '<div class="check" role="checkbox" title="คลิกเพื่อทำเครื่องหมายว่าเสร็จแล้ว"></div>'
+          : '<div class="task-info-badge" title="รายการแจ้งเพื่อทราบ (ไม่มีปุ่มติ๊ก)"><i class="ph-fill ph-info"></i></div>';
+        li.innerHTML = checkOrInfo +
                        '<div class="task-body"><div class="task-text">'+t.text+'</div>'+
                        '<div class="task-meta"><span class="pill '+(isOverdue?'pri-high':'pri-med')+'">'+(isOverdue?'Overdue ('+formatDisplayDate(t.due)+')':'Today')+'</span>'+
                        (t.subject?'<span class="subj-dot" style="background:var(--'+getColorForString(t.subject)+'-dark)"></span>'+t.subject:'')+
                        timeStr + '</div></div>';
-        li.querySelector('.check').onclick = function(e){
-          e.stopPropagation();
-          t.done = true;
-          if(t.linkedScheduleId) {
-            var linkedSch = data.schedule.find(function(s){ return s.id === t.linkedScheduleId || s.linkedTaskId === t.id; });
-            if(linkedSch) linkedSch.isDone = true;
-          }
-          playPopSound();
-          updateStudyStreak(true);
-          save();
-          refreshViews();
-          var remainingToday = data.tasks.filter(function(x){ return !x.done && x.due && x.due <= todayStr; });
-          if(remainingToday.length === 0) {
-            fireConfetti();
-            playSuccessChime();
-            showToast('All urgent tasks completed! Super proud of you! 🎉');
-          }
-        };
+        var chk = li.querySelector('.check');
+        if(chk) {
+          chk.onclick = function(e){
+            e.stopPropagation();
+            t.done = true;
+            if(t.linkedScheduleId) {
+              var linkedSch = data.schedule.find(function(s){ return s.id === t.linkedScheduleId || s.linkedTaskId === t.id; });
+              if(linkedSch) linkedSch.isDone = true;
+            }
+            playPopSound();
+            updateStudyStreak(true);
+            save();
+            refreshViews();
+            var remainingToday = data.tasks.filter(function(x){ return (x.hasCheckbox !== false) && !x.done && x.due && x.due <= todayStr; });
+            if(remainingToday.length === 0) {
+              fireConfetti();
+              playSuccessChime();
+              showToast('All urgent tasks completed! Super proud of you! 🎉');
+            }
+          };
+        }
         li.onclick = function(){ openTaskModal(t.id); };
         tkList.appendChild(li);
       });
     }
     
     // Overall Task Progress Ring
-    var totalTasks = data.tasks.length;
-    var doneTasks = data.tasks.filter(function(t){ return t.done; }).length;
+    var actionableAll = data.tasks.filter(function(t){ return t.hasCheckbox !== false; });
+    var totalTasks = actionableAll.length;
+    var doneTasks = actionableAll.filter(function(t){ return t.done; }).length;
     var pct = totalTasks === 0 ? 0 : Math.round((doneTasks/totalTasks)*100);
     document.getElementById('ringPct').textContent = pct + '%';
     document.getElementById('ringSubText').textContent = totalTasks === 0 ? 'No tasks yet' : (pct === 100 ? 'All tasks completed ✨' : doneTasks + ' of ' + totalTasks + ' done');
@@ -9296,14 +9825,14 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
       if(searchQuery && !t.text.toLowerCase().includes(searchQuery) && !(t.subject && t.subject.toLowerCase().includes(searchQuery))) return false;
       
       // Quick Chip Filter
-      if(activeTaskFilter === 'pending' && t.done) return false;
-      if(activeTaskFilter === 'completed' && !t.done) return false;
+      if(activeTaskFilter === 'pending' && (t.done || t.hasCheckbox === false)) return false;
+      if(activeTaskFilter === 'completed' && (!t.done || t.hasCheckbox === false)) return false;
       if(activeTaskFilter === 'exams') {
         var isExam = t.category && (t.category.startsWith('exam_') || t.category === 'quiz');
         if(!isExam) return false;
       }
       if(activeTaskFilter === 'urgent') {
-        if(t.done) return false;
+        if(t.done || t.hasCheckbox === false) return false;
         var isOverdue = t.due && t.due < todayStr;
         var isHighPri = t.priority === 'high';
         var isToday = t.due === todayStr;
@@ -9328,7 +9857,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     filteredTasks.forEach(function(t){
       if(t.done) { completed.push(t); return; }
       if(!t.due) { noDueDate.push(t); return; }
-      if(t.due < todayStr) {
+      if(t.hasCheckbox !== false && t.due < todayStr) {
         overdue.push(t);
       } else {
         var ym = t.due.substring(0, 7); // 'YYYY-MM'
@@ -9371,9 +9900,12 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 
         var reminderBadge = t.hasReminder ? '<span class="pill pri-low" style="font-size:10px;" title="ตั้งเตือนไว้แล้ว"><i class="ph-fill ph-bell" style="color:var(--amber-dark);"></i> เตือน</span>' : '';
         var itemColor = t.color || getColorForString(t.subject || t.text, t.category);
+        var checkOrInfoHtml = (t.hasCheckbox !== false)
+          ? '<div class="check '+(t.done?'checked':'')+'" role="checkbox" title="คลิกเพื่อทำเครื่องหมายว่าเสร็จแล้ว"></div>'
+          : '<div class="task-info-badge" title="รายการแจ้งเพื่อทราบ (ไม่มีปุ่มติ๊ก)"><i class="ph-fill ph-info"></i></div>';
 
         html += '<li class="task-item '+(t.done?'done':'')+'" data-id="'+t.id+'">'+
-                '<div class="check '+(t.done?'checked':'')+'" role="checkbox"></div>'+
+                checkOrInfoHtml +
                 '<div class="task-body"><div class="task-text">'+t.text+'</div><div class="task-meta">'+
                 '<span class="pill pri-'+(t.priority||'med')+'">'+(t.priority==='high'?'High':t.priority==='low'?'Low':'Med')+'</span>'+
                 examBadge +
@@ -9432,9 +9964,13 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     tl.innerHTML = allHtml;
     
     // Task counters update
-    var pendingCount = data.tasks.filter(function(t){ return !t.done; }).length;
-    var overdueCount = data.tasks.filter(function(t){ return !t.done && t.due && t.due < todayStr; }).length;
-    document.getElementById('taskSub').textContent = pendingCount + ' pending (' + overdueCount + ' overdue) · ' + (data.tasks.length - pendingCount) + ' completed';
+    var actionableTasks = data.tasks.filter(function(t){ return t.hasCheckbox !== false; });
+    var pendingCount = actionableTasks.filter(function(t){ return !t.done; }).length;
+    var overdueCount = actionableTasks.filter(function(t){ return !t.done && t.due && t.due < todayStr; }).length;
+    var completedCount = actionableTasks.filter(function(t){ return t.done; }).length;
+    var infoCount = data.tasks.filter(function(t){ return t.hasCheckbox === false; }).length;
+    var infoNote = infoCount > 0 ? ' · ' + infoCount + ' แจ้งทราบ' : '';
+    document.getElementById('taskSub').textContent = pendingCount + ' pending (' + overdueCount + ' overdue) · ' + completedCount + ' completed' + infoNote;
 
     // Bind clicks
     tl.querySelectorAll('.task-item').forEach(function(li){
@@ -9454,7 +9990,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
           if(task.done) {
             playPopSound();
             updateStudyStreak(true);
-            var pending = data.tasks.filter(function(x){ return !x.done; });
+            var pending = data.tasks.filter(function(x){ return (x.hasCheckbox !== false) && !x.done; });
             if(pending.length === 0) {
               fireConfetti();
               playSuccessChime();
@@ -9795,6 +10331,299 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     updateMobileDayPickerVisibility();
   }
 
+  // --- Modular Dockable Widgets Engine ---
+  var DOCKABLE_WIDGETS = ['quote', 'timer', 'urgentTasks'];
+
+  function isWidgetDocked(id) {
+    if(!data || !data.settings || !Array.isArray(data.settings.dockedWidgets)) return false;
+    return data.settings.dockedWidgets.indexOf(id) !== -1;
+  }
+
+  function dockWidget(id) {
+    if(!data.settings) data.settings = {};
+    if(!Array.isArray(data.settings.dockedWidgets)) data.settings.dockedWidgets = [];
+    if(data.settings.dockedWidgets.indexOf(id) === -1) {
+      data.settings.dockedWidgets.push(id);
+      save();
+    }
+    renderDockedWidgets();
+    playPopSound();
+    var widgetNames = { quote: 'คำคมกำลังใจ', timer: 'Focus Timer', urgentTasks: 'งานด่วน (Urgent Tasks)' };
+    showToast("📌 ตรึง " + (widgetNames[id] || id) + " ไว้ที่แถบข้างจอแล้ว");
+  }
+
+  function undockWidget(id) {
+    if(!data.settings || !Array.isArray(data.settings.dockedWidgets)) return;
+    var idx = data.settings.dockedWidgets.indexOf(id);
+    if(idx !== -1) {
+      data.settings.dockedWidgets.splice(idx, 1);
+      save();
+    }
+    renderDockedWidgets();
+    playPopSound();
+    var widgetNames = { quote: 'คำคมกำลังใจ', timer: 'Focus Timer', urgentTasks: 'งานด่วน (Urgent Tasks)' };
+    showToast("↩️ นำ " + (widgetNames[id] || id) + " กลับเข้าหน้าหลักแล้ว");
+  }
+
+  function undockAllWidgets() {
+    if(!data.settings) data.settings = {};
+    data.settings.dockedWidgets = [];
+    save();
+    renderDockedWidgets();
+    playPopSound();
+    showToast("↩️ นำวิดเจ็ตทั้งหมดกลับเข้าหน้าหลักแล้ว");
+  }
+
+  window.dockWidget = dockWidget;
+  window.undockWidget = undockWidget;
+  window.undockAllWidgets = undockAllWidgets;
+
+  function renderDockedWidgets() {
+    var appWrap = document.querySelector('.app-wrap');
+    var dropzone = document.getElementById('sideDockDropzone');
+    if(!dropzone || !appWrap) return;
+
+    var dockedList = (data.settings && Array.isArray(data.settings.dockedWidgets)) ? data.settings.dockedWidgets : [];
+    
+    // Toggle container class for expanding max-width to 1280px
+    appWrap.classList.toggle('has-side-dock', dockedList.length > 0);
+
+    // 1. Quote Widget visibility
+    var isQuoteDocked = dockedList.indexOf('quote') !== -1;
+    var quotePill = document.getElementById('quotePill');
+    var quotePlaceholder = document.getElementById('quotePillPlaceholder');
+    if(quotePill) quotePill.style.display = isQuoteDocked ? 'none' : 'flex';
+    if(quotePlaceholder) quotePlaceholder.style.display = isQuoteDocked ? 'flex' : 'none';
+
+    // 2. Timer Widget visibility
+    var isTimerDocked = dockedList.indexOf('timer') !== -1;
+    var timerCard = document.getElementById('focusTimerCard');
+    var timerPlaceholder = document.getElementById('timerPlaceholder');
+    if(timerCard) timerCard.style.display = isTimerDocked ? 'none' : 'flex';
+    if(timerPlaceholder) timerPlaceholder.style.display = isTimerDocked ? 'flex' : 'none';
+
+    // 3. Urgent Tasks Widget visibility
+    var isTasksDocked = dockedList.indexOf('urgentTasks') !== -1;
+    var tasksCard = document.getElementById('todayTasksCard');
+    var tasksPlaceholder = document.getElementById('urgentTasksPlaceholder');
+    if(tasksCard) tasksCard.style.display = isTasksDocked ? 'none' : 'block';
+    if(tasksPlaceholder) tasksPlaceholder.style.display = isTasksDocked ? 'flex' : 'none';
+
+    // Render cards inside Dropzone
+    dropzone.innerHTML = '';
+
+    dockedList.forEach(function(widgetId){
+      if(widgetId === 'quote') {
+        var card = document.createElement('div');
+        card.className = 'docked-card docked-quote-card';
+        card.id = 'docked-quote';
+        card.draggable = true;
+        card.dataset.widget = 'quote';
+        
+        var currentQText = (document.getElementById('quoteText') ? document.getElementById('quoteText').textContent : '');
+        var quoteSplit = currentQText.split('” — ');
+        if(quoteSplit.length === 1) quoteSplit = currentQText.split('" — ');
+        var qBody = quoteSplit[0] ? quoteSplit[0] + (quoteSplit[0].endsWith('”') || quoteSplit[0].endsWith('"') ? '' : '”') : currentQText;
+        var qAuthor = quoteSplit[1] ? '— ' + quoteSplit[1] : '';
+
+        card.innerHTML = 
+          '<div class="docked-card-header">' +
+            '<div class="docked-card-title">' +
+              '<div class="widget-drag-handle" title="คลิกลากเพื่อย้ายกลับ"><i class="ph ph-dots-six-vertical"></i></div>' +
+              '<i class="ph-fill ph-sparkle" style="color:var(--primary);"></i>' +
+              '<span>Daily Inspiration</span>' +
+            '</div>' +
+            '<div class="docked-card-actions">' +
+              '<button class="docked-action-btn" id="dockedShuffleQuoteBtn" title="สุ่มคำคมใหม่"><i class="ph ph-arrows-clockwise"></i></button>' +
+              '<button class="docked-action-btn" onclick="undockWidget(\'quote\')" title="ส่งกลับไปที่เดิม"><i class="ph ph-arrow-u-down-left"></i></button>' +
+            '</div>' +
+          '</div>' +
+          '<div class="docked-quote-body" id="dockedQuoteBody">' + qBody + '</div>' +
+          '<div class="docked-quote-author" id="dockedQuoteAuthor">' + qAuthor + '</div>';
+
+        dropzone.appendChild(card);
+
+        var shuf = card.querySelector('#dockedShuffleQuoteBtn');
+        if(shuf) {
+          shuf.addEventListener('click', function(){
+            showRandomQuote();
+            playPopSound();
+          });
+        }
+      } else if(widgetId === 'timer') {
+        var card = document.createElement('div');
+        card.className = 'docked-card docked-timer-card';
+        card.id = 'docked-timer';
+        card.draggable = true;
+        card.dataset.widget = 'timer';
+
+        var currentTime = (document.getElementById('pomoTime') ? document.getElementById('pomoTime').textContent : '25:00');
+        var isTimerActive = (typeof pomoActive !== 'undefined') ? pomoActive : false;
+
+        card.innerHTML = 
+          '<div class="docked-card-header">' +
+            '<div class="docked-card-title">' +
+              '<div class="widget-drag-handle" title="คลิกลากเพื่อย้ายกลับ"><i class="ph ph-dots-six-vertical"></i></div>' +
+              '<i class="ph-fill ph-timer" style="color:var(--primary);"></i>' +
+              '<span>Focus Timer</span>' +
+            '</div>' +
+            '<div class="docked-card-actions">' +
+              '<button class="docked-action-btn" onclick="undockWidget(\'timer\')" title="ส่งกลับไปที่เดิม"><i class="ph ph-arrow-u-down-left"></i></button>' +
+            '</div>' +
+          '</div>' +
+          '<div class="docked-timer-body">' +
+            '<div class="docked-timer-digits" id="dockedPomoTime">' + currentTime + '</div>' +
+            '<div class="docked-timer-controls">' +
+              '<button class="btn small primary" id="dockedPomoStart">' + (isTimerActive ? '<i class="ph ph-pause"></i> Pause' : '<i class="ph ph-play"></i> Focus') + '</button>' +
+              '<button class="btn small ghost" id="dockedPomoReset" title="รีเซ็ตเวลา"><i class="ph ph-arrow-counter-clockwise"></i></button>' +
+              '<button class="btn small ghost" id="dockedOpenZenBtn" title="Zen Fullscreen"><i class="ph ph-arrows-out"></i></button>' +
+            '</div>' +
+          '</div>';
+
+        dropzone.appendChild(card);
+
+        var dStart = card.querySelector('#dockedPomoStart');
+        if(dStart) {
+          dStart.addEventListener('click', function(){
+            var mainStart = document.getElementById('pomoStart');
+            if(mainStart) mainStart.click();
+          });
+        }
+        var dReset = card.querySelector('#dockedPomoReset');
+        if(dReset) {
+          dReset.addEventListener('click', function(){
+            var mainReset = document.getElementById('pomoReset');
+            if(mainReset) mainReset.click();
+          });
+        }
+        var dZen = card.querySelector('#dockedOpenZenBtn');
+        if(dZen) {
+          dZen.addEventListener('click', function(){
+            var mainZen = document.getElementById('openZenBtn');
+            if(mainZen) mainZen.click();
+          });
+        }
+      } else if(widgetId === 'urgentTasks') {
+        var card = document.createElement('div');
+        card.className = 'docked-card docked-tasks-card';
+        card.id = 'docked-urgentTasks';
+        card.draggable = true;
+        card.dataset.widget = 'urgentTasks';
+
+        var urgentListHtml = (document.getElementById('todayTasksList') ? document.getElementById('todayTasksList').innerHTML : '');
+
+        card.innerHTML = 
+          '<div class="docked-card-header">' +
+            '<div class="docked-card-title">' +
+              '<div class="widget-drag-handle" title="คลิกลากเพื่อย้ายกลับ"><i class="ph ph-dots-six-vertical"></i></div>' +
+              '<i class="ph-fill ph-warning-circle" style="color:var(--coral-dark);"></i>' +
+              '<span>Urgent Tasks</span>' +
+            '</div>' +
+            '<div class="docked-card-actions">' +
+              '<button class="docked-action-btn" id="dockedAddTaskBtn" title="เพิ่มงาน"><i class="ph ph-plus"></i></button>' +
+              '<button class="docked-action-btn" onclick="undockWidget(\'urgentTasks\')" title="ส่งกลับไปที่เดิม"><i class="ph ph-arrow-u-down-left"></i></button>' +
+            '</div>' +
+          '</div>' +
+          '<ul class="task-list" id="dockedTasksList" style="max-height:220px; overflow-y:auto; padding:2px 0;">' + urgentListHtml + '</ul>';
+
+        dropzone.appendChild(card);
+
+        var addBtn = card.querySelector('#dockedAddTaskBtn');
+        if(addBtn) {
+          addBtn.addEventListener('click', function(){ openTaskModal(); });
+        }
+      }
+    });
+
+    bindDraggableCards();
+  }
+
+  function bindDraggableCards() {
+    document.querySelectorAll('.docked-card').forEach(function(c){
+      c.setAttribute('draggable', 'true');
+    });
+  }
+
+  function setupDragAndDropEvents() {
+    var appWrap = document.querySelector('.app-wrap');
+    var dropzone = document.getElementById('sideDockDropzone');
+
+    // Dragstart listener
+    document.addEventListener('dragstart', function(e){
+      var target = e.target.closest('.dockable-widget, .docked-card');
+      if(!target || !target.dataset.widget) return;
+
+      var widgetId = target.dataset.widget;
+      e.dataTransfer.setData('text/plain', widgetId);
+      e.dataTransfer.effectAllowed = 'move';
+      target.classList.add('is-dragging');
+      if(appWrap) appWrap.classList.add('is-dragging-any');
+      if(dropzone) dropzone.classList.add('drag-active');
+
+      var phId = widgetId === 'quote' ? 'quotePillPlaceholder' : (widgetId === 'timer' ? 'timerPlaceholder' : 'urgentTasksPlaceholder');
+      var placeholder = document.getElementById(phId);
+      if(placeholder) placeholder.classList.add('drag-active');
+    });
+
+    document.addEventListener('dragend', function(e){
+      var target = e.target.closest('.dockable-widget, .docked-card');
+      if(target) target.classList.remove('is-dragging');
+      if(appWrap) appWrap.classList.remove('is-dragging-any');
+      if(dropzone) {
+        dropzone.classList.remove('drag-active');
+        dropzone.classList.remove('drag-over');
+      }
+      document.querySelectorAll('.widget-placeholder').forEach(function(p){
+        p.classList.remove('drag-active');
+        p.classList.remove('drag-over');
+      });
+    });
+
+    if(dropzone) {
+      dropzone.addEventListener('dragover', function(e){
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        dropzone.classList.add('drag-over');
+      });
+      dropzone.addEventListener('dragleave', function(){
+        dropzone.classList.remove('drag-over');
+      });
+      dropzone.addEventListener('drop', function(e){
+        e.preventDefault();
+        dropzone.classList.remove('drag-over');
+        dropzone.classList.remove('drag-active');
+        var widgetId = e.dataTransfer.getData('text/plain');
+        if(widgetId && DOCKABLE_WIDGETS.indexOf(widgetId) !== -1) {
+          dockWidget(widgetId);
+        }
+      });
+    }
+
+    document.querySelectorAll('.widget-placeholder').forEach(function(ph){
+      ph.addEventListener('dragover', function(e){
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        ph.classList.add('drag-over');
+      });
+      ph.addEventListener('dragleave', function(){
+        ph.classList.remove('drag-over');
+      });
+      ph.addEventListener('drop', function(e){
+        e.preventDefault();
+        ph.classList.remove('drag-over');
+        var widgetId = e.dataTransfer.getData('text/plain') || ph.dataset.widget;
+        if(widgetId) {
+          undockWidget(widgetId);
+        }
+      });
+    });
+
+    var resetBtn = document.getElementById('dockResetAllBtn');
+    if(resetBtn) {
+      resetBtn.addEventListener('click', undockAllWidgets);
+    }
+  }
+
   function refreshViews() {
     updateHeader();
     renderToday();
@@ -9803,12 +10632,14 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     renderTasks();
     renderNotes();
     applyCalendarViewMode();
+    renderDockedWidgets();
     updateReminderBadge();
   }
 
   // --- Wire All DOM Events ---
   function wireEvents(){
     window.addEventListener('resize', updateMobileDayPickerVisibility);
+    setupDragAndDropEvents();
 
     document.getElementById('themeToggle').addEventListener('click', function(){
       data.settings.darkMode = !data.settings.darkMode;
@@ -10261,6 +11092,11 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
         linkedT.remindDate = entry.remindDate;
         linkedT.remindTime = entry.remindTime;
         linkedT.linkedScheduleId = entry.id;
+        var fSyncModeTask = document.getElementById('f-sync-mode-task');
+        var syncHasCheckbox = fSyncModeTask ? fSyncModeTask.classList.contains('active') : true;
+        linkedT.hasCheckbox = syncHasCheckbox;
+        if(!syncHasCheckbox) linkedT.done = false;
+        entry.hasCheckbox = syncHasCheckbox;
         linkedT.syncToSchedule = true;
         entry.isDone = !!linkedT.done;
       } else if(!syncToTask && entry.linkedTaskId) {
@@ -10347,6 +11183,13 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
       entry.remindDate = (hasReminder && reminderTiming === 'custom') ? remindDate : null;
       entry.remindTime = (hasReminder && reminderTiming === 'custom') ? remindTime : null;
       entry.syncToSchedule = syncToSchedule;
+
+      var tModeTask = document.getElementById('t-mode-task');
+      var isTaskMode = tModeTask ? tModeTask.classList.contains('active') : true;
+      entry.hasCheckbox = isTaskMode;
+      if(!isTaskMode) {
+        entry.done = false;
+      }
 
       // Handle Bidirectional Sync to Schedule
       if(syncToSchedule && (due || startDate)) {
@@ -10556,11 +11399,16 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     function updatePomoUI() {
       var m = Math.floor(pomoLeft/60), s = pomoLeft%60;
       var timeStr = m + ':' + (s<10?'0':'')+s;
-      pomoTimeEl.textContent = timeStr;
-      pomoStartBtn.innerHTML = pomoActive ? '<i class="ph ph-pause"></i> Pause' : '<i class="ph ph-play"></i> Focus';
+      if(pomoTimeEl) pomoTimeEl.textContent = timeStr;
+      if(pomoStartBtn) pomoStartBtn.innerHTML = pomoActive ? '<i class="ph ph-pause"></i> Pause' : '<i class="ph ph-play"></i> Focus';
       
       if(zenTimerDigits) zenTimerDigits.textContent = timeStr;
       if(zenStartBtn) zenStartBtn.innerHTML = pomoActive ? '<i class="ph ph-pause"></i> Pause' : '<i class="ph ph-play"></i> Focus';
+
+      var dockedPomoTime = document.getElementById('dockedPomoTime');
+      if(dockedPomoTime) dockedPomoTime.textContent = timeStr;
+      var dockedPomoStart = document.getElementById('dockedPomoStart');
+      if(dockedPomoStart) dockedPomoStart.innerHTML = pomoActive ? '<i class="ph ph-pause"></i> Pause' : '<i class="ph ph-play"></i> Focus';
     }
     
     pomoStartBtn.addEventListener('click', function(){
@@ -11045,6 +11893,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
   }
 
   function init(){
+    applyAppVersion();
     renderDayPicker();
     wireEvents();
     load().then(function(){
