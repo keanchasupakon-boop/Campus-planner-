@@ -2045,6 +2045,133 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
   gap: 8px;
 }
 
+/* ---------- Micro Help Tooltips & Popovers (?) ---------- */
+.help-tip-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  color: var(--ink-soft);
+  border: 1px solid var(--line);
+  font-size: 10.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  vertical-align: middle;
+  margin-left: 5px;
+  padding: 0;
+  flex-shrink: 0;
+  user-select: none;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+  line-height: 1;
+}
+.help-tip-btn::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+}
+.help-tip-btn:hover, .help-tip-btn:focus, .help-tip-btn.active {
+  background: var(--primary-light);
+  color: var(--primary);
+  border-color: var(--primary);
+  transform: scale(1.12);
+}
+.help-tip-btn i {
+  font-size: 11px;
+  pointer-events: none;
+}
+
+/* Help Popover Floating Card */
+.help-popover-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 3499;
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  animation: fadeIn 0.15s ease-out;
+}
+.help-popover-card {
+  display: none;
+  position: fixed;
+  z-index: 3500;
+  width: 300px;
+  max-width: calc(100vw - 32px);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.18), 0 4px 10px rgba(0, 0, 0, 0.05);
+  padding: 14px 16px;
+  animation: helpPopIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes helpPopIn {
+  from { opacity: 0; transform: scale(0.92) translateY(6px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.help-popover-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  gap: 8px;
+}
+.help-popover-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.help-popover-title i {
+  color: var(--primary);
+  font-size: 15px;
+}
+.help-popover-close {
+  background: transparent;
+  border: none;
+  color: var(--ink-soft);
+  cursor: pointer;
+  padding: 2px 4px;
+  font-size: 16px;
+  line-height: 1;
+  border-radius: 6px;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.help-popover-close:hover {
+  background: var(--surface-hover);
+  color: var(--ink);
+}
+.help-popover-body {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+.help-popover-body b, .help-popover-body strong {
+  color: var(--ink);
+}
+@media (max-width: 640px) {
+  .help-popover-card {
+    left: 16px !important;
+    right: 16px !important;
+    bottom: calc(76px + env(safe-area-inset-bottom, 12px)) !important;
+    top: auto !important;
+    width: auto !important;
+    max-width: 100% !important;
+    border-radius: 16px;
+    box-shadow: 0 -8px 28px rgba(0, 0, 0, 0.2);
+    animation: slideUp 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+
 /* ---------- Daily Briefing Card (Elevated Premium Aesthetic UI) ---------- */
 .briefing-modal-card {
   max-width: 500px !important;
@@ -2546,11 +2673,107 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
   justify-content: space-between;
 }
 
+/* ---------- Mobile Bottom Navigation Bar (Docked Native App Style) ---------- */
+.mobile-bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--line);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+  padding: 4px 6px calc(6px + env(safe-area-inset-bottom, 0px));
+  justify-content: space-around;
+  align-items: center;
+  box-sizing: border-box;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+[data-theme="dark"] .mobile-bottom-nav {
+  background: rgba(15, 23, 42, 0.92);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.35);
+}
+.bottom-nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background: transparent;
+  border: none;
+  padding: 4px 2px;
+  border-radius: 12px;
+  cursor: pointer;
+  color: var(--ink-soft);
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  min-width: 0;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+}
+.bottom-nav-item:active {
+  transform: scale(0.94);
+}
+.bottom-nav-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  line-height: 1;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.bottom-nav-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  line-height: 1.1;
+  transition: color 0.18s, font-weight 0.18s;
+}
+.bottom-nav-item.active {
+  color: var(--primary);
+}
+.bottom-nav-item.active .bottom-nav-icon {
+  transform: translateY(-1px) scale(1.1);
+  color: var(--primary);
+}
+.bottom-nav-item.active .bottom-nav-label {
+  font-weight: 700;
+  color: var(--primary);
+}
+.bottom-nav-badge {
+  position: absolute;
+  top: -2px;
+  right: -7px;
+  background: #EF4444;
+  color: #FFFFFF;
+  font-size: 9.5px;
+  font-weight: 800;
+  min-width: 15px;
+  height: 15px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.4);
+  border: 1.5px solid var(--surface);
+  line-height: 1;
+}
+
 /* ---------- Responsive Mobile Styles (Native iOS Feel & Clutter-Free Layout) ---------- */
 @media (max-width: 640px) {
   body {
-    padding: 12px 12px calc(24px + env(safe-area-inset-bottom, 8px)) !important;
+    padding: 12px 12px calc(76px + env(safe-area-inset-bottom, 16px)) !important;
     -webkit-tap-highlight-color: transparent;
+  }
+  .mobile-bottom-nav {
+    display: flex !important;
   }
   .app-wrap {
     padding-bottom: 0 !important;
@@ -2758,39 +2981,76 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     border-radius: 12px !important;
     color: var(--ink-soft) !important;
   }
+  #panel-today #quotePill .widget-drag-handle,
+  #panel-today #quotePill .widget-dock-btn {
+    display: none !important;
+  }
+
+  /* Milestones Carousel on Mobile - Smooth Horizontal Touch Scroll (Clean & Unsquished) */
   #panel-today #milestonesContainer {
     order: 3 !important;
+    display: flex !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    flex-wrap: nowrap !important;
+    gap: 10px !important;
+    padding: 2px 2px 10px 2px !important;
     margin-bottom: 12px !important;
-    gap: 8px !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  #panel-today #milestonesContainer::-webkit-scrollbar {
+    display: none !important;
   }
   #panel-today .milestone-card {
-    flex: 1 1 100% !important;
-    width: 100% !important;
-    min-width: 0 !important;
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: 165px !important;
+    max-width: 210px !important;
     padding: 12px 14px !important;
     border-radius: 14px !important;
     display: flex !important;
-    align-items: center !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
     justify-content: space-between !important;
     box-shadow: var(--shadow-sm) !important;
     background: var(--surface) !important;
+    border: 1px solid var(--line) !important;
+    cursor: pointer !important;
+    box-sizing: border-box !important;
   }
   #panel-today .milestone-card h4 {
-    margin: 0 !important;
-    font-size: 13.5px !important;
+    margin: 0 0 3px 0 !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    color: var(--ink) !important;
+    line-height: 1.3 !important;
+    white-space: normal !important;
+    overflow: hidden !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
   }
   #panel-today .milestone-card .date {
-    margin: 2px 0 0 0 !important;
+    margin: 0 0 8px 0 !important;
     font-size: 11px !important;
+    color: var(--ink-soft) !important;
   }
   #panel-today .milestone-card .countdown {
-    font-size: 18px !important;
-    text-align: right !important;
+    font-size: 20px !important;
+    font-weight: 800 !important;
+    color: var(--primary) !important;
+    letter-spacing: -0.03em !important;
     line-height: 1.1 !important;
+    text-align: left !important;
+    margin-top: auto !important;
   }
   #panel-today .milestone-card .countdown span {
-    display: block !important;
-    font-size: 10px !important;
+    display: inline !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    color: var(--ink-soft) !important;
+    margin-left: 2px !important;
   }
 
   /* Schedule & Tasks Section */
@@ -3114,22 +3374,79 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     background: var(--surface) !important;
     border: 1px solid var(--line) !important;
     border-radius: 16px !important;
-    padding: 12px 10px !important;
+    padding: 12px 8px !important;
     box-shadow: var(--shadow-sm) !important;
   }
   .calendar-nav-bar {
     display: flex !important;
-    flex-direction: column !important;
-    gap: 8px !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
     align-items: center !important;
+    gap: 8px !important;
     margin-bottom: 12px !important;
+    flex-wrap: wrap !important;
   }
   .calendar-month-title {
-    font-size: 16px !important;
+    font-size: 15px !important;
     font-weight: 800 !important;
+  }
+  .month-cal-header-row {
+    gap: 2px !important;
+  }
+  .cal-day-header {
+    font-size: 10px !important;
+    padding-bottom: 4px !important;
+  }
+  .month-week-row {
+    min-height: 72px !important;
+    border-radius: 8px !important;
+    margin-bottom: 4px !important;
+  }
+  .month-day-cell {
+    padding: 3px 2px !important;
+  }
+  .month-cal-num {
+    font-size: 10px !important;
+  }
+  .month-day-cell.is-today .month-cal-num-pill {
+    width: 18px !important;
+    height: 18px !important;
+    font-size: 10px !important;
+  }
+  .month-week-events {
+    padding-top: 20px !important;
+    gap: 2px !important;
+    grid-auto-rows: 20px !important;
+  }
+  .month-span-bar, .month-badge {
+    font-size: 8.5px !important;
+    padding: 0 3px !important;
+    height: 18px !important;
+    line-height: 18px !important;
+    border-radius: 4px !important;
   }
 
   /* ---------- TASKS & DEADLINES ON MOBILE ---------- */
+  .task-filter-bar {
+    display: flex !important;
+    overflow-x: auto !important;
+    flex-wrap: nowrap !important;
+    gap: 6px !important;
+    padding: 2px 2px 8px !important;
+    margin-bottom: 10px !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  .task-filter-bar::-webkit-scrollbar {
+    display: none !important;
+  }
+  .task-filter-chip {
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+    padding: 6px 12px !important;
+    font-size: 11.5px !important;
+    border-radius: 999px !important;
+  }
   .task-controls {
     display: grid !important;
     grid-template-columns: 1fr 1fr !important;
@@ -3154,6 +3471,15 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     border-radius: 10px !important;
     background: var(--surface-2) !important;
     border: 1px solid var(--line) !important;
+  }
+  #filterType {
+    grid-column: 1 / -1 !important;
+  }
+  #filterSubject {
+    grid-column: 1 / 2 !important;
+  }
+  #filterPriority {
+    grid-column: 2 / 3 !important;
   }
   .task-controls select {
     width: 100% !important;
@@ -3265,13 +3591,22 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
   .modal-card {
     border-radius: 26px 26px 0 0 !important;
     max-height: 90vh !important;
-    padding: 20px 16px !important;
+    padding: 14px 16px calc(24px + env(safe-area-inset-bottom, 12px)) !important;
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 !important;
     animation: slideUp 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    position: relative !important;
   }
-  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .modal-card::before {
+    content: '';
+    display: block;
+    width: 38px;
+    height: 4.5px;
+    background: var(--line-strong);
+    border-radius: 3px;
+    margin: 0 auto 14px auto;
+  }
   .modal-title {
     font-size: 16px !important;
     margin-bottom: 14px !important;
@@ -3284,6 +3619,18 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     width: 100% !important;
     min-width: 0 !important;
   }
+  .task-mode-selector {
+    display: flex !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  .task-mode-option {
+    flex: 1 !important;
+    justify-content: center !important;
+    padding: 7px 6px !important;
+    font-size: 11.5px !important;
+    text-align: center !important;
+  }
   input, select, textarea {
     font-size: 16px !important; /* Prevents iOS browser auto-zoom on input focus */
     padding: 10px 14px !important;
@@ -3292,7 +3639,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 
   /* Toast Notification */
   .toast-container {
-    bottom: calc(20px + env(safe-area-inset-bottom, 8px)) !important;
+    bottom: calc(76px + env(safe-area-inset-bottom, 10px)) !important;
   }
 
   /* Daily Briefing Bottom Sheet on Mobile */
@@ -4197,6 +4544,24 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
   .avatar-emoji-picker {
     grid-template-columns: repeat(6, 1fr);
   }
+  .month-week-row {
+    min-height: 64px !important;
+  }
+  .month-span-bar, .month-badge {
+    font-size: 8px !important;
+    height: 17px !important;
+    line-height: 17px !important;
+    padding: 0 2px !important;
+  }
+  .bottom-nav-label {
+    font-size: 9.5px !important;
+  }
+  .bottom-nav-icon {
+    font-size: 19px !important;
+  }
+  .masthead-text h1 {
+    font-size: 16.5px !important;
+  }
 }
 .avatar-emoji-btn {
   height: 36px;
@@ -4370,6 +4735,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
         <span class="sync-dot local" id="syncDot"></span> <span id="syncStatusText">Local</span>
       </div>
       <div class="streak-badge" id="streakBadge" title="Daily Activity Streak"><i class="ph-fill ph-fire"></i> <span id="streakCount">1</span><span class="streak-label"> Day Streak</span></div>
+      <button type="button" class="help-tip-btn" data-help-title="Streak &amp; การซิงก์ข้อมูล" data-help-desc="&bull; <b>Day Streak</b>: นับจำนวนวันที่คุณเข้ามาวางแผนหรือติ๊กส่งงานต่อเนื่องกัน เพื่อสร้างนิสัยการเรียนรู้ที่สม่ำเสมอ<br>&bull; <b>Sync Status</b>: แสดงสถานะการบันทึกข้อมูล (Local = ในเครื่อง / Synced = บนคลาวด์)" aria-label="Help: Streak &amp; Sync"><i class="ph ph-question"></i></button>
       <button class="icon-btn" id="notifBellBtn" aria-label="Notifications & Reminders" title="เตือนความจำ &amp; การแจ้งเตือน" style="position:relative;">
         <i class="ph ph-bell"></i>
         <span class="notif-badge-count" id="notifBadgeCount" style="display:none;">0</span>
@@ -4412,6 +4778,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
           </div>
           <button class="quote-refresh-btn" id="shuffleQuoteBtn" title="New Inspiration"><i class="ph ph-arrows-clockwise"></i></button>
           <button class="widget-dock-btn" onclick="dockWidget('quote')" title="ย้ายไปไว้ข้างๆ (Pin to side dock)"><i class="ph ph-arrow-square-out"></i></button>
+          <button type="button" class="help-tip-btn" data-help-title="แท่นเครื่องมือข้างจอ (Side Dock)" data-help-desc="คุณสามารถคลิกลาก (Drag) หรือกดปุ่ม ↗ เพื่อนำคำคม ตัวจับเวลา หรือรายการงานด่วน ไปตรึงไว้ที่แถบข้างจอ สำหรับดูควบคู่กับหน้าอื่นๆ ได้ตลอดเวลา" aria-label="Help: Side Dock"><i class="ph ph-question"></i></button>
         </div>
 
         <!-- Placeholder when Quote is docked -->
@@ -4430,7 +4797,10 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
         <!-- Workload Graph -->
         <div class="card">
           <div class="card-header">
-            <h3><i class="ph ph-chart-bar"></i> Workload (Next 4 Weeks)</h3>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <h3 style="margin:0;"><i class="ph ph-chart-bar"></i> Workload (Next 4 Weeks)</h3>
+              <button type="button" class="help-tip-btn" data-help-title="กราฟภาระงาน 4 สัปดาห์" data-help-desc="คำนวณจากจำนวนงานและการบ้านที่คุณมีกำหนดส่งในแต่ละสัปดาห์ ช่วยให้คุณมองเห็นช่วงสัปดาห์ที่งานหนักล่วงหน้า เพื่อวางแผนอ่านหนังสือหรือเริ่มทำงานได้ทันเวลา" aria-label="Help: Workload Graph"><i class="ph ph-question"></i></button>
+            </div>
             <div class="card-sub">Pending tasks due per week</div>
           </div>
           <div class="workload-graph" id="workloadGraph"></div>
@@ -4444,7 +4814,10 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
               <div class="ring-text"><span id="ringPct">0%</span></div>
             </div>
             <div>
-              <div style="font-weight:600; font-size:14px; margin-bottom:2px;">Task Progress</div>
+              <div style="font-weight:600; font-size:14px; margin-bottom:2px; display:flex; align-items:center; gap:4px;">
+                Task Progress
+                <button type="button" class="help-tip-btn" data-help-title="ความคืบหน้างาน (Task Progress)" data-help-desc="คำนวณสัดส่วนของงานที่ติ๊กเสร็จสิ้นเทียบกับงานทั้งหมดที่คุณมีกำหนดส่งในวันนี้ เพื่อให้เห็นความสำเร็จรายวัน" aria-label="Help: Task Progress"><i class="ph ph-question"></i></button>
+              </div>
               <div style="font-size:12px; color:var(--ink-soft);" id="ringSubText">All tasks completed</div>
             </div>
           </div>
@@ -4533,6 +4906,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
             <button class="week-ab-pill" id="weekABToggleBtn" title="สลับโหมดสัปดาห์ (คลิกเพื่อเปลี่ยนโหมด)">
               <i class="ph ph-calendar-check"></i> <span id="weekABLabel">Week A</span>
             </button>
+            <button type="button" class="help-tip-btn" data-help-title="สัปดาห์คู่ / สลับสัปดาห์ (Week A/B)" data-help-desc="สำหรับตารางเรียนแบบสลับสัปดาห์คู่/คี่ (Bi-weekly) เช่น สัปดาห์ A เรียนแล็บ สัปดาห์ B เรียนบรรยาย คลิกปุ่ม Week เพื่อสลับดูตารางของแต่ละสัปดาห์ได้ทันที" aria-label="Help: Week A/B"><i class="ph ph-question"></i></button>
             <button class="btn small ghost" id="smartCropToggleBtn" title="โหมดกระชับเวลา: ขยายกล่องคลาสให้อ่านง่ายพอดีช่วงเวลาเรียนจริง">
               <i class="ph-fill ph-sparkle" style="color:var(--gold-dark);"></i> <span id="smartCropLabel">Smart Fit</span>
             </button>
@@ -4552,6 +4926,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
           <button class="sch-filter-chip" data-cat="tutor"><i class="ph ph-briefcase"></i> 💼 ติวเตอร์</button>
           <button class="sch-filter-chip" data-cat="personal"><i class="ph ph-star"></i> 🌟 ส่วนตัว</button>
           <button class="sch-filter-chip" data-cat="other"><i class="ph ph-tag"></i> 📌 อื่นๆ</button>
+          <button type="button" class="help-tip-btn" data-help-title="ตัวกรองหมวดหมู่วิชา" data-help-desc="คลิกเพื่อเลือกดูเฉพาะหมวดหมู่ เช่น วิชาเรียน, การฝึกสอน, สังเกตการสอน, งานการบ้าน หรือธุระส่วนตัวในตารางเรียนของคุณ" aria-label="Help: Schedule Filter" style="align-self:center;"><i class="ph ph-question"></i></button>
         </div>
 
         <div class="day-picker" id="dayPicker"></div>
@@ -4579,8 +4954,9 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
           <h2><i class="ph ph-check-square"></i> Tasks & Deadlines</h2>
           <div class="sub" id="taskSub">Organize your assignments and upcoming events</div>
         </div>
-        <div class="actions-group">
+        <div class="actions-group" style="display:flex; align-items:center; gap:8px;">
           <button class="btn ghost" id="addMilestoneBtn"><i class="ph ph-flag-banner"></i> Add Milestone</button>
+          <button type="button" class="help-tip-btn" data-help-title="Milestone vs Task" data-help-desc="&bull; <b>Milestone</b>: กำหนดการใหญ่หรือหมุดหมายสำคัญ มีการนับถอยหลังโดดเด่นบนหน้าแรก เช่น วันสอบปลายภาค หรือวันส่งเล่มโปรเจกต์<br>&bull; <b>Task</b>: งานย่อย การบ้าน หรือสิ่งที่ต้องทำทั่วไป" aria-label="Help: Milestone vs Task"><i class="ph ph-question"></i></button>
           <button class="btn primary" id="addTaskBtn"><i class="ph ph-plus"></i> Add Task</button>
         </div>
       </div>
@@ -4591,6 +4967,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
         <button class="task-filter-chip" data-filter="pending"><i class="ph ph-clock"></i> ยังไม่เสร็จ</button>
         <button class="task-filter-chip" data-filter="exams"><i class="ph-fill ph-file-text" style="color:#DC2626;"></i> 🎯 งานสอบ (Exams/Quizzes)</button>
         <button class="task-filter-chip" data-filter="urgent"><i class="ph ph-warning-circle" style="color:#DC2626;"></i> ด่วน / ค้างส่ง</button>
+        <button type="button" class="help-tip-btn" data-help-title="เกณฑ์งานด่วน (Urgent Tasks)" data-help-desc="รวบรวมงานที่มีกำหนดส่งในวันนี้, งานที่เลยกำหนดส่งแล้ว (Overdue), หรืองานที่ตั้งค่าความสำคัญระดับ High เพื่อให้คุณจัดลำดับทำสิ่งสำคัญก่อน" aria-label="Help: Urgent Tasks" style="align-self:center; margin-left:2px; margin-right:4px;"><i class="ph ph-question"></i></button>
         <button class="task-filter-chip" data-filter="completed"><i class="ph ph-check-circle" style="color:#16A34A;"></i> เสร็จแล้ว</button>
       </div>
 
@@ -4648,8 +5025,11 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 
       <!-- Account & Cloud Sync Section -->
       <div class="settings-section">
-        <h3><i class="ph ph-cloud-check"></i> Account & Cloud Firestore</h3>
-        <p style="font-size:13px; color:var(--ink-soft); margin-top:-5px; margin-bottom:16px;">Manage your login credentials and cross-device cloud synchronization status.</p>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <h3 style="margin:0;"><i class="ph ph-cloud-check"></i> Account & Cloud Firestore</h3>
+          <button type="button" class="help-tip-btn" data-help-title="การจัดเก็บข้อมูล &amp; ซิงก์ข้ามเครื่อง" data-help-desc="&bull; <b>เมื่อเข้าสู่ระบบด้วย Google</b>: ข้อมูลจะถูกซิงก์ขึ้น Cloud Firestore อัตโนมัติ ปลอดภัย และเปิดดูข้ามเครื่อง (มือถือ/คอมพิวเตอร์) ได้ทันที<br>&bull; <b>เมื่อไม่ได้เข้าสู่ระบบ</b>: ข้อมูลจะบันทึกอยู่ในหน่วยความจำเครื่องนี้เท่านั้น (Local Storage)" aria-label="Help: Cloud Sync"><i class="ph ph-question"></i></button>
+        </div>
+        <p style="font-size:13px; color:var(--ink-soft); margin-top:4px; margin-bottom:16px;">Manage your login credentials and cross-device cloud synchronization status.</p>
         
         <div style="display:flex; align-items:center; justify-content:space-between; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:16px; margin-bottom:14px; flex-wrap:wrap; gap:12px;">
           <div style="display:flex; align-items:center; gap:12px;">
@@ -4670,8 +5050,11 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
       </div>
       
       <div class="settings-section">
-        <h3><i class="ph ph-calendar-star"></i> Semester Tracking</h3>
-        <p style="font-size:13px; color:var(--ink-soft); margin-top:-5px; margin-bottom:16px;">Set your term start and end dates to calculate the academic week counter.</p>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <h3 style="margin:0;"><i class="ph ph-calendar-star"></i> Semester Tracking</h3>
+          <button type="button" class="help-tip-btn" data-help-title="วันเปิด-ปิดภาคเรียน (Term Dates)" data-help-desc="ระบบจะใช้วันที่เปิด-ปิดเทอมเพื่อคำนวณสัปดาห์เรียน (Week 1, Week 2...) และแสดงผลในปฏิทินตลอดทั้งภาคเรียน ช่วยให้นับสัปดาห์และวางแผนตารางเรียนได้แม่นยำ" aria-label="Help: Semester Tracking"><i class="ph ph-question"></i></button>
+        </div>
+        <p style="font-size:13px; color:var(--ink-soft); margin-top:4px; margin-bottom:16px;">Set your term start and end dates to calculate the academic week counter.</p>
         <div class="form-row">
           <label>Term Start Date
             <input type="date" id="set-termStart">
@@ -4773,6 +5156,33 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     </div>
   </footer>
 </div>
+
+<!-- Mobile Bottom Navigation Bar (Docked Native App Style) -->
+<nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="Mobile Navigation Bar">
+  <button class="bottom-nav-item active" data-panel="today" aria-label="Today">
+    <div class="bottom-nav-icon"><i class="ph-fill ph-sun"></i></div>
+    <span class="bottom-nav-label">วันนี้</span>
+  </button>
+  <button class="bottom-nav-item" data-panel="schedule" aria-label="Schedule">
+    <div class="bottom-nav-icon"><i class="ph ph-calendar"></i></div>
+    <span class="bottom-nav-label">ตารางเรียน</span>
+  </button>
+  <button class="bottom-nav-item" data-panel="tasks" aria-label="Tasks">
+    <div class="bottom-nav-icon">
+      <i class="ph ph-check-square"></i>
+      <span class="bottom-nav-badge" id="bottomNavTasksBadge" style="display:none;">0</span>
+    </div>
+    <span class="bottom-nav-label">งาน &amp; สอบ</span>
+  </button>
+  <button class="bottom-nav-item" data-panel="notes" aria-label="Notes">
+    <div class="bottom-nav-icon"><i class="ph ph-push-pin"></i></div>
+    <span class="bottom-nav-label">โน้ต</span>
+  </button>
+  <button class="bottom-nav-item" data-panel="settings" aria-label="Settings">
+    <div class="bottom-nav-icon"><i class="ph ph-gear"></i></div>
+    <span class="bottom-nav-label">ตั้งค่า</span>
+  </button>
+</nav>
 
 <!-- Mobile Navigation Drawer -->
 <div class="drawer-backdrop" id="drawerBackdrop"></div>
@@ -5108,7 +5518,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 
     <!-- Date, Time & Frequency Row -->
     <div class="form-row" style="margin-bottom:10px; align-items:flex-end;">
-      <label style="flex:1.2;">รูปแบบ / ความถี่ (Frequency)
+      <label style="flex:1.2;">รูปแบบ / ความถี่ (Frequency) <button type="button" class="help-tip-btn" data-help-title="ความถี่ของกิจกรรม (Frequency)" data-help-desc="&bull; <b>Single Date</b>: กิจกรรมวันเดียว<br>&bull; <b>Repeats Weekly</b>: เกิดขึ้นซ้ำทุกสัปดาห์ในวันเดียวกัน<br>&bull; <b>Multi-day (ช่วงวันที่)</b>: กิจกรรมยาวหลายวันต่อเนื่อง (เช่น ค่าย, สัมมนา)<br>&bull; <b>Week A/B</b>: ตารางเรียนแบบสลับสัปดาห์คู่/คี่" aria-label="Help: Frequency"><i class="ph ph-question"></i></button>
         <select id="f-freq">
           <option value="single">Single Date (เฉพาะวันเดียว)</option>
           <option value="weekly">Repeats Weekly (ทุกสัปดาห์)</option>
@@ -5195,8 +5605,9 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 
     <!-- Quick Action Toolbar -->
     <div style="border-top:1px solid var(--line); margin-top:14px; padding-top:10px;">
-      <div style="font-size:11px; font-weight:700; color:var(--ink-soft); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.04em;">
+      <div style="font-size:11px; font-weight:700; color:var(--ink-soft); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.04em; display:flex; align-items:center; gap:5px;">
         ตัวเลือกเพิ่มเติม &amp; สิ่งแนบ (Options &amp; Attachments)
+        <button type="button" class="help-tip-btn" data-help-title="ตัวเลือกเพิ่มเติม &amp; สิ่งแนบ" data-help-desc="&bull; <b>Milestone (หมุดหมายสำคัญ)</b>: กำหนดการสำคัญ เช่น วันสอบ หรือวันส่งโปรเจกต์ ซึ่งระบบจะนำไปแสดงเป็นการ์ดนับถอยหลังบนหน้าแรก<br>&bull; <b>ซิงก์ลง To-Do</b>: นำกิจกรรมนี้ไปสร้างเป็นการ์ดในแท็บ Tasks ให้ด้วย เพื่อตรวจเช็คความคืบหน้าได้ในที่เดียว" aria-label="Help: Options &amp; Attachments"><i class="ph ph-question"></i></button>
       </div>
       <div class="quick-action-bar">
         <div class="quick-chip chip-coral" id="f-chip-milestone">
@@ -5219,7 +5630,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
       <!-- Sub-panel for To-Do Sync Mode -->
       <div class="quick-sub-panel" id="f-sync-task-panel" style="display:none; margin-top:8px; padding:8px 12px; background:var(--surface-hover); border:1px solid var(--line); border-radius:10px;">
         <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
-          <span style="font-size:12px; font-weight:600; color:var(--ink-soft);"><i class="ph ph-sliders"></i> รูปแบบรายการใน To-Do:</span>
+          <span style="font-size:12px; font-weight:600; color:var(--ink-soft); display:flex; align-items:center; gap:4px;"><i class="ph ph-sliders"></i> รูปแบบรายการใน To-Do: <button type="button" class="help-tip-btn" data-help-title="รูปแบบรายการใน To-Do" data-help-desc="&bull; <b>งานที่ต้องติ๊ก</b>: มีปุ่มวงกลมให้กดส่งงานเมื่อทำเสร็จ และนับเป็นงานค้างส่ง<br>&bull; <b>แจ้งทราบ</b>: ไม่มีปุ่มติ๊ก ใช้สำหรับบันทึกช่วยจำ (เช่น งดเรียน, กิจกรรม) โดยไม่สร้างความกดดันเรื่องงานค้าง" aria-label="Help: Task Mode"><i class="ph ph-question"></i></button></span>
           <div class="task-mode-selector" id="f-sync-mode-selector">
             <label class="task-mode-option active" id="f-sync-mode-task" style="padding:3px 10px; font-size:11.5px;" title="มีปุ่มติ๊กเมื่อทำเสร็จ">
               <input type="radio" name="f-sync-mode" value="task" checked style="display:none;">
@@ -5293,7 +5704,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     </div>
 
     <!-- Task Mode Selector (Actionable Task vs Info Notice) -->
-    <div style="display:flex; justify-content:flex-start; margin-bottom:12px;">
+    <div style="display:flex; align-items:center; justify-content:flex-start; gap:8px; margin-bottom:12px;">
       <div class="task-mode-selector" id="t-mode-selector">
         <label class="task-mode-option active" id="t-mode-task" title="รายการที่ต้องทำ มีปุ่มวงกลมให้ติ๊กเมื่อทำเสร็จ">
           <input type="radio" name="t-mode" value="task" checked style="display:none;">
@@ -5304,11 +5715,12 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
           <i class="ph-fill ph-info"></i> <span>แจ้งเพื่อทราบ (ไม่มีปุ่มติ๊ก)</span>
         </label>
       </div>
+      <button type="button" class="help-tip-btn" data-help-title="ประเภทรายการ (Task Mode)" data-help-desc="&bull; <b>งานที่ต้องทำ (มีปุ่มติ๊ก)</b>: สำหรับการบ้านหรืองานที่ต้องส่งครู มีปุ่มวงกลมให้ติ๊กเมื่อทำเสร็จ และนับเป็นงานค้างส่ง<br>&bull; <b>แจ้งเพื่อทราบ (ไม่มีปุ่มติ๊ก)</b>: สำหรับการแจ้งเตือนทั่วไป เช่น วันหยุดเรียน วันนัดหมาย โดยไม่นับเป็นงานค้างส่ง" aria-label="Help: Task Mode"><i class="ph ph-question"></i></button>
     </div>
 
     <!-- Date, Time & All-Day Row -->
     <div class="form-row" style="margin-bottom:10px; align-items:flex-end;">
-      <label style="flex: 1;">Start Date (วันที่เริ่ม - ไม่บังคับ)
+      <label style="flex: 1;">Start Date (วันที่เริ่ม) <button type="button" class="help-tip-btn" data-help-title="วันที่เริ่มทำงาน (Start Date)" data-help-desc="(ไม่บังคับ) หากระบุไว้ ระบบจะนำช่วงเวลาตั้งแต่วันที่เริ่มจนถึงวันส่ง ไปวาดเป็น <b>แถบยาวบนปฏิทินรายเดือน</b> ช่วยให้เห็นระยะเวลาการทำงานจริงตลอดช่วงสัปดาห์" aria-label="Help: Start Date"><i class="ph ph-question"></i></button>
         <input type="date" id="t-start-date">
       </label>
       <label style="flex: 1;">Due Date (กำหนดส่ง)
@@ -5335,7 +5747,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
           <option value="other">📌 ทั่วไป / อื่นๆ (Other)</option>
         </select>
       </label>
-      <label style="flex: 1;">ความสำคัญ (Priority)
+      <label style="flex: 1;">ความสำคัญ (Priority) <button type="button" class="help-tip-btn" data-help-title="ระดับความสำคัญ (Priority)" data-help-desc="&bull; <b>High</b>: จะถูกนำไปแสดงในกล่อง <b>Urgent Tasks (งานด่วน)</b> บนหน้าแรกเสมอ และขึ้นเตือนก่อนงานอื่น<br>&bull; <b>Medium / Low</b>: แสดงในรายการงานทั่วไปตามลำดับวันครบกำหนด" aria-label="Help: Priority"><i class="ph ph-question"></i></button>
         <select id="t-priority">
           <option value="low">Low</option>
           <option value="med" selected>Medium</option>
@@ -5606,6 +6018,18 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 <!-- QUICK PREVIEW POPOVER (Google/Apple Calendar Style) -->
 <div id="popoverBackdrop" style="display:none; position:fixed; inset:0; z-index:1040; background:transparent;"></div>
 <div class="event-popover" id="eventPopover" style="display:none;"></div>
+
+<!-- MICRO HELP TOOLTIP POPOVER -->
+<div class="help-popover-backdrop" id="helpPopoverBackdrop"></div>
+<div class="help-popover-card" id="helpPopoverCard" role="dialog" aria-modal="true">
+  <div class="help-popover-header">
+    <div class="help-popover-title" id="helpPopoverTitle">
+      <i class="ph-fill ph-question"></i> <span>คำอธิบายฟังก์ชัน</span>
+    </div>
+    <button type="button" class="help-popover-close" id="helpPopoverCloseBtn" aria-label="Close Help"><i class="ph ph-x"></i></button>
+  </div>
+  <div class="help-popover-body" id="helpPopoverBody"></div>
+</div>
 
 <!-- IMAGE LIGHTBOX MODAL -->
 <div class="image-lightbox" id="imageLightboxModal">
@@ -7575,6 +7999,16 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     document.querySelectorAll('#drawerNavButtons .drawer-nav-item').forEach(function(x){
       x.classList.toggle('active', x.dataset.panel === panelName);
     });
+    // Update mobile bottom nav items & icons
+    document.querySelectorAll('#mobileBottomNav .bottom-nav-item').forEach(function(x){
+      var isActive = (x.dataset.panel === panelName);
+      x.classList.toggle('active', isActive);
+      var icon = x.querySelector('.bottom-nav-icon i');
+      if (icon) {
+        var baseClass = icon.className.replace(/\bph-fill\b/g, '').replace(/\bph\b/g, '').trim();
+        icon.className = (isActive ? 'ph-fill ' : 'ph ') + baseClass;
+      }
+    });
     // Switch active panel
     document.querySelectorAll('.panel').forEach(function(p){
       p.classList.remove('active');
@@ -7597,6 +8031,23 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     }
   }
 
+  function updateBottomNavTasksBadge() {
+    var badge = document.getElementById('bottomNavTasksBadge');
+    if (!badge) return;
+    var count = 0;
+    if (data && data.tasks) {
+      data.tasks.forEach(function(t){
+        if (!t.done && t.hasCheckbox !== false) count++;
+      });
+    }
+    if (count > 0) {
+      badge.textContent = count > 99 ? '99+' : count;
+      badge.style.display = 'inline-flex';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+
   // --- Modal Helpers ---
   var modalBackdrop = document.getElementById('modalBackdrop');
   function closeAllModals() {
@@ -7612,6 +8063,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     if(window.closeImageLightbox) window.closeImageLightbox();
     document.body.style.overflow = '';
     hideEventPopover();
+    hideHelpPopover();
     closeMobileDrawer();
   }
 
@@ -7667,6 +8119,65 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     if(pop) pop.style.display = 'none';
     if(bd) bd.style.display = 'none';
   };
+
+  // --- Micro Help Tooltips & Popovers Controller ---
+  var currentHelpBtn = null;
+  function showHelpPopover(btn, title, desc) {
+    var card = document.getElementById('helpPopoverCard');
+    var backdrop = document.getElementById('helpPopoverBackdrop');
+    var titleEl = document.getElementById('helpPopoverTitle');
+    var bodyEl = document.getElementById('helpPopoverBody');
+    if (!card || !bodyEl) return;
+
+    if (currentHelpBtn) currentHelpBtn.classList.remove('active');
+    currentHelpBtn = btn;
+    if (btn) btn.classList.add('active');
+
+    if (titleEl) {
+      titleEl.innerHTML = '<i class="ph-fill ph-question"></i> <span>' + (title || 'คำอธิบายฟังก์ชัน') + '</span>';
+    }
+    bodyEl.innerHTML = desc || '';
+
+    // If mobile (<= 640px), show backdrop & bottom sheet card
+    if (window.innerWidth <= 640) {
+      if (backdrop) backdrop.style.display = 'block';
+      card.style.display = 'block';
+      card.style.top = '';
+      card.style.left = '';
+    } else {
+      // Desktop positioning near button
+      if (backdrop) backdrop.style.display = 'none';
+      card.style.display = 'block';
+      if (btn) {
+        var rect = btn.getBoundingClientRect();
+        var cardW = 300;
+        var cardH = card.offsetHeight || 130;
+        var top = rect.bottom + 8;
+        var left = rect.left - (cardW / 2) + (rect.width / 2);
+
+        if (left < 16) left = 16;
+        if (left + cardW > window.innerWidth - 16) left = window.innerWidth - cardW - 16;
+        if (top + cardH > window.innerHeight - 16) {
+          top = rect.top - cardH - 8;
+        }
+        card.style.top = Math.max(12, top) + 'px';
+        card.style.left = Math.max(12, left) + 'px';
+      }
+    }
+  }
+
+  function hideHelpPopover() {
+    var card = document.getElementById('helpPopoverCard');
+    var backdrop = document.getElementById('helpPopoverBackdrop');
+    if (card) card.style.display = 'none';
+    if (backdrop) backdrop.style.display = 'none';
+    if (currentHelpBtn) {
+      currentHelpBtn.classList.remove('active');
+      currentHelpBtn = null;
+    }
+  }
+  window.showHelpPopover = showHelpPopover;
+  window.hideHelpPopover = hideHelpPopover;
 
   window.showEventPopover = function(entryId, anchorEl) {
     var entry = data.schedule.find(function(x){ return x.id === entryId; });
@@ -8904,6 +9415,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     var todayStr = getLocalDateStr(now);
     
     document.getElementById('todayDateStr').textContent = now.toLocaleDateString(undefined, {weekday: 'long', month:'short', day:'numeric', year:'numeric'});
+    updateBottomNavTasksBadge();
     
     // Milestones Carousel
     var mCont = document.getElementById('milestonesContainer');
@@ -9791,6 +10303,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 
   // --- Tasks Timeline View (with Search & Filter) ---
   function renderTasks(){
+    updateBottomNavTasksBadge();
     var tl = document.getElementById('tasksTimeline');
     tl.innerHTML = '';
 
@@ -10659,6 +11172,12 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
       });
     });
 
+    document.querySelectorAll('#mobileBottomNav .bottom-nav-item').forEach(function(b){
+      b.addEventListener('click', function(){
+        switchTab(b.dataset.panel);
+      });
+    });
+
     var mMenuBtn = document.getElementById('mobileMenuBtn');
     if(mMenuBtn) mMenuBtn.addEventListener('click', openMobileDrawer);
 
@@ -10675,6 +11194,30 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
         if(origSoundBtn) origSoundBtn.click();
       });
     }
+
+    // Help Tooltip Popovers Event Delegation (capture phase to prevent bubbling to parent labels/inputs)
+    document.addEventListener('click', function(e) {
+      var btn = e.target.closest('.help-tip-btn');
+      if (btn) {
+        e.preventDefault();
+        e.stopPropagation();
+        var title = btn.dataset.helpTitle || btn.getAttribute('aria-label') || 'Help';
+        var desc = btn.dataset.helpDesc || '';
+        showHelpPopover(btn, title, desc);
+        return;
+      }
+      if (e.target.closest('#helpPopoverCloseBtn') || e.target.id === 'helpPopoverBackdrop') {
+        hideHelpPopover();
+        return;
+      }
+      if (!e.target.closest('#helpPopoverCard')) {
+        hideHelpPopover();
+      }
+    }, true);
+
+    window.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') hideHelpPopover();
+    });
 
     // Schedule View Switcher (Week vs Month)
     document.querySelectorAll('#scheduleViewSwitcher button').forEach(function(btn){
