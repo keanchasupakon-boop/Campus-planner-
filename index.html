@@ -442,8 +442,61 @@ button, input, select, textarea {
 .ring-prog { fill: none; stroke: var(--primary); stroke-width: 6; stroke-dasharray: 176; stroke-dashoffset: 176; transition: stroke-dashoffset 0.8s ease; stroke-linecap: round; }
 .ring-text { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13.5px; }
 
-.pomo-time { font-size: 28px; font-weight: 700; font-variant-numeric: tabular-nums; margin-bottom: 8px; letter-spacing: -0.02em; text-align: center; }
+.pomo-time { font-size: 28px; font-weight: 700; font-variant-numeric: tabular-nums; margin-bottom: 8px; letter-spacing: -0.02em; text-align: center; transition: color 0.3s ease; }
+.pomo-time.break-mode { color: #10B981; }
 .pomo-controls { display: flex; justify-content: center; gap: 6px; }
+
+/* Pomodoro Cycle Mode Tabs (Focus 25m vs Break 5m) */
+.pomo-mode-tabs {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: var(--surface-hover);
+  padding: 3px 4px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+}
+.pomo-mode-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: var(--ink-soft);
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+.pomo-mode-tab:hover {
+  color: var(--ink);
+}
+.pomo-mode-tab.active {
+  background: var(--surface);
+  color: var(--primary);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+.pomo-mode-tab[data-mode="break"].active {
+  color: #10B981;
+}
+.btn.break-btn {
+  background: #10B981 !important;
+  color: #FFFFFF !important;
+  border-color: #10B981 !important;
+}
+.btn.break-btn:hover {
+  background: #059669 !important;
+}
+.zen-timer-digits.break-mode {
+  color: #34D399 !important;
+  text-shadow: 0 0 35px rgba(16, 185, 129, 0.45);
+}
+.docked-timer-digits.break-mode {
+  color: #10B981;
+}
 
 /* ---------- Interactive Calendar (Mini & Full Month) ---------- */
 .calendar-nav-bar {
@@ -1023,15 +1076,189 @@ button, input, select, textarea {
   border: solid white; border-width: 0 2px 2px 0; transform: rotate(45deg);
 }
 .task-info-badge {
-  flex: none; width: 20px; height: 20px; border-radius: 50%;
+  flex: none; width: 22px; height: 22px; border-radius: 50%;
   margin-top: 1px; display: inline-flex; align-items: center; justify-content: center;
   font-size: 13px; color: var(--primary); background: rgba(59, 130, 246, 0.12);
-  border: 1.5px solid rgba(59, 130, 246, 0.35); transition: all 0.2s ease;
+  border: 1.5px solid rgba(59, 130, 246, 0.35); transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer; position: relative; padding: 0; outline: none;
 }
 .task-item:hover .task-info-badge {
   background: var(--primary);
   border-color: var(--primary);
   color: #FFFFFF;
+  transform: scale(1.08);
+}
+.task-info-badge .hover-check-icon { display: none; }
+.task-info-badge:hover .main-info-icon { display: none; }
+.task-info-badge:hover .hover-check-icon { display: inline-block; font-size: 12px; }
+
+.task-info-badge.finished {
+  background: #10B981 !important;
+  border-color: #10B981 !important;
+  color: #FFFFFF !important;
+}
+.task-info-badge.finished .main-info-icon { display: inline-block !important; }
+.task-info-badge.finished .hover-check-icon { display: none !important; }
+
+/* Quick Action Finish Button for Events */
+.task-finish-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 600;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  flex-shrink: 0;
+  margin-left: 8px;
+  align-self: center;
+}
+.task-finish-btn:hover {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: #10B981;
+  color: #059669;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.15);
+}
+.task-finish-btn.finished {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: #10B981;
+  color: #059669;
+}
+.task-item.done .task-finish-btn {
+  opacity: 0.8;
+}
+.task-item.done .task-finish-btn:hover {
+  opacity: 1;
+}
+
+/* Month Section Batch Finish Header Button */
+.section-batch-finish-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px dashed var(--line-strong);
+  background: var(--surface);
+  color: var(--primary);
+  cursor: pointer;
+  margin-left: auto;
+  transition: all 0.18s ease;
+}
+.section-batch-finish-btn:hover {
+  background: rgba(59, 130, 246, 0.1);
+  border-style: solid;
+  border-color: var(--primary);
+  transform: translateY(-1px);
+}
+
+/* Completed Tasks Header Actions Group */
+.completed-header-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+.completed-edit-btn, .completed-clear-all-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+.completed-edit-btn {
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink-soft);
+}
+.completed-edit-btn:hover {
+  background: rgba(59, 130, 246, 0.08);
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-1px);
+}
+.completed-edit-btn.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #FFFFFF;
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.25);
+}
+.completed-clear-all-btn {
+  border: 1px dashed rgba(239, 68, 68, 0.45);
+  background: rgba(239, 68, 68, 0.05);
+  color: var(--coral-dark, #dc2626);
+}
+.completed-clear-all-btn:hover {
+  background: rgba(239, 68, 68, 0.14);
+  border-style: solid;
+  border-color: #dc2626;
+  color: #b91c1c;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.15);
+}
+
+/* Task Actions Wrapper (Finish + Delete buttons) */
+.task-actions-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  flex: none;
+}
+.task-actions-wrap .task-finish-btn {
+  margin-left: 0;
+}
+.task-row-del-btn {
+  display: none;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  background: rgba(239, 68, 68, 0.08);
+  color: #dc2626;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+  flex: none;
+}
+.task-row-del-btn:hover {
+  background: #dc2626;
+  color: #ffffff;
+  border-color: #dc2626;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(220, 38, 38, 0.25);
+}
+.completed-timeline-section.edit-mode .task-row-del-btn,
+.completed-edit-active ~ .task-list .task-row-del-btn {
+  display: inline-flex !important;
+  animation: popIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@media (hover: hover) and (pointer: fine) {
+  .completed-timeline-section .task-item.done:hover .task-row-del-btn {
+    display: inline-flex;
+  }
+}
+.timeline-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 .task-body { flex: 1; min-width: 0; }
 .task-text { font-size: 14.5px; font-weight: 500; color: var(--ink); margin-bottom: 3px; }
@@ -4712,6 +4939,8 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
   background: rgba(239, 68, 68, 0.12);
   color: #EF4444;
 }
+
+
 </style>
 </head>
 <body>
@@ -4793,7 +5022,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
       <!-- Milestones Countdown Carousel -->
       <div id="milestonesContainer" class="milestone-container" style="display:none;"></div>
 
-      <div class="big-picture-grid">
+            <div class="big-picture-grid">
         <!-- Workload Graph -->
         <div class="card">
           <div class="card-header">
@@ -4825,7 +5054,10 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
           <div class="metric-card dockable-widget" id="focusTimerCard" draggable="true" data-widget="timer" style="flex-direction:column; gap:8px; text-align:center; position:relative;">
             <div style="display:flex; align-items:center; justify-content:space-between; width:100%;">
               <div class="widget-drag-handle" title="คลิกลากไปไว้แถบข้างๆ (Drag to side dock)"><i class="ph ph-dots-six-vertical"></i></div>
-              <div style="font-size:12px; font-weight:600; color:var(--ink-soft); display:flex; align-items:center; gap:5px;"><i class="ph ph-timer"></i> Focus Timer</div>
+              <div class="pomo-mode-tabs" id="pomoModeTabs">
+                <button type="button" class="pomo-mode-tab active" data-mode="focus" id="pomoModeFocusTab"><i class="ph-fill ph-target"></i> โฟกัส 25m</button>
+                <button type="button" class="pomo-mode-tab" data-mode="break" id="pomoModeBreakTab"><i class="ph-fill ph-coffee"></i> พัก 5m</button>
+              </div>
               <button class="widget-dock-btn" onclick="dockWidget('timer')" title="ย้ายไปไว้ข้างๆ (Pin to side dock)"><i class="ph ph-arrow-square-out"></i></button>
             </div>
             <div class="pomo-time" id="pomoTime" style="margin:0;">25:00</div>
@@ -5845,8 +6077,9 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
       </div>
     </div>
 
-    <div style="display:flex; align-items:center; gap:8px; margin-top:20px;">
+    <div style="display:flex; align-items:center; gap:8px; margin-top:20px; flex-wrap:wrap;">
       <button class="btn small ghost" id="deleteTaskBtn" style="display:none; color:var(--coral-dark); border-color:var(--coral-dark);"><i class="ph ph-trash"></i> Delete</button>
+      <button type="button" class="btn small" id="toggleTaskDoneModalBtn" style="display:none;"><i class="ph ph-check-circle"></i> <span id="toggleTaskDoneModalTxt">Mark as Finished</span></button>
       <div style="flex:1;"></div>
       <button class="btn small ghost" id="cancelTaskModal">Cancel</button>
       <button class="btn small primary" id="saveTaskBtn"><i class="ph ph-floppy-disk"></i> Save Task</button>
@@ -6049,9 +6282,13 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
   </div>
 
   <div class="zen-center-content">
-    <div class="zen-glow-circle"></div>
+    <div class="zen-glow-circle" id="zenGlowCircle"></div>
+    <div class="pomo-mode-tabs" id="zenModeTabs" style="margin-bottom:14px; background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.15);">
+      <button type="button" class="pomo-mode-tab active" data-mode="focus" id="zenModeFocusTab" style="color:#FFF;"><i class="ph-fill ph-target"></i> โฟกัส 25:00</button>
+      <button type="button" class="pomo-mode-tab" data-mode="break" id="zenModeBreakTab" style="color:#CBD5E1;"><i class="ph-fill ph-coffee"></i> พักผ่อน 05:00</button>
+    </div>
     <div class="zen-focus-task-wrap">
-      <div style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--primary); margin-bottom:6px;">Current Focus Goal</div>
+      <div style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--primary); margin-bottom:6px;" id="zenGoalHeader">Current Focus Goal</div>
       <input type="text" class="zen-task-input" id="zenTaskInput" placeholder="What are you focusing on right now?">
     </div>
 
@@ -7752,6 +7989,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     if(oldData.milestones) newData.milestones = oldData.milestones;
     if(oldData.streak) newData.streak = oldData.streak;
     else newData.streak = { count: 1, lastDate: getLocalDateStr() };
+    if(oldData.gamification) newData.gamification = oldData.gamification;
 
     if(newData.settings.soundEnabled === undefined) newData.settings.soundEnabled = true;
     if(!newData.settings.themeMood) newData.settings.themeMood = 'aurora';
@@ -7799,7 +8037,18 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
         {id:uid(), title:'Midterm Examinations', date: in14Days}
       ],
       streak: { count: 1, lastDate: todayStr },
-      settings: { darkMode: false, soundEnabled: true, themeMood: 'aurora', weekStartSunday: true }
+      settings: { darkMode: false, soundEnabled: true, themeMood: 'aurora', weekStartSunday: true },
+      gamification: {
+        level: 1,
+        exp: 0,
+        totalExp: 0,
+        waterDrops: 3,
+        waterDropsUsed: 0,
+        mascot: 'cat',
+        currentMode: 'garden',
+        focusMinutes: 0,
+        memories: []
+      }
     };
   }
 
@@ -8896,6 +9145,28 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
       });
     }
 
+    var toggleDoneBtn = document.getElementById('toggleTaskDoneModalBtn');
+    var toggleDoneTxt = document.getElementById('toggleTaskDoneModalTxt');
+    if (toggleDoneBtn && toggleDoneTxt) {
+      if (entry) {
+        toggleDoneBtn.style.display = 'inline-flex';
+        var isEvent = entry.hasCheckbox === false;
+        if (entry.done) {
+          toggleDoneBtn.className = 'btn small ghost';
+          toggleDoneBtn.innerHTML = '<i class="ph ph-arrow-counter-clockwise"></i> <span>นำกลับมาเป็นยังไม่เสร็จ (Re-open)</span>';
+        } else {
+          toggleDoneBtn.className = 'btn small primary';
+          toggleDoneBtn.innerHTML = isEvent ? '<i class="ph-bold ph-check"></i> <span>จบกิจกรรม (Mark as Finished)</span>' : '<i class="ph-bold ph-check"></i> <span>เสร็จสิ้น (Mark as Finished)</span>';
+        }
+        toggleDoneBtn.onclick = function(){
+          toggleTaskDone(entry.id);
+          closeAllModals();
+        };
+      } else {
+        toggleDoneBtn.style.display = 'none';
+      }
+    }
+
     openModal('taskModal');
     setTimeout(function(){
       var inp = document.getElementById('t-text');
@@ -9524,34 +9795,31 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
         var timeStr = t.time ? ' &middot; <i class="ph ph-clock"></i> ' + fmtTime(t.time) : '';
         var checkOrInfo = (t.hasCheckbox !== false)
           ? '<div class="check" role="checkbox" title="คลิกเพื่อทำเครื่องหมายว่าเสร็จแล้ว"></div>'
-          : '<div class="task-info-badge" title="รายการแจ้งเพื่อทราบ (ไม่มีปุ่มติ๊ก)"><i class="ph-fill ph-info"></i></div>';
+          : '<button type="button" class="task-info-badge '+(t.done?'finished':'')+'" title="'+(t.done?'กิจกรรมนี้เสร็จสิ้นแล้ว (คลิกเพื่อยกเลิก)':'คลิกเพื่อจบกิจกรรม / เสร็จสิ้น (Mark as Finished)')+'" aria-label="Finish Event"><i class="ph-bold '+(t.done?'ph-check':'ph-info')+' main-info-icon"></i><i class="ph-bold ph-check hover-check-icon"></i></button>';
+        var finishBtn = (t.hasCheckbox === false)
+          ? '<button type="button" class="task-finish-btn '+(t.done?'finished':'')+'" title="'+(t.done?'เสร็จแล้ว (คลิกเพื่อยกเลิก)':'จบกิจกรรม / เสร็จสิ้น (Mark as Finished)')+'"><i class="ph-bold '+(t.done?'ph-check-circle':'ph-check')+'"></i> <span>'+(t.done?'เสร็จแล้ว':'เสร็จสิ้น')+'</span></button>'
+          : '';
         li.innerHTML = checkOrInfo +
                        '<div class="task-body"><div class="task-text">'+t.text+'</div>'+
                        '<div class="task-meta"><span class="pill '+(isOverdue?'pri-high':'pri-med')+'">'+(isOverdue?'Overdue ('+formatDisplayDate(t.due)+')':'Today')+'</span>'+
                        (t.subject?'<span class="subj-dot" style="background:var(--'+getColorForString(t.subject)+'-dark)"></span>'+t.subject:'')+
-                       timeStr + '</div></div>';
+                       timeStr + '</div></div>' + finishBtn;
         var chk = li.querySelector('.check');
         if(chk) {
-          chk.onclick = function(e){
-            e.stopPropagation();
-            t.done = true;
-            if(t.linkedScheduleId) {
-              var linkedSch = data.schedule.find(function(s){ return s.id === t.linkedScheduleId || s.linkedTaskId === t.id; });
-              if(linkedSch) linkedSch.isDone = true;
-            }
-            playPopSound();
-            updateStudyStreak(true);
-            save();
-            refreshViews();
-            var remainingToday = data.tasks.filter(function(x){ return (x.hasCheckbox !== false) && !x.done && x.due && x.due <= todayStr; });
-            if(remainingToday.length === 0) {
-              fireConfetti();
-              playSuccessChime();
-              showToast('All urgent tasks completed! Super proud of you! 🎉');
-            }
-          };
+          chk.onclick = function(e){ toggleTaskDone(t.id, e); };
         }
-        li.onclick = function(){ openTaskModal(t.id); };
+        var infoBadge = li.querySelector('.task-info-badge');
+        if(infoBadge) {
+          infoBadge.onclick = function(e){ toggleTaskDone(t.id, e); };
+        }
+        var fBtn = li.querySelector('.task-finish-btn');
+        if(fBtn) {
+          fBtn.onclick = function(e){ toggleTaskDone(t.id, e); };
+        }
+        li.onclick = function(e){
+          if(e.target.closest('.check, .task-info-badge, .task-finish-btn')) return;
+          openTaskModal(t.id);
+        };
         tkList.appendChild(li);
       });
     }
@@ -10301,6 +10569,116 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     }
   }
 
+  // --- Centralized Task/Event Completion Handler ---
+  function toggleTaskDone(id, e) {
+    if(e && e.stopPropagation) e.stopPropagation();
+    var task = data.tasks.find(function(x){ return x.id === id; });
+    if(!task) return;
+    task.done = !task.done;
+    if(task.linkedScheduleId) {
+      var linkedSch = data.schedule.find(function(s){ return s.id === task.linkedScheduleId || s.linkedTaskId === id; });
+      if(linkedSch) linkedSch.isDone = task.done;
+    }
+    if(task.done) {
+      playSuccessChime();
+      updateStudyStreak(true);
+      var isEvent = (task.hasCheckbox === false);
+      showToast(isEvent ? '🎉 จบกิจกรรม "' + task.text + '" เรียบร้อยแล้ว!' : '🎉 งาน "' + task.text + '" เสร็จเรียบร้อยแล้ว!');
+      var pending = data.tasks.filter(function(x){ return !x.done; });
+      if(pending.length === 0) {
+        fireConfetti();
+        playSuccessChime();
+        showToast('All tasks & events completed! Super proud of you! 🎉');
+      }
+    } else {
+      playPopSound();
+      showToast('↩ นำ "' + task.text + '" กลับมาเป็นรอดำเนินการ');
+    }
+    save();
+    refreshViews();
+  }
+  window.toggleTaskDone = toggleTaskDone;
+
+  function batchFinishMonthEvents(ym) {
+    var now = new Date();
+    var todayStr = getLocalDateStr(now);
+    var finishedCount = 0;
+    data.tasks.forEach(function(t){
+      if(!t.done && t.due && t.due.substring(0, 7) === ym && t.due <= todayStr) {
+        t.done = true;
+        finishedCount++;
+        if(t.linkedScheduleId) {
+          var ls = data.schedule.find(function(s){ return s.id === t.linkedScheduleId || s.linkedTaskId === t.id; });
+          if(ls) ls.isDone = true;
+        }
+      }
+    });
+    if(finishedCount > 0) {
+      playSuccessChime();
+      fireConfetti();
+      updateStudyStreak(true);
+      save();
+      refreshViews();
+      showToast('🎉 จบกิจกรรมและงานที่ผ่านมา ' + finishedCount + ' รายการในเดือนนี้เรียบร้อยแล้ว!');
+    }
+  }
+  window.batchFinishMonthEvents = batchFinishMonthEvents;
+
+  // --- Completed Tasks Management ---
+  window.completedEditMode = false;
+
+  function clearAllCompletedTasks() {
+    var completedTasks = data.tasks.filter(function(t){ return t.done; });
+    var count = completedTasks.length;
+    if(count === 0) return;
+
+    if(!confirm('คุณแน่ใจหรือไม่ว่าต้องการลบรายการที่เสร็จแล้วทั้งหมด (' + count + ' รายการ)?\n(คุณสามารถกดยกเลิก Undo ได้หลังลบ)')) {
+      return;
+    }
+
+    var removedTasks = [];
+    var removedSchedule = [];
+    var removedMilestones = [];
+
+    for(var i = data.tasks.length - 1; i >= 0; i--) {
+      var t = data.tasks[i];
+      if(t.done) {
+        removedTasks.push(data.tasks.splice(i, 1)[0]);
+        if(t.linkedScheduleId) {
+          var sIdx = data.schedule.findIndex(function(s){ return s.id === t.linkedScheduleId || s.linkedTaskId === t.id; });
+          if(sIdx > -1) {
+            removedSchedule.push(data.schedule.splice(sIdx, 1)[0]);
+          }
+        }
+      }
+    }
+
+    window.completedEditMode = false;
+    save();
+    refreshViews();
+    playPopSound();
+
+    var batchId = 'batch_completed_' + Date.now();
+    var timeout = setTimeout(function(){ delete undoQueue[batchId]; }, 6000);
+    undoQueue[batchId] = {
+      restore: function(){
+        clearTimeout(timeout);
+        removedTasks.forEach(function(item){ data.tasks.push(item); });
+        removedSchedule.forEach(function(s){ data.schedule.push(s); });
+        removedMilestones.forEach(function(m){ if(data.milestones) data.milestones.push(m); });
+        save();
+        refreshViews();
+        delete undoQueue[batchId];
+        showToast('กู้คืนรายการที่เสร็จแล้วเรียบร้อย ✨');
+      }
+    };
+
+    showToast('ลบรายการที่เสร็จแล้วทั้งหมด ' + removedTasks.length + ' รายการเรียบร้อย 🗑️', function(){
+      if(undoQueue[batchId]) undoQueue[batchId].restore();
+    });
+  }
+  window.clearAllCompletedTasks = clearAllCompletedTasks;
+
   // --- Tasks Timeline View (with Search & Filter) ---
   function renderTasks(){
     updateBottomNavTasksBadge();
@@ -10338,14 +10716,14 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
       if(searchQuery && !t.text.toLowerCase().includes(searchQuery) && !(t.subject && t.subject.toLowerCase().includes(searchQuery))) return false;
       
       // Quick Chip Filter
-      if(activeTaskFilter === 'pending' && (t.done || t.hasCheckbox === false)) return false;
-      if(activeTaskFilter === 'completed' && (!t.done || t.hasCheckbox === false)) return false;
+      if(activeTaskFilter === 'pending' && t.done) return false;
+      if(activeTaskFilter === 'completed' && !t.done) return false;
       if(activeTaskFilter === 'exams') {
         var isExam = t.category && (t.category.startsWith('exam_') || t.category === 'quiz');
         if(!isExam) return false;
       }
       if(activeTaskFilter === 'urgent') {
-        if(t.done || t.hasCheckbox === false) return false;
+        if(t.done) return false;
         var isOverdue = t.due && t.due < todayStr;
         var isHighPri = t.priority === 'high';
         var isToday = t.due === todayStr;
@@ -10379,9 +10757,11 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
       }
     });
     
-    function makeSection(title, icon, list, colorClass) {
+    function makeSection(title, icon, list, colorClass, extraHeaderHtml, isCompletedSection) {
       if(list.length === 0) return '';
-      var html = '<div class="timeline-section"><div class="timeline-header '+colorClass+'"><i class="'+icon+'"></i> '+title+' ('+list.length+')</div><ul class="task-list">';
+      var extra = extraHeaderHtml || '';
+      var sectionCls = 'timeline-section' + (isCompletedSection ? ' completed-timeline-section' + (window.completedEditMode ? ' edit-mode' : '') : '');
+      var html = '<div class="'+sectionCls+'"><div class="timeline-header '+colorClass+'"><i class="'+icon+'"></i> <span>'+title+' ('+list.length+')</span>'+extra+'</div><ul class="task-list">';
       list.sort(function(a,b){ return (a.due||'9999').localeCompare(b.due||'9999'); }).forEach(function(t){
         var timeBadge = '';
         if(t.isAllDay) {
@@ -10414,8 +10794,20 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
         var reminderBadge = t.hasReminder ? '<span class="pill pri-low" style="font-size:10px;" title="ตั้งเตือนไว้แล้ว"><i class="ph-fill ph-bell" style="color:var(--amber-dark);"></i> เตือน</span>' : '';
         var itemColor = t.color || getColorForString(t.subject || t.text, t.category);
         var checkOrInfoHtml = (t.hasCheckbox !== false)
-          ? '<div class="check '+(t.done?'checked':'')+'" role="checkbox" title="คลิกเพื่อทำเครื่องหมายว่าเสร็จแล้ว"></div>'
-          : '<div class="task-info-badge" title="รายการแจ้งเพื่อทราบ (ไม่มีปุ่มติ๊ก)"><i class="ph-fill ph-info"></i></div>';
+          ? '<div class="check '+(t.done?'checked':'')+'" role="checkbox" title="'+(t.done?'ทำเครื่องหมายว่ายังไม่เสร็จ':'คลิกเพื่อทำเครื่องหมายว่าเสร็จแล้ว')+'"></div>'
+          : '<button type="button" class="task-info-badge '+(t.done?'finished':'')+'" title="'+(t.done?'กิจกรรมนี้เสร็จสิ้นแล้ว (คลิกเพื่อยกเลิก)':'คลิกเพื่อจบกิจกรรม / เสร็จสิ้น (Mark as Finished)')+'" aria-label="Finish Event"><i class="ph-bold '+(t.done?'ph-check':'ph-info')+' main-info-icon"></i><i class="ph-bold ph-check hover-check-icon"></i></button>';
+
+        var finishBtnHtml = (t.hasCheckbox === false)
+          ? '<button type="button" class="task-finish-btn '+(t.done?'finished':'')+'" title="'+(t.done?'เสร็จแล้ว (คลิกเพื่อยกเลิก)':'จบกิจกรรม / เสร็จสิ้น (Mark as Finished)')+'"><i class="ph-bold '+(t.done?'ph-check-circle':'ph-check')+'"></i> <span>'+(t.done?'เสร็จแล้ว':'เสร็จสิ้น')+'</span></button>'
+          : '';
+
+        var delBtnHtml = (isCompletedSection || t.done)
+          ? '<button type="button" class="task-row-del-btn" data-id="'+t.id+'" title="ลบรายการนี้"><i class="ph-bold ph-trash"></i> <span>ลบ</span></button>'
+          : '';
+
+        var actionsWrapHtml = (finishBtnHtml || delBtnHtml)
+          ? '<div class="task-actions-wrap">' + finishBtnHtml + delBtnHtml + '</div>'
+          : '';
 
         html += '<li class="task-item '+(t.done?'done':'')+'" data-id="'+t.id+'">'+
                 checkOrInfoHtml +
@@ -10424,7 +10816,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
                 examBadge +
                 (t.subject?'<span class="subj-dot" style="background:var(--'+itemColor+'-dark)"></span>'+t.subject:'')+
                 dateBadge +
-                timeBadge + schBadge + attachBadges + reminderBadge + '</div></div></li>';
+                timeBadge + schBadge + attachBadges + reminderBadge + '</div></div>' + actionsWrapHtml + '</li>';
       });
       html += '</ul></div>';
       return html;
@@ -10460,7 +10852,12 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
       var thName = THAI_MONTHS[mIdx] || ym;
       var enName = ENG_MONTHS[mIdx] || '';
       var monthHeader = '📅 ' + thName + ' ' + y + (enName ? ' (' + enName + ' ' + y + ')' : '');
-      allHtml += makeSection(monthHeader, 'ph ph-calendar-blank', mTasks, 'pri-med');
+      var pastCount = mTasks.filter(function(t){ return !t.done && t.due && t.due <= todayStr; }).length;
+      var batchBtnHtml = '';
+      if(pastCount > 0) {
+        batchBtnHtml = '<button type="button" class="section-batch-finish-btn" data-ym="'+ym+'" title="จบกิจกรรมและงานที่ผ่านมาทั้งหมดในเดือนนี้ ('+pastCount+')"><i class="ph-bold ph-checks"></i> จบกิจกรรมที่ผ่านมา ('+pastCount+')</button>';
+      }
+      allHtml += makeSection(monthHeader, 'ph ph-calendar-blank', mTasks, 'pri-med', batchBtnHtml);
     });
 
     // 3. No Specific Deadline (only if tasks exist)
@@ -10470,7 +10867,13 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 
     // 4. Completed (only if tasks exist)
     if(completed.length > 0) {
-      allHtml += makeSection('✅ งานที่เสร็จแล้ว (Completed)', 'ph ph-check-circle', completed, '');
+      var completedActionsHtml = '<div class="completed-header-actions">' +
+        '<button type="button" class="completed-edit-btn '+(window.completedEditMode ? 'active' : '')+'" title="'+(window.completedEditMode ? 'เสร็จสิ้นการแก้ไข' : 'เปิดโหมดแก้ไขเพื่อเลือกลบทีละรายการ')+'"><i class="ph-bold '+(window.completedEditMode ? 'ph-check' : 'ph-pencil-simple')+'"></i> <span>'+(window.completedEditMode ? 'เสร็จสิ้น' : 'แก้ไข')+'</span></button>' +
+        '<button type="button" class="completed-clear-all-btn" title="ลบรายการที่เสร็จแล้วทั้งหมด ('+completed.length+')"><i class="ph-bold ph-trash"></i> <span>ลบทั้งหมด</span></button>' +
+      '</div>';
+      allHtml += makeSection('✅ งานที่เสร็จแล้ว (Completed)', 'ph ph-check-circle', completed, (window.completedEditMode ? 'completed-edit-active' : ''), completedActionsHtml, true);
+    } else {
+      window.completedEditMode = false;
     }
     
     if(allHtml === "") allHtml = '<div class="empty-note">No tasks match your search or filter.</div>';
@@ -10478,42 +10881,71 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     
     // Task counters update
     var actionableTasks = data.tasks.filter(function(t){ return t.hasCheckbox !== false; });
-    var pendingCount = actionableTasks.filter(function(t){ return !t.done; }).length;
-    var overdueCount = actionableTasks.filter(function(t){ return !t.done && t.due && t.due < todayStr; }).length;
-    var completedCount = actionableTasks.filter(function(t){ return t.done; }).length;
-    var infoCount = data.tasks.filter(function(t){ return t.hasCheckbox === false; }).length;
-    var infoNote = infoCount > 0 ? ' · ' + infoCount + ' แจ้งทราบ' : '';
+    var pendingCount = data.tasks.filter(function(t){ return !t.done; }).length;
+    var overdueCount = data.tasks.filter(function(t){ return !t.done && t.due && t.due < todayStr; }).length;
+    var completedCount = data.tasks.filter(function(t){ return t.done; }).length;
+    var infoCount = data.tasks.filter(function(t){ return t.hasCheckbox === false && !t.done; }).length;
+    var infoNote = infoCount > 0 ? ' · ' + infoCount + ' กิจกรรม' : '';
     document.getElementById('taskSub').textContent = pendingCount + ' pending (' + overdueCount + ' overdue) · ' + completedCount + ' completed' + infoNote;
 
     // Bind clicks
     tl.querySelectorAll('.task-item').forEach(function(li){
       if(li.hasAttribute('onclick')) return; // Milestone
-      li.addEventListener('click', function(){ openTaskModal(this.dataset.id); });
+      li.addEventListener('click', function(e){
+        if(e.target.closest('.check, .task-info-badge, .task-finish-btn, .task-row-del-btn')) return;
+        if(window.completedEditMode && li.closest('.completed-timeline-section')) return;
+        openTaskModal(this.dataset.id);
+      });
       var chk = li.querySelector('.check');
       if(chk) {
         chk.addEventListener('click', function(e){
+          toggleTaskDone(li.dataset.id, e);
+        });
+      }
+      var infoBadge = li.querySelector('.task-info-badge');
+      if(infoBadge) {
+        infoBadge.addEventListener('click', function(e){
+          toggleTaskDone(li.dataset.id, e);
+        });
+      }
+      var fBtn = li.querySelector('.task-finish-btn');
+      if(fBtn) {
+        fBtn.addEventListener('click', function(e){
+          toggleTaskDone(li.dataset.id, e);
+        });
+      }
+      var delBtn = li.querySelector('.task-row-del-btn');
+      if(delBtn) {
+        delBtn.addEventListener('click', function(e){
           e.stopPropagation();
-          var id = li.dataset.id;
-          var task = data.tasks.find(function(x){ return x.id === id; });
-          task.done = !task.done;
-          if(task.linkedScheduleId) {
-            var linkedSch = data.schedule.find(function(s){ return s.id === task.linkedScheduleId || s.linkedTaskId === id; });
-            if(linkedSch) linkedSch.isDone = task.done;
-          }
-          if(task.done) {
-            playPopSound();
-            updateStudyStreak(true);
-            var pending = data.tasks.filter(function(x){ return (x.hasCheckbox !== false) && !x.done; });
-            if(pending.length === 0) {
-              fireConfetti();
-              playSuccessChime();
-              showToast('All tasks completed! You are incredible! 🎉');
-            }
-          }
-          save(); refreshViews();
+          deleteWithUndo('tasks', li.dataset.id);
         });
       }
     });
+
+    tl.querySelectorAll('.section-batch-finish-btn').forEach(function(btn){
+      btn.addEventListener('click', function(e){
+        e.stopPropagation();
+        batchFinishMonthEvents(this.dataset.ym);
+      });
+    });
+
+    var editToggleBtn = tl.querySelector('.completed-edit-btn');
+    if(editToggleBtn) {
+      editToggleBtn.addEventListener('click', function(e){
+        e.stopPropagation();
+        window.completedEditMode = !window.completedEditMode;
+        renderTasks();
+      });
+    }
+
+    var clearAllBtn = tl.querySelector('.completed-clear-all-btn');
+    if(clearAllBtn) {
+      clearAllBtn.addEventListener('click', function(e){
+        e.stopPropagation();
+        clearAllCompletedTasks();
+      });
+    }
   }
 
   function renderNotes(){
@@ -10972,28 +11404,49 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 
         var currentTime = (document.getElementById('pomoTime') ? document.getElementById('pomoTime').textContent : '25:00');
         var isTimerActive = (typeof pomoActive !== 'undefined') ? pomoActive : false;
+        var currentPomoMode = (typeof pomoMode !== 'undefined') ? pomoMode : 'focus';
+        var isBreak = (currentPomoMode === 'break');
 
         card.innerHTML = 
           '<div class="docked-card-header">' +
             '<div class="docked-card-title">' +
               '<div class="widget-drag-handle" title="คลิกลากเพื่อย้ายกลับ"><i class="ph ph-dots-six-vertical"></i></div>' +
-              '<i class="ph-fill ph-timer" style="color:var(--primary);"></i>' +
-              '<span>Focus Timer</span>' +
+              '<i class="' + (isBreak ? 'ph-fill ph-coffee' : 'ph-fill ph-timer') + '" style="color:' + (isBreak ? '#10B981' : 'var(--primary)') + ';"></i>' +
+              '<span>' + (isBreak ? 'Break Timer' : 'Focus Timer') + '</span>' +
             '</div>' +
             '<div class="docked-card-actions">' +
               '<button class="docked-action-btn" onclick="undockWidget(\'timer\')" title="ส่งกลับไปที่เดิม"><i class="ph ph-arrow-u-down-left"></i></button>' +
             '</div>' +
           '</div>' +
           '<div class="docked-timer-body">' +
-            '<div class="docked-timer-digits" id="dockedPomoTime">' + currentTime + '</div>' +
+            '<div class="pomo-mode-tabs" style="margin-bottom:6px; transform:scale(0.88);">' +
+              '<button type="button" class="pomo-mode-tab ' + (!isBreak ? 'active' : '') + '" data-mode="focus" id="dockedTabFocus">25m โฟกัส</button>' +
+              '<button type="button" class="pomo-mode-tab ' + (isBreak ? 'active' : '') + '" data-mode="break" id="dockedTabBreak">5m พัก ☕</button>' +
+            '</div>' +
+            '<div class="docked-timer-digits ' + (isBreak ? 'break-mode' : '') + '" id="dockedPomoTime">' + currentTime + '</div>' +
             '<div class="docked-timer-controls">' +
-              '<button class="btn small primary" id="dockedPomoStart">' + (isTimerActive ? '<i class="ph ph-pause"></i> Pause' : '<i class="ph ph-play"></i> Focus') + '</button>' +
+              '<button class="btn small ' + (isBreak ? 'break-btn' : 'primary') + '" id="dockedPomoStart">' + (isTimerActive ? '<i class="ph ph-pause"></i> Pause' : (isBreak ? '<i class="ph ph-coffee"></i> Break' : '<i class="ph ph-play"></i> Focus')) + '</button>' +
               '<button class="btn small ghost" id="dockedPomoReset" title="รีเซ็ตเวลา"><i class="ph ph-arrow-counter-clockwise"></i></button>' +
               '<button class="btn small ghost" id="dockedOpenZenBtn" title="Zen Fullscreen"><i class="ph ph-arrows-out"></i></button>' +
             '</div>' +
           '</div>';
 
         dropzone.appendChild(card);
+
+        var dTabFocus = card.querySelector('#dockedTabFocus');
+        if(dTabFocus) {
+          dTabFocus.addEventListener('click', function(){
+            if(window.setPomoMode) window.setPomoMode('focus');
+            playPopSound();
+          });
+        }
+        var dTabBreak = card.querySelector('#dockedTabBreak');
+        if(dTabBreak) {
+          dTabBreak.addEventListener('click', function(){
+            if(window.setPomoMode) window.setPomoMode('break');
+            playPopSound();
+          });
+        }
 
         var dStart = card.querySelector('#dockedPomoStart');
         if(dStart) {
@@ -11932,48 +12385,178 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
       }
     });
 
-    // Pomodoro Timer & Zen Sync
+    // Pomodoro Timer & Zen Sync (Focus 25m & Break 5m Cycle)
     var pomoTimeEl = document.getElementById('pomoTime');
     var pomoStartBtn = document.getElementById('pomoStart');
     var zenTimerDigits = document.getElementById('zenTimerDigits');
     var zenStartBtn = document.getElementById('zenStartBtn');
-    var pomoTimer = null; var pomoLeft = 25 * 60; var pomoActive = false;
+    var pomoTimer = null;
+    var pomoMode = 'focus'; // 'focus' (25m) or 'break' (5m)
+    var pomoLeft = 25 * 60;
+    var pomoActive = false;
+
+    function setPomoMode(mode) {
+      if (pomoMode === mode) return;
+      if (pomoTimer) clearInterval(pomoTimer);
+      pomoActive = false;
+      pomoMode = mode;
+      pomoLeft = (pomoMode === 'focus') ? 25 * 60 : 5 * 60;
+      updatePomoUI();
+    }
+    window.setPomoMode = setPomoMode;
 
     function updatePomoUI() {
-      var m = Math.floor(pomoLeft/60), s = pomoLeft%60;
-      var timeStr = m + ':' + (s<10?'0':'')+s;
-      if(pomoTimeEl) pomoTimeEl.textContent = timeStr;
-      if(pomoStartBtn) pomoStartBtn.innerHTML = pomoActive ? '<i class="ph ph-pause"></i> Pause' : '<i class="ph ph-play"></i> Focus';
-      
-      if(zenTimerDigits) zenTimerDigits.textContent = timeStr;
-      if(zenStartBtn) zenStartBtn.innerHTML = pomoActive ? '<i class="ph ph-pause"></i> Pause' : '<i class="ph ph-play"></i> Focus';
+      var m = Math.floor(pomoLeft / 60), s = pomoLeft % 60;
+      var timeStr = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+      var isBreak = (pomoMode === 'break');
+
+      if (pomoTimeEl) {
+        pomoTimeEl.textContent = timeStr;
+        pomoTimeEl.classList.toggle('break-mode', isBreak);
+      }
+      if (pomoStartBtn) {
+        if (pomoActive) {
+          pomoStartBtn.innerHTML = '<i class="ph ph-pause"></i> Pause';
+          pomoStartBtn.className = isBreak ? 'btn small break-btn' : 'btn small primary';
+        } else {
+          pomoStartBtn.innerHTML = isBreak ? '<i class="ph ph-coffee"></i> พัก 5m' : '<i class="ph ph-play"></i> Focus';
+          pomoStartBtn.className = isBreak ? 'btn small break-btn' : 'btn small primary';
+        }
+      }
+
+      var focusTab = document.getElementById('pomoModeFocusTab');
+      var breakTab = document.getElementById('pomoModeBreakTab');
+      if (focusTab) focusTab.classList.toggle('active', !isBreak);
+      if (breakTab) breakTab.classList.toggle('active', isBreak);
+
+      if (zenTimerDigits) {
+        zenTimerDigits.textContent = timeStr;
+        zenTimerDigits.classList.toggle('break-mode', isBreak);
+      }
+      if (zenStartBtn) {
+        if (pomoActive) {
+          zenStartBtn.innerHTML = '<i class="ph ph-pause"></i> Pause';
+          zenStartBtn.className = isBreak ? 'btn break-btn' : 'btn primary';
+        } else {
+          zenStartBtn.innerHTML = isBreak ? '<i class="ph ph-coffee"></i> Start Break' : '<i class="ph ph-play"></i> Focus';
+          zenStartBtn.className = isBreak ? 'btn break-btn' : 'btn primary';
+        }
+      }
+      var zenFocusTab = document.getElementById('zenModeFocusTab');
+      var zenBreakTab = document.getElementById('zenModeBreakTab');
+      if (zenFocusTab) zenFocusTab.classList.toggle('active', !isBreak);
+      if (zenBreakTab) zenBreakTab.classList.toggle('active', isBreak);
+
+      var zenGoalHeader = document.getElementById('zenGoalHeader');
+      var zenTaskInput = document.getElementById('zenTaskInput');
+      var zenGlow = document.getElementById('zenGlowCircle');
+      if (zenGoalHeader) {
+        zenGoalHeader.textContent = isBreak ? '☕ Rest & Recharge (Break Time)' : 'Current Focus Goal';
+        zenGoalHeader.style.color = isBreak ? '#34D399' : 'var(--primary)';
+      }
+      if (zenTaskInput) {
+        zenTaskInput.placeholder = isBreak ? 'ช่วงเวลาพักสายตา จิบน้ำ ยืดเส้นยืดสาย ☕' : 'What are you focusing on right now?';
+      }
+      if (zenGlow) {
+        zenGlow.style.background = isBreak 
+          ? 'radial-gradient(circle, rgba(16,185,129,0.3) 0%, rgba(16,185,129,0) 70%)'
+          : 'radial-gradient(circle, rgba(59,130,246,0.3) 0%, rgba(59,130,246,0) 70%)';
+      }
 
       var dockedPomoTime = document.getElementById('dockedPomoTime');
-      if(dockedPomoTime) dockedPomoTime.textContent = timeStr;
+      if (dockedPomoTime) {
+        dockedPomoTime.textContent = timeStr;
+        dockedPomoTime.classList.toggle('break-mode', isBreak);
+      }
       var dockedPomoStart = document.getElementById('dockedPomoStart');
-      if(dockedPomoStart) dockedPomoStart.innerHTML = pomoActive ? '<i class="ph ph-pause"></i> Pause' : '<i class="ph ph-play"></i> Focus';
+      if (dockedPomoStart) {
+        if (pomoActive) {
+          dockedPomoStart.innerHTML = '<i class="ph ph-pause"></i> Pause';
+          dockedPomoStart.className = isBreak ? 'btn small break-btn' : 'btn small primary';
+        } else {
+          dockedPomoStart.innerHTML = isBreak ? '<i class="ph ph-coffee"></i> Break' : '<i class="ph ph-play"></i> Focus';
+          dockedPomoStart.className = isBreak ? 'btn small break-btn' : 'btn small primary';
+        }
+      }
+      var dockedTabFocus = document.getElementById('dockedTabFocus');
+      var dockedTabBreak = document.getElementById('dockedTabBreak');
+      if (dockedTabFocus) dockedTabFocus.classList.toggle('active', !isBreak);
+      if (dockedTabBreak) dockedTabBreak.classList.toggle('active', isBreak);
     }
-    
+
     pomoStartBtn.addEventListener('click', function(){
       pomoActive = !pomoActive;
-      if(pomoActive) {
+      if (pomoActive) {
         playPopSound();
+        if (pomoTimer) clearInterval(pomoTimer);
         pomoTimer = setInterval(function(){
-          if(pomoLeft > 0) { pomoLeft--; updatePomoUI(); }
-          else {
-            clearInterval(pomoTimer); pomoActive = false; updatePomoUI();
-            playGongSound();
-            fireConfetti();
-            showToast("Pomodoro finished! Great job! Time for a break ☕");
+          if (pomoLeft > 0) {
+            pomoLeft--;
+            updatePomoUI();
+          } else {
+            clearInterval(pomoTimer);
+            pomoActive = false;
+
+            if (pomoMode === 'focus') {
+              playGongSound();
+              fireConfetti();
+
+              showToast("🎉 Focus สำเร็จยอดเยี่ยม! เริ่มช่วงพัก 5 นาที (Break Time) แล้วนะ ☕");
+              pomoMode = 'break';
+              pomoLeft = 5 * 60;
+              updatePomoUI();
+            } else {
+              playSuccessChime();
+              showToast("☕ หมดเวลาพัก 5 นาทีแล้ว! พร้อมกลับมาโฟกัสรอบต่อไปแล้วหรือยัง? 🎯");
+              pomoMode = 'focus';
+              pomoLeft = 25 * 60;
+              updatePomoUI();
+            }
           }
         }, 1000);
-      } else { clearInterval(pomoTimer); }
+      } else {
+        clearInterval(pomoTimer);
+      }
       updatePomoUI();
     });
-    
+
     document.getElementById('pomoReset').addEventListener('click', function(){
-      clearInterval(pomoTimer); pomoActive = false; pomoLeft = 25 * 60; updatePomoUI();
+      if (pomoTimer) clearInterval(pomoTimer);
+      pomoActive = false;
+      pomoLeft = (pomoMode === 'focus') ? 25 * 60 : 5 * 60;
+      updatePomoUI();
+      playPopSound();
     });
+
+    var pFocusTab = document.getElementById('pomoModeFocusTab');
+    if (pFocusTab) {
+      pFocusTab.addEventListener('click', function(){
+        setPomoMode('focus');
+        playPopSound();
+      });
+    }
+    var pBreakTab = document.getElementById('pomoModeBreakTab');
+    if (pBreakTab) {
+      pBreakTab.addEventListener('click', function(){
+        setPomoMode('break');
+        playPopSound();
+      });
+    }
+
+    var zFocusTab = document.getElementById('zenModeFocusTab');
+    if (zFocusTab) {
+      zFocusTab.addEventListener('click', function(){
+        setPomoMode('focus');
+        playPopSound();
+      });
+    }
+    var zBreakTab = document.getElementById('zenModeBreakTab');
+    if (zBreakTab) {
+      zBreakTab.addEventListener('click', function(){
+        setPomoMode('break');
+        playPopSound();
+      });
+    }
 
     // Zen Mode Event Handlers
     var openZen = document.getElementById('openZenBtn');
